@@ -25,9 +25,9 @@ export async function POST(req: Request, res: Response) {
   switch (event.type) {
     case checkout_session_completed:
       const session = event.data.object;
-      const {
-        // @ts-ignore
-        metadata: {
+
+      if (session.metadata) {
+        const {
           adults,
           checkinDate,
           checkoutDate,
@@ -37,24 +37,26 @@ export async function POST(req: Request, res: Response) {
           user,
           discount,
           totalPrice,
-        },
-      } = session;
+        } = session.metadata;
 
-      await createBooking({
-        adults: Number(adults),
-        checkinDate,
-        checkoutDate,
-        children: Number(children),
-        hotelRoom,
-        numberOfDays: Number(numberOfDays),
-        user,
-        discount: Number(discount),
-        totalPrice: Number(totalPrice),
-      });
+        await createBooking({
+          adults: Number(adults),
+          checkinDate,
+          checkoutDate,
+          children: Number(children),
+          hotelRoom,
+          numberOfDays: Number(numberOfDays),
+          user,
+          discount: Number(discount),
+          totalPrice: Number(totalPrice),
+        });
 
-      await updateHotelRoom(hotelRoom);
+        await updateHotelRoom(hotelRoom);
+      } else {
+        console.error("Metadata is null in the session.");
+      }
 
-      return NextResponse.json("Booking succesful", {
+      return NextResponse.json("Booking successful", {
         status: 200,
         statusText: "Booking completed",
       });
