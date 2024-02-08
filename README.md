@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## SmartStay Web Application
 
-## Getting Started
+Welcome to SmartStay, a web application built with Next.js, React.js, SanityIO, Tailwind CSS, and Stripe for payment processing.
 
-First, run the development server:
+## Overview
 
-```bash
+SmartStay is designed to provide users with an intuitive and seamless experience for exploring and booking stays. Leveraging the power of Next.js and React.js, the application offers a modern and dynamic user interface.
+
+## Technologies Used
+
+React.js: A JavaScript library for building user interfaces.
+Next.js: A React framework for building server-rendered and static web applications.
+SanityIO: A headless CMS for structured content management.
+Tailwind CSS: A utility-first CSS framework for building responsive and design-friendly interfaces.
+Stripe: A secure and flexible platform for online payment processing.
+
+## Setup Instructions
+
+Clone the Repository:
+git clone https://github.com/your-username/SmartStay.git
+cd SmartStay
+
+Install Dependencies:
+npm install
+
+Run the Development Server:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in Browser:
+Visit http://localhost:3000 to explore SmartStay.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Important Note
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If certain functionalities seem to be malfunctioning in the application, it might be due to the temporary nature of some test features in SanityIO. Keep in mind that these features may stop working after a certain period.
