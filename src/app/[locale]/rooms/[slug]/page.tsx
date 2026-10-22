@@ -38,6 +38,8 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
 
   if (!room) return <LoadingSpinner />;
 
+  const squareFeet = room.dimension.match(/^\s*(\d+)/)?.[1];
+
   const calcMinCheckoutDate = () => {
     if (checkinDate) {
       const nextDay = new Date(checkinDate);
@@ -84,7 +86,9 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
   return (
     <div className="page-container pt-6 sm:pt-8">
       <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{room.name}</h1>
-      <p className="text-muted mt-1">{room.dimension}</p>
+      <p className="text-muted mt-1">
+        {squareFeet ? t("squareFeet", { value: squareFeet }) : room.dimension}
+      </p>
 
       <div className="mt-6">
         <HotelPhotoGallery photos={room.images} />
