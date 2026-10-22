@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import { Review } from "@/models/reviews";
 import Rating from "../Rating/Rating";
+import { getErrorMessage } from "@/libs/errorMessage";
 
 const RoomReview: FC<{ roomId: string }> = ({ roomId }) => {
   const fetchRoomReviews = async () => {
@@ -15,11 +16,19 @@ const RoomReview: FC<{ roomId: string }> = ({ roomId }) => {
     data: roomReviews,
     error,
     isLoading,
-  } = useSWR("/api/room-reviews", fetchRoomReviews);
+  } = useSWR(`/api/room-reviews/${roomId}`, fetchRoomReviews);
 
-  if (error) throw new Error("Cannot fetch data");
-  if (typeof roomReviews === "undefined" && !isLoading)
-    throw new Error("Cannot fetch data");
+  if (error) {
+    return (
+      <p role="alert" className="col-span-full">
+        {getErrorMessage(error, "We could not load the reviews. Please try again later.")}
+      </p>
+    );
+  }
+
+  if (!isLoading && roomReviews && !roomReviews.length) {
+    return <p className="col-span-full">No reviews yet.</p>;
+  }
 
   return (
     <>

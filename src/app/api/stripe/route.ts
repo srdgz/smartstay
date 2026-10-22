@@ -2,7 +2,6 @@ import { getRoom } from "@/libs/apis";
 import { authOptions } from "@/libs/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import toast from "react-hot-toast";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -35,14 +34,19 @@ export async function POST(req: Request, res: Response) {
     !hotelRoomSlug ||
     !numberOfDays
   ) {
-    return new NextResponse("Please all fields are required", { status: 400 });
+    return new NextResponse(
+      "Please provide check-in and check-out dates, guests and a room.",
+      { status: 400 }
+    );
   }
 
   const origin = req.headers.get("origin");
 
   const session = await getServerSession(authOptions);
   if (!session) {
-    return new NextResponse("Authentication required", { status: 400 });
+    return new NextResponse("You must be logged in to make a booking.", {
+      status: 401,
+    });
   }
 
   const userId = session.user.id;
@@ -91,6 +95,8 @@ export async function POST(req: Request, res: Response) {
     });
   } catch (error: any) {
     console.log("Payment failed", error);
-    return new NextResponse(error, { status: 500 });
+    return new NextResponse("We could not start the payment. Please try again.", {
+      status: 500,
+    });
   }
 }

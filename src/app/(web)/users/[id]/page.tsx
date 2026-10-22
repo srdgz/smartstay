@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 import axios from "axios";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { getUserBookings } from "@/libs/apis";
 import { User } from "@/models/user";
@@ -17,6 +17,7 @@ import Chart from "@/components/Chart/Chart";
 import RatingModal from "@/components/RatingModal/RatingModal";
 import BackDrop from "@/components/BackDrop/BackDrop";
 import toast from "react-hot-toast";
+import { getErrorMessage } from "@/libs/errorMessage";
 
 const UserDetails = (props: { params: { id: string } }) => {
   const {
@@ -31,6 +32,7 @@ const UserDetails = (props: { params: { id: string } }) => {
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [ratingValue, setRatingValue] = useState<number | null>(0);
   const [ratingText, setRatingText] = useState("");
+  const { data: session } = useSession();
 
   const toggleRatingModal = () => setIsRatingVisible((prevState) => !prevState);
 
@@ -39,27 +41,29 @@ const UserDetails = (props: { params: { id: string } }) => {
       return toast.error("Please provide a rating text and a rating");
     }
 
-    if (!roomId) toast.error("Id not provided");
+    if (!roomId) {
+      return toast.error("We could not find the room to review. Please try again.");
+    }
 
     setIsSubmittingReview(true);
 
     try {
-      const { data } = await axios.post("/api/users", {
+      await axios.post("/api/users", {
         reviewText: ratingText,
         ratingValue,
         roomId,
       });
-      console.log(data);
       toast.success("Review submitted");
-    } catch (error) {
-      console.log(error);
-      toast.error("Review failed");
-    } finally {
       setRatingText("");
       setRatingValue(null);
       setRoomId(null);
-      setIsSubmittingReview(false);
       setIsRatingVisible(false);
+    } catch (error) {
+      toast.error(
+        getErrorMessage(error, "We could not save your review. Please try again.")
+      );
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -89,7 +93,8 @@ const UserDetails = (props: { params: { id: string } }) => {
 
   if (loadingUserData) return <LoadingSpinner />;
   if (!userData) throw new Error("Cannot fetch data");
-  if (!userData) throw new Error("Cannot fetch data");
+
+  const avatarUrl = userData.image ?? session?.user?.image ?? null;
 
   return (
     <div className="container mx-auto px-2 md:px-4 py10">
@@ -99,9 +104,9 @@ const UserDetails = (props: { params: { id: string } }) => {
           className="hidden md:block md:col-span-4 lg:col-span-3 shadow-lg h-fit sticky top-10 bg-[#eff0f2] text-black rounded-lg px-6 py-4"
         >
           <div className="md:w-[143px] w-28 h-28 md:h-[143px] mx-auto mb-5 rounded-full overflow-hidden">
-            {userData.image ? (
+            {avatarUrl ? (
               <Image
-                src={userData.image}
+                src={avatarUrl}
                 alt=""
                 width={143}
                 height={143}
@@ -133,12 +138,12 @@ const UserDetails = (props: { params: { id: string } }) => {
             <h1 className="text-2xl font-bold mr-3">Hello, {userData.name}</h1>
           </div>
           <div className="md:hidden w-14 h-14 rounded-l-full overflow-hidden">
-            {userData.image ? (
+            {avatarUrl ? (
               <Image
                 className="img scale-animation rounded-full"
                 width={56}
                 height={56}
-                src={userData.image}
+                src={avatarUrl}
                 alt=""
               />
             ) : (

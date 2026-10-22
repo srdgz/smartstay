@@ -14,6 +14,14 @@ const defaultFormData = {
   password: "",
 };
 
+const signInErrors: Record<string, string> = {
+  OAuthAccountNotLinked:
+    "An account with this email already exists. Sign in with the method you used originally.",
+  CredentialsSignin: "Incorrect email or password.",
+  AccessDenied: "Access denied. You do not have permission to sign in.",
+  Default: "We could not sign you in. Please try again.",
+};
+
 const Auth = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const inputStyles =
@@ -31,12 +39,19 @@ const Auth = () => {
     if (session) router.push("/");
   }, [router, session]);
 
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("error");
+    if (code) {
+      toast.error(signInErrors[code] ?? signInErrors.Default, { id: code });
+    }
+  }, []);
+
   const loginHandler = async (provider?: string) => {
     try {
       await signIn(provider);
       router.push("/");
     } catch (error) {
-      toast.error("Algo no fue bien.");
+      toast.error(signInErrors.Default);
     }
   };
 
@@ -45,12 +60,13 @@ const Auth = () => {
     try {
       const user = await signUp(formData);
       if (user) {
-        toast.success("Registrado correctamente. Por favor, inicia sesión.");
+        toast.success("Account created. Please sign in.");
+        setFormData(defaultFormData);
       }
     } catch (error) {
-      toast.error("Algo no fue bien.");
-    } finally {
-      setFormData(defaultFormData);
+      toast.error(
+        "We could not create your account. If you already registered, use Sign In."
+      );
     }
   };
 

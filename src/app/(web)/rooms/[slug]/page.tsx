@@ -14,6 +14,7 @@ import HotelPhotoGallery from "@/components/HotelPhotoGallery/HotelPhotoGallery"
 import BookRoomCta from "@/components/BookRoomCta/BookRoomCta";
 import toast from "react-hot-toast";
 import { getStripe } from "@/libs/stripe";
+import { getErrorMessage } from "@/libs/errorMessage";
 import RoomReview from "@/components/RoomReview/RoomReview";
 // import RoomReview from "@/components/RoomReview/RoomReview";
 
@@ -57,9 +58,15 @@ const RoomDetails = (props: { params: { slug: string } }) => {
 
     const hotelRoomSlug = room.slug.current;
 
-    const stripe = await getStripe();
-
     try {
+      const stripe = await getStripe();
+
+      if (!stripe) {
+        return toast.error(
+          "Payments are not available right now. Please try again later."
+        );
+      }
+
       const { data: stripeSession } = await axios.post("/api/stripe", {
         checkinDate,
         checkoutDate,
@@ -69,18 +76,17 @@ const RoomDetails = (props: { params: { slug: string } }) => {
         hotelRoomSlug,
       });
 
-      if (stripe) {
-        const result = await stripe.redirectToCheckout({
-          sessionId: stripeSession.id,
-        });
+      const result = await stripe.redirectToCheckout({
+        sessionId: stripeSession.id,
+      });
 
-        if (result.error) {
-          toast.error("Payment Failed");
-        }
+      if (result.error) {
+        toast.error(result.error.message ?? "The payment could not be completed.");
       }
     } catch (error) {
-      console.log("Error: ", error);
-      toast.error("To make a booking, you must be logged in.");
+      toast.error(
+        getErrorMessage(error, "We could not start the payment. Please try again.")
+      );
     }
   };
 
