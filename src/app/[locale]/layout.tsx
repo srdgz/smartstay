@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -18,11 +18,10 @@ import { CURRENCY_COOKIE, resolveCurrency } from "@/presentation/lib/currencyPre
 
 import "./globals.css";
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
-  style: ["italic", "normal"],
-  variable: "--font-poppins",
+  display: "swap",
+  variable: "--font-inter",
 });
 
 type Props = {
@@ -68,7 +67,7 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={poppins.className}>
+      <body className={`${inter.variable} font-sans`}>
         <NextIntlClientProvider>
           <CurrencyProvider initialCurrency={currency} rates={rates}>
             <NextAuthProvider>
@@ -77,9 +76,9 @@ export default async function RootLayout({
                 <a href="#main-content" className="skip-link">
                   {t("skipToContent")}
                 </a>
-                <div className="font-normal">
+                <div className="flex min-h-screen flex-col">
                   <Header />
-                  <main id="main-content" tabIndex={-1}>
+                  <main id="main-content" tabIndex={-1} className="flex-1">
                     {children}
                   </main>
                   <Footer />

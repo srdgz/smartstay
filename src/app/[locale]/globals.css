@@ -4,6 +4,7 @@
 
 html {
   color-scheme: light;
+  scroll-padding-top: 6rem;
 }
 
 html.dark {
@@ -11,35 +12,57 @@ html.dark {
 }
 
 body {
-  @apply bg-white text-[#1E1E1E];
+  @apply bg-white font-sans text-ink antialiased;
 }
 
 .dark body {
-  @apply bg-black text-white;
+  @apply bg-neutral-950 text-neutral-100;
 }
 
-.img {
-  @apply object-cover w-full h-full;
-}
+@layer components {
+  .img {
+    @apply h-full w-full object-cover;
+  }
 
-.scale-animation {
-  @apply hover:scale-125 transition-all duration-700;
-}
+  .scale-animation {
+    @apply transition-transform duration-500 ease-out group-hover:scale-105;
+  }
 
-.btn-primary {
-  @apply px-6 md:px-[50px] lg:px-[72px] py-2 md:py-5 bg-primary rounded-lg md:rounded-2xl shadow-sm shadow-primary text-white font-bold text-base md:text-xl hover:scale-110 duration-300 transition-all;
-}
+  .text-muted {
+    @apply text-gray-600 dark:text-gray-400;
+  }
 
-.btn-tertiary {
-  @apply px-6 md:px-[50px] lg:px-[72px] py-2 md:py-5 bg-tertiary-light rounded-lg md:rounded-2xl shadow-sm shadow-tertiary-light text-white font-bold text-base md:text-xl hover:scale-110 duration-300 transition-all;
-}
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-base font-semibold transition duration-200 active:scale-[0.98];
+  }
 
-.font-heading {
-  @apply font-medium md:font-semibold md:text-6xl text-3xl;
-}
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-base font-semibold text-white shadow-sm transition duration-200 hover:bg-primary-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-500;
+  }
 
-.font-normal {
-  @apply text-sm md:text-base;
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-transparent px-5 py-3 text-base font-semibold transition duration-200 hover:border-gray-900 dark:border-neutral-600 dark:hover:border-white;
+  }
+
+  .field {
+    @apply block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-base text-ink placeholder:text-gray-600 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-gray-400;
+  }
+
+  .card {
+    @apply rounded-2xl border border-gray-200 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900;
+  }
+
+  .page-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+  }
+
+  .font-heading {
+    @apply text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl;
+  }
+
+  .font-normal {
+    @apply text-base;
+  }
 }
 
 :focus-visible {
