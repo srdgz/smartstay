@@ -1,7 +1,9 @@
 "use client";
 
+import { es } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
 import { Dispatch, FC, SetStateAction } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
@@ -11,7 +13,10 @@ import {
   MIN_CHILDREN,
 } from "@/domain/booking/limits";
 import { discountedPrice, nightsBetween, stayTotal } from "@/domain/room/pricing";
+import { useMoney } from "@/presentation/hooks/useMoney";
 import { toDateOnly } from "@/presentation/lib/dateOnly";
+
+registerLocale("es", es);
 
 type Props = {
   checkinDate: Date | null;
@@ -48,7 +53,12 @@ const BookRoomCta: FC<Props> = (props) => {
     handleBookNowClick,
   } = props;
 
+  const t = useTranslations("Booking");
+  const locale = useLocale();
+  const { format } = useMoney();
+
   const discountPrice = discountedPrice(price, discount);
+  const datePickerLocale = locale === "es" ? "es" : undefined;
 
   const calcNoOfDays = () => {
     if (!checkinDate || !checkoutDate) return 0;
@@ -63,13 +73,16 @@ const BookRoomCta: FC<Props> = (props) => {
             discount ? "line-through text-gray-600 dark:text-gray-400" : ""
           } font-bold text-xl`}
         >
-          <span className="sr-only">Original price: </span>$ {price}
+          <span className="sr-only">{t("originalPrice")} </span>
+          {format(price)}
         </span>
         {discount ? (
           <span className="font-bold text-xl">
             {" "}
-            | discount {discount}%. Now{" "}
-            <span className="text-tertiary-dark dark:text-tertiary-darkmode">$ {discountPrice}</span>
+            {t("discountNow", { discount })}{" "}
+            <span className="text-tertiary-dark dark:text-tertiary-darkmode">
+              {format(discountPrice)}
+            </span>
           </span>
         ) : (
           ""
@@ -86,7 +99,7 @@ const BookRoomCta: FC<Props> = (props) => {
             htmlFor="check-in-date"
             className="block text-sm font-medium text-gray-900 dark:text-gray-400"
           >
-            Check In date
+            {t("checkIn")}
           </label>
           <DatePicker
             selected={checkinDate}
@@ -94,7 +107,8 @@ const BookRoomCta: FC<Props> = (props) => {
             dateFormat="dd/MM/yyyy"
             minDate={new Date()}
             id="check-in-date"
-            placeholderText="dd/mm/yyyy"
+            locale={datePickerLocale}
+            placeholderText={t("datePlaceholder")}
             autoComplete="off"
             className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
           />
@@ -104,7 +118,7 @@ const BookRoomCta: FC<Props> = (props) => {
             htmlFor="check-out-date"
             className="block text-sm font-medium text-gray-900 dark:text-gray-400"
           >
-            Check Out date
+            {t("checkOut")}
           </label>
           <DatePicker
             selected={checkoutDate}
@@ -113,7 +127,8 @@ const BookRoomCta: FC<Props> = (props) => {
             disabled={!checkinDate}
             minDate={calcMinCheckoutDate()}
             id="check-out-date"
-            placeholderText="dd/mm/yyyy"
+            locale={datePickerLocale}
+            placeholderText={t("datePlaceholder")}
             autoComplete="off"
             className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
           />
@@ -126,7 +141,7 @@ const BookRoomCta: FC<Props> = (props) => {
             htmlFor="adults"
             className="block text-sm font-medium text-gray-900 dark:text-gray-400"
           >
-            Adults
+            {t("adults")}
           </label>
           <input
             type="number"
@@ -143,7 +158,7 @@ const BookRoomCta: FC<Props> = (props) => {
             htmlFor="children"
             className="block text-sm font-medium text-gray-900 dark:text-gray-400"
           >
-            Children
+            {t("children")}
           </label>
           <input
             type="number"
@@ -160,7 +175,7 @@ const BookRoomCta: FC<Props> = (props) => {
       <div aria-live="polite">
         {calcNoOfDays() > 0 && (
           <p className="mt-3">
-            Total Price: $ {stayTotal(price, discount, calcNoOfDays())}
+            {t("total", { price: format(stayTotal(price, discount, calcNoOfDays())) })}
           </p>
         )}
       </div>
@@ -171,7 +186,7 @@ const BookRoomCta: FC<Props> = (props) => {
         onClick={handleBookNowClick}
         className="btn-primary w-full mt-6 disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
-        {isBooked ? "Booked" : "Book Now"}
+        {isBooked ? t("booked") : t("bookNow")}
       </button>
     </div>
   );

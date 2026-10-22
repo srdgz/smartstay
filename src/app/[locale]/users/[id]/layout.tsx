@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "My profile",
-};
+import { pageTitle } from "@/i18n/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return { title: await pageTitle(params.locale, "profile") };
+}
 
 export default function UserLayout({
   children,

@@ -1,6 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { FC } from "react";
+
 import CountUpNumber from "../CountUpNumber/CountUpNumber";
 
 type Props = {
@@ -10,21 +12,23 @@ type Props = {
 
 const ClientComponent: FC<Props> = (props) => {
   const { heading1, section2 } = props;
+  const t = useTranslations("Hero");
+
   return (
     <section className="flex px-4 items-center gap-12 container mx-auto">
       <div className="py-10 h-full">
         {heading1}
         <div className="flex justify-between mt-12">
           <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">Basic Room</p>
+            <p className="text-xs lg:text-xl text-center">{t("basicRoom")}</p>
             <CountUpNumber duration={3000} endValue={200} />
           </div>
           <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">Luxury Room</p>
+            <p className="text-xs lg:text-xl text-center">{t("luxuryRoom")}</p>
             <CountUpNumber duration={3000} endValue={150} />
           </div>
           <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">Suite Room</p>
+            <p className="text-xs lg:text-xl text-center">{t("suiteRoom")}</p>
             <CountUpNumber duration={3000} endValue={90} />
           </div>
         </div>

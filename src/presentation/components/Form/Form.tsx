@@ -1,7 +1,9 @@
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 const Form = () => {
+  const t = useTranslations("Contact");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -11,7 +13,7 @@ const Form = () => {
     setName("");
     setEmail("");
     setMessage("");
-    toast.success("Message submitted successfully");
+    toast.success(t("success"));
   };
 
   return (
@@ -21,7 +23,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <label className="block mb-4 dark:text-white">
-          Your name:
+          {t("name")}
           <input
             className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
             name="name"
@@ -34,7 +36,7 @@ const Form = () => {
         </label>
 
         <label className="block mb-4 dark:text-white">
-          Your e-mail:
+          {t("email")}
           <input
             className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
             name="email"
@@ -47,7 +49,7 @@ const Form = () => {
         </label>
 
         <label className="block mb-4 dark:text-white">
-          Your message:
+          {t("message")}
           <textarea
             name="message"
             rows={5}
@@ -59,7 +61,7 @@ const Form = () => {
         </label>
 
         <button type="submit" className="btn btn-primary w-full mt-4">
-          Submit
+          {t("submit")}
         </button>
       </form>
     </div>

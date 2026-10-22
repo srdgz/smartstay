@@ -1,4 +1,8 @@
+import { useTranslations } from "next-intl";
+
 const LoadingSpinner = () => {
+  const t = useTranslations("Common");
+
   return (
     <div
       role="status"
@@ -8,7 +12,7 @@ const LoadingSpinner = () => {
         aria-hidden="true"
         className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#1D3557] dark:border-white"
       />
-      <span className="sr-only">Loading</span>
+      <span className="sr-only">{t("loading")}</span>
     </div>
   );
 };

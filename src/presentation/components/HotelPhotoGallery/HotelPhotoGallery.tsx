@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { FC, useRef, useState } from "react";
 import type { RoomImage } from "@/domain/room/Room";
 import Image from "next/image";
@@ -9,6 +10,7 @@ import { MdCancel } from "react-icons/md";
 import useModalFocus from "@/presentation/hooks/useModalFocus";
 
 const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
+  const t = useTranslations("Gallery");
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -48,11 +50,11 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
               type="button"
               className="w-full h-full"
               onClick={() => openModal(0)}
-              aria-label="Open photo gallery"
+              aria-label={t("open")}
             >
               <Image
                 src={photos[0].url}
-                alt="Room photo 1"
+                alt={t("roomPhoto", { number: 1 })}
                 className="img scale-animation"
                 width={150}
                 height={150}
@@ -64,11 +66,11 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
               type="button"
               className="w-full h-full"
               onClick={() => openModal(currentPhotoIndex)}
-              aria-label="Open photo gallery"
+              aria-label={t("open")}
             >
               <Image
                 src={photos[currentPhotoIndex].url}
-                alt={`Room photo ${currentPhotoIndex + 1}`}
+                alt={t("roomPhoto", { number: currentPhotoIndex + 1 })}
                 className="img"
                 width={150}
                 height={150}
@@ -81,11 +83,11 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
             <button
               type="button"
               onClick={handlePrevious}
-              aria-label="Previous photo"
+              aria-label={t("previous")}
             >
               <FaArrowLeft aria-hidden="true" />
             </button>
-            <button type="button" onClick={handleNext} aria-label="Next photo">
+            <button type="button" onClick={handleNext} aria-label={t("next")}>
               <FaArrowRight aria-hidden="true" />
             </button>
           </div>
@@ -100,13 +102,13 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
                 type="button"
                 className="w-full h-full"
                 onClick={() => openModal(index + 1)}
-                aria-label={`Open photo ${index + 2} in gallery`}
+                aria-label={t("openPhoto", { number: index + 2 })}
               >
                 <Image
                   width={150}
                   height={150}
                   src={photo.url}
-                  alt={`Room photo ${index + 2}`}
+                  alt={t("roomPhoto", { number: index + 2 })}
                   className="img scale-animation"
                 />
               </button>
@@ -117,13 +119,13 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
               type="button"
               className="relative h-64 rounded-2xl overflow-hidden"
               onClick={() => openModal(maximumVisiblePhotos)}
-              aria-label={`View ${remainingPhotosCount} more photos`}
+              aria-label={t("morePhotos", { count: remainingPhotosCount })}
             >
               <Image
                 width={150}
                 height={150}
                 src={photos[maximumVisiblePhotos - 1].url}
-                alt={`Room photo ${maximumVisiblePhotos}`}
+                alt={t("roomPhoto", { number: maximumVisiblePhotos })}
                 className="img"
               />
               <div
@@ -140,13 +142,13 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Room photo gallery"
+            aria-label={t("dialog")}
             className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-90 z-[55]"
           >
             <div className="h-[75vh] w-[320px] md:w-[700px] relative">
               <Image
                 src={photos[currentPhotoIndex].url}
-                alt={`Room photo ${currentPhotoIndex + 1}`}
+                alt={t("roomPhoto", { number: currentPhotoIndex + 1 })}
                 width={150}
                 height={150}
                 className="img"
@@ -156,14 +158,14 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
                   <button
                     type="button"
                     onClick={handlePrevious}
-                    aria-label="Previous photo"
+                    aria-label={t("previous")}
                   >
                     <FaArrowLeft aria-hidden="true" />
                   </button>
                   <button
                     type="button"
                     onClick={handleNext}
-                    aria-label="Next photo"
+                    aria-label={t("next")}
                   >
                     <FaArrowRight aria-hidden="true" />
                   </button>
@@ -176,7 +178,7 @@ const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
                 type="button"
                 className="absolute top-2 right-2 text-white text-lg"
                 onClick={closeModal}
-                aria-label="Close gallery"
+                aria-label={t("close")}
               >
                 <MdCancel
                   aria-hidden="true"

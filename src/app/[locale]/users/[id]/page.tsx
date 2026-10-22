@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
@@ -16,9 +17,12 @@ import RatingModal from "@/presentation/components/RatingModal/RatingModal";
 import BackDrop from "@/presentation/components/BackDrop/BackDrop";
 import toast from "react-hot-toast";
 import { notifyError } from "@/presentation/lib/notify";
-import { getErrorMessage } from "@/presentation/lib/errorMessage";
+import { useErrorMessage } from "@/presentation/hooks/useErrorMessage";
 
 const UserDetails = () => {
+  const t = useTranslations("Profile");
+  const locale = useLocale();
+  const errorMessage = useErrorMessage();
   const [currentNav, setCurrentNav] = useState<
     "bookings" | "amount" | "ratings"
   >("bookings");
@@ -33,26 +37,24 @@ const UserDetails = () => {
 
   const reviewSubmitHandler = async () => {
     if (!ratingText.trim().length || !ratingValue) {
-      return notifyError("Please provide a rating text and a rating");
+      return notifyError(t("reviewRequired"));
     }
 
     if (!roomId) {
-      return notifyError("We could not find the room to review. Please try again.");
+      return notifyError(t("reviewRoomMissing"));
     }
 
     setIsSubmittingReview(true);
 
     try {
       await submitReview({ roomId, rating: ratingValue, text: ratingText });
-      toast.success("Review submitted");
+      toast.success(t("reviewSubmitted"));
       setRatingText("");
       setRatingValue(null);
       setRoomId(null);
       setIsRatingVisible(false);
     } catch (error) {
-      notifyError(
-        getErrorMessage(error, "We could not save your review. Please try again.")
-      );
+      notifyError(errorMessage(error, t("reviewFailed")));
     } finally {
       setIsSubmittingReview(false);
     }
@@ -66,12 +68,15 @@ const UserDetails = () => {
   if (!userData) return <LoadingSpinner />;
 
   const avatarUrl = userData.image ?? session?.user?.image ?? null;
+  const joinedDate = new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+    new Date(userData.createdAt)
+  );
 
   return (
     <div className="container mx-auto px-2 md:px-4 py10">
       <div className="grid md:grid-cols-12 gap-10">
         <aside
-          aria-label="Profile summary"
+          aria-label={t("summary")}
           className="hidden md:block md:col-span-4 lg:col-span-3 shadow-lg h-fit sticky top-10 bg-[#eff0f2] text-black rounded-lg px-6 py-4"
         >
           <div className="md:w-[143px] w-28 h-28 md:h-[143px] mx-auto mb-5 rounded-full overflow-hidden">
@@ -88,7 +93,7 @@ const UserDetails = () => {
             )}
           </div>
           <div className="font-normal py-4 text-left">
-            <h2 className="text-xl font-bold pb-3">About</h2>
+            <h2 className="text-xl font-bold pb-3">{t("about")}</h2>
             <p className="text-sm">{userData.about ?? ""}</p>
           </div>
           <div className="font-normal text-left">
@@ -97,16 +102,18 @@ const UserDetails = () => {
           <button
             type="button"
             className="flex items-center"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => signOut({ callbackUrl: `/${locale}` })}
           >
-            <span className="mr-2">Sign Out</span>
+            <span className="mr-2">{t("signOut")}</span>
             <FaSignOutAlt className="text-3xl" aria-hidden="true" />
           </button>
         </aside>
 
         <div className="md:col-span-8 lg:col-span-9">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold mr-3">Hello, {userData.name}</h1>
+            <h1 className="text-2xl font-bold mr-3">
+              {t("hello", { name: userData.name })}
+            </h1>
           </div>
           <div className="md:hidden w-14 h-14 rounded-l-full overflow-hidden">
             {avatarUrl ? (
@@ -126,19 +133,19 @@ const UserDetails = () => {
           </p>
 
           <p className="text-xs py-2 font-medium">
-            Joined In {userData.createdAt.split("T")[0]}
+            {t("joined", { date: joinedDate })}
           </p>
           <button
             type="button"
             className="md:hidden flex items-center my-2"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => signOut({ callbackUrl: `/${locale}` })}
           >
-            <span className="mr-2">Sign out</span>
+            <span className="mr-2">{t("signOut")}</span>
             <FaSignOutAlt className="text-3xl" aria-hidden="true" />
           </button>
 
           <nav
-            aria-label="Profile sections"
+            aria-label={t("sections")}
             className="sticky top-0 px-2 w-fit mx-auto md:w-full md:px-5 py-3 mb-8 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 mt-7"
           >
             <ul className="flex items-center">
@@ -155,7 +162,7 @@ const UserDetails = () => {
                 >
                   <BsJournalBookmarkFill aria-hidden="true" />
                   <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                    Current Bookings
+                    {t("bookingsTab")}
                   </span>
                 </button>
               </li>
@@ -172,7 +179,7 @@ const UserDetails = () => {
                 >
                   <GiMoneyStack aria-hidden="true" />
                   <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                    Amount Spent
+                    {t("amountTab")}
                   </span>
                 </button>
               </li>
@@ -180,7 +187,7 @@ const UserDetails = () => {
           </nav>
 
           <h2 className="sr-only" aria-live="polite">
-            {currentNav === "bookings" ? "Current Bookings" : "Amount Spent"}
+            {currentNav === "bookings" ? t("bookingsTab") : t("amountTab")}
           </h2>
 
           {currentNav === "bookings" ? (

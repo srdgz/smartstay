@@ -1,23 +1,26 @@
+import { useTranslations } from "next-intl";
 import { FC } from "react";
 
+import { useErrorMessage } from "@/presentation/hooks/useErrorMessage";
 import { useRoomReviews } from "@/presentation/hooks/useApi";
-import { getErrorMessage } from "@/presentation/lib/errorMessage";
 
 import Rating from "../Rating/Rating";
 
 const RoomReview: FC<{ roomId: string }> = ({ roomId }) => {
+  const t = useTranslations("Reviews");
+  const errorMessage = useErrorMessage();
   const { data: roomReviews, error, isLoading } = useRoomReviews(roomId);
 
   if (error) {
     return (
       <p role="alert" className="col-span-full">
-        {getErrorMessage(error, "We could not load the reviews. Please try again later.")}
+        {errorMessage(error, t("loadFailed"))}
       </p>
     );
   }
 
   if (!isLoading && roomReviews && !roomReviews.length) {
-    return <p className="col-span-full">No reviews yet.</p>;
+    return <p className="col-span-full">{t("none")}</p>;
   }
 
   return (

@@ -1,28 +1,12 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { BiSolidMessageDetail } from "react-icons/bi";
 import { BsFillSendFill, BsTelephoneOutbound } from "react-icons/bs";
 
-const supportLinks = [
-  { label: "Community Forum" },
-  { label: "Help Center", href: "/contact" },
-  { label: "Privacy" },
-  { label: "Terms of Service" },
-];
+import { Link } from "@/i18n/navigation";
 
-const exploreLinks = [
-  { label: "Stays", href: "/rooms" },
-  { label: "Experiences" },
-  { label: "New Features" },
-  { label: "Gift Cards" },
-];
+type FooterItem = { label: string; href?: "/contact" | "/rooms" };
 
-const FooterList = ({
-  label,
-  items,
-}: {
-  label: string;
-  items: { label: string; href?: string }[];
-}) => (
+const FooterList = ({ label, items }: { label: string; items: FooterItem[] }) => (
   <nav aria-label={label} className="flex-1 md:text-right">
     <ul>
       {items.map((item) => (
@@ -41,6 +25,22 @@ const FooterList = ({
 );
 
 const Footer = () => {
+  const t = useTranslations("Footer");
+
+  const supportLinks: FooterItem[] = [
+    { label: t("communityForum") },
+    { label: t("helpCenter"), href: "/contact" },
+    { label: t("privacy") },
+    { label: t("terms") },
+  ];
+
+  const exploreLinks: FooterItem[] = [
+    { label: t("stays"), href: "/rooms" },
+    { label: t("experiences") },
+    { label: t("newFeatures") },
+    { label: t("giftCards") },
+  ];
+
   return (
     <footer className="mt-16">
       <div className="container mx-auto px-4">
@@ -50,7 +50,7 @@ const Footer = () => {
         >
           SmartStay
         </Link>
-        <h2 className="font-semibold text-[20px] py-6">Contact</h2>
+        <h2 className="font-semibold text-[20px] py-6">{t("contact")}</h2>
         <div className="flex flex-wrap gap-16 items-center justify-between">
           <div className="flex-1">
             <p>Avda. Programación 123</p>
@@ -67,8 +67,8 @@ const Footer = () => {
               <p className="ml-2">SmartStay by srdgz</p>
             </div>
           </div>
-          <FooterList label="Support" items={supportLinks} />
-          <FooterList label="Explore" items={exploreLinks} />
+          <FooterList label={t("support")} items={supportLinks} />
+          <FooterList label={t("explore")} items={exploreLinks} />
         </div>
       </div>
       <div className="bg-tertiary-light h-10 md:h-[70px] mt-16 w-full bottom-0 left-0 dark:bg-[#212529]"></div>

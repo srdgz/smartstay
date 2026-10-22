@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "@/test/axe";
+import { renderWithProviders } from "@/test/render";
 import { describe, expect, it, vi } from "vitest";
 
 import type { Booking } from "@/domain/booking/Booking";
@@ -23,13 +24,16 @@ const bookings: Booking[] = [
     children: 0,
     totalPrice: 190,
     discount: 5,
+    currency: "EUR",
+    exchangeRate: 0.9,
+    chargedAmount: 171,
   },
 ];
 
 const setup = () => {
   const setRoomId = vi.fn();
   const toggleRatingModal = vi.fn();
-  render(
+  renderWithProviders(
     <Table
       bookingDetails={bookings}
       setRoomId={setRoomId}
@@ -51,8 +55,15 @@ describe("Table", () => {
     setup();
     expect(screen.getByRole("link", { name: "Standard Room" })).toHaveAttribute(
       "href",
-      "/rooms/standard-room"
+      "/en/rooms/standard-room"
     );
+  });
+
+  it("shows the amount in the currency the booking was charged in", () => {
+    setup();
+    expect(screen.getByText("€90")).toBeInTheDocument();
+    expect(screen.getByText("€171")).toBeInTheDocument();
+    expect(screen.getByText("5%")).toBeInTheDocument();
   });
 
   it("opens the rating dialog for the chosen room", async () => {

@@ -4,8 +4,9 @@ import { respond } from "@/infrastructure/http/route";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: { slug: string } }
 ) {
-  return respond(() => useCases.getRoom(params.slug));
+  const locale = new URL(request.url).searchParams.get("locale") ?? "";
+  return respond(() => useCases.getRoom(params.slug, locale));
 }

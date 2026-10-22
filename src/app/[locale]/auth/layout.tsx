@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Sign in or create an account",
-};
+import { pageTitle } from "@/i18n/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return { title: await pageTitle(params.locale, "auth") };
+}
 
 export default function AuthLayout({
   children,

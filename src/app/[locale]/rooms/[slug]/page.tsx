@@ -4,6 +4,7 @@ import { MdOutlineCleaningServices } from "react-icons/md";
 import { LiaFireExtinguisherSolid } from "react-icons/lia";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { GiSmokeBomb } from "react-icons/gi";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { useRoom } from "@/presentation/hooks/useApi";
@@ -15,7 +16,8 @@ import BookRoomCta from "@/presentation/components/BookRoomCta/BookRoomCta";
 import toast from "react-hot-toast";
 import { notifyError } from "@/presentation/lib/notify";
 import { getStripe } from "@/presentation/lib/stripeBrowser";
-import { getErrorMessage } from "@/presentation/lib/errorMessage";
+import { useErrorMessage } from "@/presentation/hooks/useErrorMessage";
+import { useMoney } from "@/presentation/hooks/useMoney";
 import RoomReview from "@/presentation/components/RoomReview/RoomReview";
 
 const RoomDetails = (props: { params: { slug: string } }) => {
@@ -27,6 +29,10 @@ const RoomDetails = (props: { params: { slug: string } }) => {
   const [checkoutDate, setCheckoutDate] = useState<Date | null>(null);
   const [adults, setAdults] = useState(1);
   const [noOfChildren, setNoOfChildren] = useState(0);
+  const t = useTranslations("RoomDetails");
+  const locale = useLocale();
+  const { currency } = useMoney();
+  const errorMessage = useErrorMessage();
 
   const { data: room, error } = useRoom(slug);
 
@@ -45,18 +51,16 @@ const RoomDetails = (props: { params: { slug: string } }) => {
 
   const handleBookNowClick = async () => {
     if (!checkinDate || !checkoutDate)
-      return notifyError("Please provide checkin / checkout date");
+      return notifyError(t("provideDates"));
 
     if (checkinDate > checkoutDate)
-      return notifyError("Please choose a valid checkin period");
+      return notifyError(t("invalidPeriod"));
 
     try {
       const stripe = await getStripe();
 
       if (!stripe) {
-        return notifyError(
-          "Payments are not available right now. Please try again later."
-        );
+        return notifyError(t("paymentsUnavailable"));
       }
 
       const stripeSession = await createCheckoutSession({
@@ -65,6 +69,8 @@ const RoomDetails = (props: { params: { slug: string } }) => {
         checkoutDate: toDateOnly(checkoutDate),
         adults,
         children: noOfChildren,
+        currency,
+        locale,
       });
 
       const result = await stripe.redirectToCheckout({
@@ -72,12 +78,10 @@ const RoomDetails = (props: { params: { slug: string } }) => {
       });
 
       if (result.error) {
-        notifyError(result.error.message ?? "The payment could not be completed.");
+        notifyError(result.error.message ?? t("paymentIncomplete"));
       }
     } catch (error) {
-      notifyError(
-        getErrorMessage(error, "We could not start the payment. Please try again.")
-      );
+      notifyError(errorMessage(error, t("paymentFailed")));
     }
   };
 
@@ -108,11 +112,11 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                 ))}
               </div>
               <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">Description</h2>
+                <h2 className="font-bold text-3xl mb-2">{t("description")}</h2>
                 <p className="">{room.description}</p>
               </div>
               <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">Offered Amenities</h2>
+                <h2 className="font-bold text-3xl mb-2">{t("amenities")}</h2>
                 <div className="grid grid-cols-2">
                   {room.amenities.map((amenity) => (
                     <div
@@ -131,33 +135,33 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                 </div>
               </div>
               <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">Safety and hygiene</h2>
+                <h2 className="font-bold text-3xl mb-2">{t("safety")}</h2>
                 <div className="grid grid-cols-2">
                   <div className="flex items-center my-1 md:my-0">
                     <MdOutlineCleaningServices aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">Daily Cleaning</p>
+                    <p className="ml-2 md:text-base text-xs">{t("dailyCleaning")}</p>
                   </div>
                   <div className="flex items-center my-1 md:my-0">
                     <LiaFireExtinguisherSolid aria-hidden="true" />
                     <p className="ml-2 md:text-base text-xs">
-                      Fire Extinguishers
+                      {t("fireExtinguishers")}
                     </p>
                   </div>
                   <div className="flex items-center my-1 md:my-0">
                     <AiOutlineMedicineBox aria-hidden="true" />
                     <p className="ml-2 md:text-base text-xs">
-                      Disinfections and Sterilizations
+                      {t("disinfection")}
                     </p>
                   </div>
                   <div className="flex items-center my-1 md:my-0">
                     <GiSmokeBomb aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">Smoke Detectors</p>
+                    <p className="ml-2 md:text-base text-xs">{t("smokeDetectors")}</p>
                   </div>
                 </div>
               </div>
               <div className="shadow dark:shadow-white rounded-lg p-6">
                 <div className="items-center mb-4">
-                  <h2 className="md:text-lg font-semibold">Customer Reviews</h2>
+                  <h2 className="md:text-lg font-semibold">{t("reviews")}</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <RoomReview roomId={room.id} />
@@ -166,7 +170,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
             </div>
           </div>
           <aside
-            aria-label="Book this room"
+            aria-label={t("bookAside")}
             className="md:col-span-4 rounded-xl shadow-lg dark:shadow dark:shadow-white sticky top-10 h-fit overflow-auto"
           >
             <BookRoomCta

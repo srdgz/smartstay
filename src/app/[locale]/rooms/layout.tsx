@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: {
-    default: "Stays",
-    template: "%s | SmartStay",
-  },
-};
+import { pageTitle } from "@/i18n/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return {
+    title: {
+      default: await pageTitle(params.locale, "stays"),
+      template: "%s | SmartStay",
+    },
+  };
+}
 
 export default function RoomsLayout({
   children,

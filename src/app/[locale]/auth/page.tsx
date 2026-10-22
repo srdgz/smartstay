@@ -1,13 +1,15 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { signUp } from "next-auth-sanity/client";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+
+import { useRouter } from "@/i18n/navigation";
 import { notifyError } from "@/presentation/lib/notify";
-import { useRouter } from "next/navigation";
 
 const defaultFormData = {
   name: "",
@@ -15,15 +17,15 @@ const defaultFormData = {
   password: "",
 };
 
-const signInErrors: Record<string, string> = {
-  OAuthAccountNotLinked:
-    "An account with this email already exists. Sign in with the method you used originally.",
-  CredentialsSignin: "Incorrect email or password.",
-  AccessDenied: "Access denied. You do not have permission to sign in.",
-  Default: "We could not sign you in. Please try again.",
-};
+const knownSignInErrors = [
+  "OAuthAccountNotLinked",
+  "CredentialsSignin",
+  "AccessDenied",
+] as const;
 
 const Auth = () => {
+  const t = useTranslations("Auth");
+  const locale = useLocale();
   const [formData, setFormData] = useState(defaultFormData);
   const inputStyles =
     "border border-gray-300 sm:text-sm text-black placeholder:text-gray-600 rounded-lg block w-full p-2.5";
@@ -42,17 +44,17 @@ const Auth = () => {
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get("error");
-    if (code) {
-      notifyError(signInErrors[code] ?? signInErrors.Default, code);
-    }
-  }, []);
+    if (!code) return;
+
+    const known = knownSignInErrors.find((error) => error === code);
+    notifyError(t(`errors.${known ?? "Default"}`), code);
+  }, [t]);
 
   const loginHandler = async (provider?: string) => {
     try {
-      await signIn(provider);
-      router.push("/");
+      await signIn(provider, { callbackUrl: `/${locale}` });
     } catch (error) {
-      notifyError(signInErrors.Default);
+      notifyError(t("errors.Default"));
     }
   };
 
@@ -61,13 +63,11 @@ const Auth = () => {
     try {
       const user = await signUp(formData);
       if (user) {
-        toast.success("Account created. Please sign in.");
+        toast.success(t("accountCreated"));
         setFormData(defaultFormData);
       }
     } catch (error) {
-      notifyError(
-        "We could not create your account. If you already registered, use Sign In."
-      );
+      notifyError(t("signUpFailed"));
     }
   };
 
@@ -76,14 +76,14 @@ const Auth = () => {
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8 md:w-[70%] mx-auto">
         <div className="flex mb-8 flex-col md:flex-row items-center justify-between">
           <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
-            Create an account
+            {t("createAccount")}
           </h1>
-          <p>or</p>
+          <p>{t("or")}</p>
           <span className="inline-flex items-center">
             <button
               type="button"
               onClick={() => loginHandler("github")}
-              aria-label="Sign in with GitHub"
+              aria-label={t("signInGithub")}
               className="mr-3"
             >
               <AiFillGithub
@@ -95,7 +95,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={() => loginHandler("google")}
-              aria-label="Sign in with Google"
+              aria-label={t("signInGoogle")}
               className="ml-3"
             >
               <FcGoogle aria-hidden="true" className="text-4xl" />
@@ -104,42 +104,42 @@ const Auth = () => {
         </div>
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
           <label htmlFor="auth-name" className="sr-only">
-            Name
+            {t("name")}
           </label>
           <input
             id="auth-name"
             type="text"
             name="name"
             autoComplete="name"
-            placeholder="Your name"
+            placeholder={t("namePlaceholder")}
             required
             className={inputStyles}
             value={formData.name}
             onChange={handleInputChange}
           />
           <label htmlFor="auth-email" className="sr-only">
-            Email
+            {t("email")}
           </label>
           <input
             id="auth-email"
             type="email"
             name="email"
             autoComplete="email"
-            placeholder="email@email.com"
+            placeholder={t("emailPlaceholder")}
             required
             className={inputStyles}
             value={formData.email}
             onChange={handleInputChange}
           />
           <label htmlFor="auth-password" className="sr-only">
-            Password (at least 8 characters)
+            {t("password")}
           </label>
           <input
             id="auth-password"
             type="password"
             name="password"
             autoComplete="new-password"
-            placeholder="Your password"
+            placeholder={t("passwordPlaceholder")}
             required
             minLength={8}
             className={inputStyles}
@@ -150,7 +150,7 @@ const Auth = () => {
             type="submit"
             className="w-full bg-tertiary-dark text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Sign Up
+            {t("signUp")}
           </button>
         </form>
         <button
@@ -158,7 +158,7 @@ const Auth = () => {
           onClick={() => loginHandler()}
           className="text-blue-700 underline dark:text-blue-300"
         >
-          Sign In
+          {t("signIn")}
         </button>
       </div>
     </section>

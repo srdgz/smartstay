@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Dispatch, FC, SetStateAction, useRef } from "react";
 import { BsStarFill } from "react-icons/bs";
 
@@ -26,6 +27,7 @@ const RatingModal: FC<Props> = (props) => {
     toggleRatingModal,
   } = props;
 
+  const t = useTranslations("RatingModal");
   const dialogRef = useRef<HTMLDivElement>(null);
   useModalFocus(isOpen, dialogRef, toggleRatingModal);
 
@@ -46,14 +48,14 @@ const RatingModal: FC<Props> = (props) => {
           id="rating-dialog-title"
           className="text-xl dark:text-gray-800 font-semibold mb-2"
         >
-          Rate Your Experience
+          {t("title")}
         </h2>
         <div className="mb-4" role="group" aria-labelledby="rating-label">
           <span
             id="rating-label"
             className="block text-sm font-medium text-gray-700"
           >
-            Rating
+            {t("rating")}
           </span>
           <div className="flex items-center">
             {starValues.map((value) => (
@@ -65,7 +67,7 @@ const RatingModal: FC<Props> = (props) => {
                     : "text-gray-500"
                 }`}
                 onClick={() => setRatingValue(value)}
-                aria-label={`${value} ${value === 1 ? "star" : "stars"}`}
+                aria-label={t("stars", { count: value })}
                 aria-pressed={ratingValue === value}
                 key={value}
               >
@@ -80,7 +82,7 @@ const RatingModal: FC<Props> = (props) => {
             htmlFor="rating-text"
             className="block text-sm font-medium text-gray-700"
           >
-            Review Text
+            {t("reviewText")}
           </label>
 
           <textarea
@@ -99,14 +101,14 @@ const RatingModal: FC<Props> = (props) => {
             className="px-4 py-2 bg-primary text-white rounded-md"
             disabled={isSubmittingReview}
           >
-            {isSubmittingReview ? "Submitting" : "Submit"}
+            {isSubmittingReview ? t("submitting") : t("submit")}
           </button>
           <button
             type="button"
             onClick={toggleRatingModal}
             className="ml-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
           >
-            Cancel
+            {t("cancel")}
           </button>
         </div>
       </div>

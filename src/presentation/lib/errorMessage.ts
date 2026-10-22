@@ -1,12 +1,25 @@
 import axios from "axios";
 
-export const getErrorMessage = (error: unknown, fallback: string) => {
-  if (axios.isAxiosError(error)) {
-    if (!error.response) {
-      return "Network error. Please check your connection and try again.";
+export type ErrorTranslations = {
+  has: (code: string) => boolean;
+  message: (code: string, params?: Record<string, string | number>) => string;
+  network: string;
+};
+
+export const getErrorMessage = (
+  error: unknown,
+  fallback: string,
+  translations: ErrorTranslations
+) => {
+  if (!axios.isAxiosError(error)) return fallback;
+  if (!error.response) return translations.network;
+
+  const data = error.response.data;
+  if (data && typeof data === "object" && typeof data.code === "string") {
+    if (translations.has(data.code)) {
+      return translations.message(data.code, data.params ?? {});
     }
-    const data = error.response.data;
-    if (typeof data === "string" && data.trim()) return data;
   }
+
   return fallback;
 };

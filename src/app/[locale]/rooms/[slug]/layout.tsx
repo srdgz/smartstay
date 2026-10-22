@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 
+import { pageTitle, resolveLocale } from "@/i18n/metadata";
 import { useCases } from "@/infrastructure/container";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { locale: string; slug: string };
 }): Promise<Metadata> {
   try {
-    const room = await useCases.getRoom(params.slug);
-    return { title: room.name || "Room details" };
+    const room = await useCases.getRoom(params.slug, resolveLocale(params.locale));
+    return { title: room.name || (await pageTitle(params.locale, "roomDetails")) };
   } catch {
-    return { title: "Room details" };
+    return { title: await pageTitle(params.locale, "roomDetails") };
   }
 }
 

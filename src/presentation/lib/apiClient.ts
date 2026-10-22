@@ -11,6 +11,8 @@ export type CheckoutInput = {
   checkoutDate: string;
   adults: number;
   children: number;
+  currency: string;
+  locale: string;
 };
 
 export const createCheckoutSession = async (input: CheckoutInput) => {

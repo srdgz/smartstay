@@ -1,3 +1,6 @@
+import { setRequestLocale } from "next-intl/server";
+
+import { resolveLocale } from "@/i18n/metadata";
 import { useCases } from "@/infrastructure/container";
 import FeaturedRoom from "@/presentation/components/FeaturedRoom/FeaturedRoom";
 import Gallery from "@/presentation/components/Gallery/Gallery";
@@ -7,8 +10,9 @@ import PageSearch from "@/presentation/components/PageSearch/PageSearch";
 
 export const dynamic = "force-dynamic";
 
-const Home = async () => {
-  const featuredRoom = await useCases.getFeaturedRoom();
+const Home = async ({ params: { locale } }: { params: { locale: string } }) => {
+  setRequestLocale(resolveLocale(locale));
+  const featuredRoom = await useCases.getFeaturedRoom(locale);
 
   return (
     <>

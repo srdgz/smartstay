@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "@/test/axe";
+import { renderWithProviders } from "@/test/render";
 import { describe, expect, it, vi } from "vitest";
 
 import RatingModal from "./RatingModal";
@@ -18,7 +19,7 @@ const setup = (overrides: Partial<React.ComponentProps<typeof RatingModal>> = {}
     ...overrides,
   };
   const user = userEvent.setup();
-  const view = render(<RatingModal {...props} />);
+  const view = renderWithProviders(<RatingModal {...props} />);
   return { props, user, ...view };
 };
 

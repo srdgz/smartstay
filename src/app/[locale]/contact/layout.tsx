@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Contact",
-};
+import { pageTitle } from "@/i18n/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return { title: await pageTitle(params.locale, "contact") };
+}
 
 export default function ContactLayout({
   children,

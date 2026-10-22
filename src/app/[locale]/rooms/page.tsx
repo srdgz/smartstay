@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,6 +10,7 @@ import Search from "@/presentation/components/Search/Search";
 import RoomCard from "@/presentation/components/RoomCard/RoomCard";
 
 const Rooms = () => {
+  const t = useTranslations("Rooms");
   const [roomTypeFilter, setRoomTypeFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
@@ -50,7 +52,7 @@ const Rooms = () => {
 
   return (
     <div className="container mx-auto pt-10">
-      <h1 className="sr-only">Our stays</h1>
+      <h1 className="sr-only">{t("title")}</h1>
       <Search
         roomTypeFilter={roomTypeFilter}
         searchQuery={searchQuery}
@@ -60,12 +62,10 @@ const Rooms = () => {
 
       <p role="status" className={data && !filteredRooms.length ? "mt-20 text-center" : "sr-only"}>
         {isLoading
-          ? "Loading stays"
+          ? t("loading")
           : filteredRooms.length
-          ? `${filteredRooms.length} ${
-              filteredRooms.length === 1 ? "stay" : "stays"
-            } found`
-          : "No stays match your search."}
+          ? t("count", { count: filteredRooms.length })
+          : t("none")}
       </p>
 
       <div className="flex mt-20 justify-between flex-wrap">

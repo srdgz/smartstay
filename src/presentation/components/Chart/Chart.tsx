@@ -7,19 +7,25 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+import { useTranslations } from "next-intl";
 import { FC, useContext } from "react";
 import { Bar } from "react-chartjs-2";
 
-import ThemeContext from "@/presentation/context/themeContext";
 import type { Booking } from "@/domain/booking/Booking";
+import { useMoney } from "@/presentation/hooks/useMoney";
+import ThemeContext from "@/presentation/context/themeContext";
 
 ChartJS.register(Tooltip, CategoryScale, LinearScale, BarElement);
 
 const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
+  const t = useTranslations("Chart");
   const { darkTheme } = useContext(ThemeContext);
+  const { currency, convert, formatIn } = useMoney();
 
   const labels = userBookings.map((booking) => booking.room.name);
-  const amountSpent = userBookings.map((booking) => booking.totalPrice);
+  const amountSpent = userBookings.map((booking) =>
+    Math.round(convert(booking.totalPrice) * 100) / 100
+  );
   const totalSpent = amountSpent.reduce((sum, amount) => sum + amount, 0);
 
   const textColor = darkTheme ? "#FFFFFF" : "#1E1E1E";
@@ -33,12 +39,12 @@ const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
     },
   };
 
-  const summary = `Bar chart of the amount spent per booking. Total: $ ${totalSpent}.`;
+  const summary = t("summary", { total: formatIn(totalSpent, currency) });
 
   return (
     <figure>
       <figcaption className="font-semibold mb-4">
-        Amount spent per booking (USD)
+        {t("title", { currency })}
       </figcaption>
       <Bar
         role="img"
@@ -48,7 +54,7 @@ const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
           labels,
           datasets: [
             {
-              label: "Amount spent",
+              label: t("dataset"),
               data: amountSpent,
               borderWidth: 1,
               backgroundColor: "#F27405",
@@ -58,25 +64,25 @@ const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
         }}
       />
       <table className="sr-only">
-        <caption>Amount spent per booking</caption>
+        <caption>{t("dataset")}</caption>
         <thead>
           <tr>
-            <th scope="col">Room</th>
-            <th scope="col">Amount spent (USD)</th>
+            <th scope="col">{t("room")}</th>
+            <th scope="col">{t("dataset")} ({currency})</th>
           </tr>
         </thead>
         <tbody>
-          {userBookings.map((booking) => (
+          {userBookings.map((booking, index) => (
             <tr key={booking.id}>
               <th scope="row">{booking.room.name}</th>
-              <td>{booking.totalPrice}</td>
+              <td>{formatIn(amountSpent[index], currency)}</td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
-            <th scope="row">Total</th>
-            <td>{totalSpent}</td>
+            <th scope="row">{t("total")}</th>
+            <td>{formatIn(totalSpent, currency)}</td>
           </tr>
         </tfoot>
       </table>

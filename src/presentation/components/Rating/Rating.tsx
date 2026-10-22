@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { FaStar, FaStarHalf } from "react-icons/fa";
 
@@ -6,6 +7,7 @@ type Props = {
 };
 
 const Rating: FC<Props> = ({ rating }) => {
+  const t = useTranslations("Reviews");
   const fullStars = Math.floor(rating);
   const decimalPart = rating - fullStars;
 
@@ -20,7 +22,7 @@ const Rating: FC<Props> = ({ rating }) => {
   }
 
   return (
-    <span role="img" aria-label={`Rated ${rating} out of 5`}>
+    <span role="img" aria-label={t("rated", { rating })}>
       {fullStarElements} {halfStarElement}
     </span>
   );

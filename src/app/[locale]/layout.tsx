@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
-import Header from "@/presentation/components/Header/Header";
-import Footer from "@/presentation/components/Footer/Footer";
-import ThemeProvider from "@/presentation/components/ThemeProvider/ThemeProvider";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
+import { resolveLocale } from "@/i18n/metadata";
+import { routing } from "@/i18n/routing";
+import { useCases } from "@/infrastructure/container";
 import { NextAuthProvider } from "@/presentation/components/AuthProvider/AuthProvider";
+import Footer from "@/presentation/components/Footer/Footer";
+import Header from "@/presentation/components/Header/Header";
+import ThemeProvider from "@/presentation/components/ThemeProvider/ThemeProvider";
 import Toast from "@/presentation/components/Toast/Toast";
+import { CurrencyProvider } from "@/presentation/context/CurrencyContext";
+import { CURRENCY_COOKIE, resolveCurrency } from "@/presentation/lib/currencyPreference";
+
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -14,21 +25,41 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "SmartStay | Find your perfect refuge with just one click!",
-    template: "%s | SmartStay",
-  },
-  description: "Your journey, your style, your choice.",
+type Props = {
+  children: React.ReactNode;
+  params: { locale: string };
 };
 
-export default function RootLayout({
+export async function generateMetadata({
+  params,
+}: Omit<Props, "children">): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: resolveLocale(params.locale),
+    namespace: "Metadata",
+  });
+
+  return {
+    title: {
+      default: t("defaultTitle"),
+      template: "%s | SmartStay",
+    },
+    description: t("description"),
+  };
+}
+
+export default async function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  params: { locale },
+}: Props) {
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
+
+  const t = await getTranslations({ locale, namespace: "Common" });
+  const rates = await useCases.getExchangeRates();
+  const currency = resolveCurrency(cookies().get(CURRENCY_COOKIE)?.value, locale);
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link rel="icon" type="image/png" href="/icon.png" />
         <link
@@ -38,21 +69,25 @@ export default function RootLayout({
         />
       </head>
       <body className={poppins.className}>
-        <NextAuthProvider>
-          <ThemeProvider>
-            <Toast />
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
-            <div className="font-normal">
-              <Header />
-              <main id="main-content" tabIndex={-1}>
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </ThemeProvider>
-        </NextAuthProvider>
+        <NextIntlClientProvider>
+          <CurrencyProvider initialCurrency={currency} rates={rates}>
+            <NextAuthProvider>
+              <ThemeProvider>
+                <Toast />
+                <a href="#main-content" className="skip-link">
+                  {t("skipToContent")}
+                </a>
+                <div className="font-normal">
+                  <Header />
+                  <main id="main-content" tabIndex={-1}>
+                    {children}
+                  </main>
+                  <Footer />
+                </div>
+              </ThemeProvider>
+            </NextAuthProvider>
+          </CurrencyProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

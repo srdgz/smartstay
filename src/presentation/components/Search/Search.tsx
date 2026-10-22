@@ -1,7 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { FC, ChangeEvent } from "react";
+
+import { useRouter } from "@/i18n/navigation";
 
 type Props = {
   roomTypeFilter: string;
@@ -16,6 +18,7 @@ const Search: FC<Props> = ({
   setRoomTypeFilter,
   setSearchQuery,
 }) => {
+  const t = useTranslations("Search");
   const router = useRouter();
   const handleRoomTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setRoomTypeFilter(event.target.value);
@@ -24,7 +27,11 @@ const Search: FC<Props> = ({
     setSearchQuery(event.target.value);
   };
   const handleFilterClick = () => {
-    router.push(`/rooms?roomType=${roomTypeFilter}&searchQuery=${searchQuery}`);
+    router.push(
+      `/rooms?roomType=${encodeURIComponent(roomTypeFilter)}&searchQuery=${encodeURIComponent(
+        searchQuery
+      )}`
+    );
   };
   return (
     <section className="bg-tertiary-light px-4 py-6 rounded-lg dark:bg-[#212529]">
@@ -34,7 +41,7 @@ const Search: FC<Props> = ({
             htmlFor="room-type"
             className="block text-sm font-medium mb-2 text-black dark:text-white"
           >
-            Room Type
+            {t("roomType")}
           </label>
           <div className="relative">
             <select
@@ -43,10 +50,10 @@ const Search: FC<Props> = ({
               value={roomTypeFilter}
               className="w-full px-4 py-2 capitalize rounded-xl leading-tight bg-[#457B9D] dark:bg-[#F1FAEE] text-white dark:text-black"
             >
-              <option value="All">All</option>
-              <option value="Basic">Basic</option>
-              <option value="Luxury">Luxury</option>
-              <option value="Suite">Suite</option>
+              <option value="All">{t("all")}</option>
+              <option value="Basic">{t("basic")}</option>
+              <option value="Luxury">{t("luxury")}</option>
+              <option value="Suite">{t("suite")}</option>
             </select>
           </div>
         </div>
@@ -55,12 +62,12 @@ const Search: FC<Props> = ({
             htmlFor="search"
             className="block text-sm font-medium mb-2 text-black dark:text-white"
           >
-            Search
+            {t("search")}
           </label>
           <input
             type="search"
             id="search"
-            placeholder="Search..."
+            placeholder={t("placeholder")}
             value={searchQuery}
             onChange={handleSearchQueryChange}
             className="w-full px-4 py-3 rounded-xl leading-tight bg-[#457B9D] dark:bg-[#F1FAEE] placeholder:text-white dark:placeholder:text-black text-white dark:text-black"
@@ -71,7 +78,7 @@ const Search: FC<Props> = ({
           type="button"
           onClick={handleFilterClick}
         >
-          Search
+          {t("search")}
         </button>
       </div>
     </section>

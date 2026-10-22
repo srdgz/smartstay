@@ -1,8 +1,8 @@
 import ClientComponent from "./ClientComponent";
-import { heading1, section2 } from "./ServerComponent";
+import { HeroHeading, HeroImages } from "./ServerComponent";
 
 const HeroSection = () => {
-  return <ClientComponent section2={section2} heading1={heading1} />;
+  return <ClientComponent section2={<HeroImages />} heading1={<HeroHeading />} />;
 };
 
 export default HeroSection;
