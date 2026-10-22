@@ -24,6 +24,8 @@ const Form = () => {
           Your name:
           <input
             className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
+            name="name"
+            autoComplete="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -35,6 +37,8 @@ const Form = () => {
           Your e-mail:
           <input
             className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
+            name="email"
+            autoComplete="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -45,6 +49,8 @@ const Form = () => {
         <label className="block mb-4 dark:text-white">
           Your message:
           <textarea
+            name="message"
+            rows={5}
             className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
