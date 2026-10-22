@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="mt-16">
       <div className="container mx-auto px-4">
-        <Link href="/" className="font-black text-tertiary-dark">
+        <Link href="/" className="font-black text-tertiary-dark dark:text-tertiary-darkmode">
           SmartStay
         </Link>
         <h4 className="font-semibold text-[20px] py-6">Contact</h4>
