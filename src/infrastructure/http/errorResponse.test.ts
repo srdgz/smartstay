@@ -7,7 +7,7 @@ import {
   ValidationError,
 } from "@/domain/errors";
 
-import { messageFor, statusFor } from "./errorResponse";
+import { bodyFor, messageFor, statusFor } from "./errorResponse";
 
 describe("errorResponse", () => {
   it.each([
@@ -19,6 +19,24 @@ describe("errorResponse", () => {
     ["text", 500],
   ])("maps %s to HTTP %i", (error, status) => {
     expect(statusFor(error)).toBe(status);
+  });
+
+  it("exposes the code and parameters of domain errors for translation", () => {
+    expect(
+      bodyFor(new ValidationError("Adults out of range.", "adultsRange", { min: 1, max: 5 }))
+    ).toEqual({
+      code: "adultsRange",
+      message: "Adults out of range.",
+      params: { min: 1, max: 5 },
+    });
+  });
+
+  it("reports unexpected errors with the generic code only", () => {
+    expect(bodyFor(new Error("secret stack detail"))).toEqual({
+      code: "generic",
+      message: "Something went wrong. Please try again.",
+      params: {},
+    });
   });
 
   it("shows domain messages but hides unexpected ones", () => {

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { ConflictError, NotFoundError, ValidationError } from "@/domain/errors";
 import {
   buildRoom,
+  FakeExchangeRateProvider,
   FakePaymentGateway,
   InMemoryRoomRepository,
 } from "@/test/fakes";
@@ -19,7 +20,9 @@ const validInput: StartCheckoutInput = {
   checkoutDate: "2026-12-04",
   adults: 2,
   children: 1,
-  origin: "http://localhost:3000",
+  currency: "USD",
+  locale: "en",
+  successUrl: "http://localhost:3000/en/users/user-1",
 };
 
 describe("startCheckout", () => {
@@ -30,7 +33,12 @@ describe("startCheckout", () => {
   beforeEach(() => {
     rooms = new InMemoryRoomRepository([buildRoom()]);
     payments = new FakePaymentGateway();
-    startCheckout = makeStartCheckout({ rooms, payments, now: () => NOW });
+    startCheckout = makeStartCheckout({
+      rooms,
+      payments,
+      rates: new FakeExchangeRateProvider(0.9),
+      now: () => NOW,
+    });
   });
 
   it("creates a checkout session priced on the server", async () => {
@@ -43,8 +51,24 @@ describe("startCheckout", () => {
     expect(request.productName).toBe("Standard Room");
     expect(request.unitAmount).toBe(28500);
     expect(request.currency).toBe("usd");
-    expect(request.successUrl).toBe("http://localhost:3000/users/user-1");
+    expect(request.locale).toBe("en");
+    expect(request.successUrl).toBe("http://localhost:3000/en/users/user-1");
     expect(request.productImages).toEqual(["https://images.example.com/1.jpg"]);
+  });
+
+  it("charges in the chosen currency using the current exchange rate", async () => {
+    await startCheckout({ ...validInput, currency: "EUR", locale: "es" });
+
+    const request = payments.requests[0];
+    expect(request.currency).toBe("eur");
+    expect(request.unitAmount).toBe(25650);
+    expect(request.locale).toBe("es");
+    expect(fromCheckoutMetadata(request.metadata)).toMatchObject({
+      totalPrice: 285,
+      currency: "EUR",
+      exchangeRate: 0.9,
+      chargedAmount: 256.5,
+    });
   });
 
   it("stores the booking details in the checkout metadata", async () => {
@@ -60,29 +84,53 @@ describe("startCheckout", () => {
       children: 1,
       totalPrice: 285,
       discount: 5,
+      currency: "USD",
+      exchangeRate: 1,
+      chargedAmount: 285,
     });
   });
 
+  it("looks the room up in the requested language", async () => {
+    await startCheckout({ ...validInput, locale: "es" });
+    expect(rooms.requestedLocales).toEqual(["es"]);
+  });
+
+  it("rejects unsupported currencies", async () => {
+    await expect(startCheckout({ ...validInput, currency: "GBP" })).rejects.toMatchObject({
+      code: "unsupportedCurrency",
+    });
+    expect(payments.requests).toHaveLength(0);
+  });
+
   it("rejects invalid or inverted dates", async () => {
-    await expect(startCheckout({ ...validInput, checkinDate: "soon" })).rejects.toBeInstanceOf(
-      ValidationError
-    );
+    await expect(startCheckout({ ...validInput, checkinDate: "soon" })).rejects.toMatchObject({
+      code: "invalidDates",
+    });
     await expect(
       startCheckout({ ...validInput, checkoutDate: "2026-12-01" })
-    ).rejects.toThrow(/after the check-in/);
+    ).rejects.toMatchObject({ code: "checkoutAfterCheckin" });
   });
 
   it("rejects stays that start in the past", async () => {
     await expect(
       startCheckout({ ...validInput, checkinDate: "2026-10-01", checkoutDate: "2026-10-05" })
-    ).rejects.toThrow(/in the past/);
+    ).rejects.toMatchObject({ code: "checkinPast" });
   });
 
   it("rejects guest numbers outside the allowed range", async () => {
-    await expect(startCheckout({ ...validInput, adults: 0 })).rejects.toThrow(/adults/);
+    await expect(startCheckout({ ...validInput, adults: 0 })).rejects.toMatchObject({
+      code: "adultsRange",
+      params: { min: 1, max: 5 },
+    });
     await expect(startCheckout({ ...validInput, adults: 6 })).rejects.toThrow(/adults/);
-    await expect(startCheckout({ ...validInput, children: 4 })).rejects.toThrow(/children/);
+    await expect(startCheckout({ ...validInput, children: 4 })).rejects.toMatchObject({
+      code: "childrenRange",
+      params: { min: 0, max: 3 },
+    });
     await expect(startCheckout({ ...validInput, children: 1.5 })).rejects.toThrow(/children/);
+    await expect(startCheckout({ ...validInput, adults: 0 })).rejects.toBeInstanceOf(
+      ValidationError
+    );
   });
 
   it("fails when the room does not exist", async () => {

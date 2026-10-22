@@ -23,6 +23,10 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/auth",
+    error: "/auth",
+  },
   adapter: SanityAdapter(client),
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,

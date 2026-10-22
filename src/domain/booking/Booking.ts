@@ -1,3 +1,5 @@
+import type { Currency } from "../money/Currency";
+
 export type BookedRoom = {
   id: string;
   slug: string;
@@ -15,6 +17,9 @@ export type Booking = {
   children: number;
   totalPrice: number;
   discount: number;
+  currency: Currency;
+  exchangeRate: number;
+  chargedAmount: number;
 };
 
 export type NewBooking = {
@@ -27,4 +32,7 @@ export type NewBooking = {
   children: number;
   totalPrice: number;
   discount: number;
+  currency: Currency;
+  exchangeRate: number;
+  chargedAmount: number;
 };

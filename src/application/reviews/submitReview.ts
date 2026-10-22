@@ -14,11 +14,17 @@ export const makeSubmitReview =
   async ({ userId, roomId, rating, text }: SubmitReviewInput) => {
     const trimmed = text.trim();
 
-    if (!roomId) throw new ValidationError("Please choose a room to review.");
-    if (!trimmed) throw new ValidationError("Please write your review.");
+    if (!roomId) {
+      throw new ValidationError("Please choose a room to review.", "reviewRoomRequired");
+    }
+    if (!trimmed) {
+      throw new ValidationError("Please write your review.", "reviewTextRequired");
+    }
     if (!Number.isInteger(rating) || rating < MIN_RATING || rating > MAX_RATING) {
       throw new ValidationError(
-        `The rating must be between ${MIN_RATING} and ${MAX_RATING}.`
+        `The rating must be between ${MIN_RATING} and ${MAX_RATING}.`,
+        "ratingRange",
+        { min: MIN_RATING, max: MAX_RATING }
       );
     }
 

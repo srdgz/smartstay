@@ -1,4 +1,6 @@
 import type { Booking } from "@/domain/booking/Booking";
+import type { ContentLocale } from "@/domain/locale";
+import { BASE_CURRENCY, isCurrency } from "@/domain/money/Currency";
 import type { Review } from "@/domain/review/Review";
 import type { Room } from "@/domain/room/Room";
 import type { User } from "@/domain/user/User";
@@ -7,18 +9,23 @@ export type SanityRoomDoc = {
   _id: string;
   slug?: { current?: string } | null;
   name?: string | null;
+  name_es?: string | null;
   type?: string | null;
   description?: string | null;
+  description_es?: string | null;
   dimension?: string | null;
   numberOfBeds?: number | null;
   price?: number | null;
   discount?: number | null;
   specialNote?: string | null;
+  specialNote_es?: string | null;
   isBooked?: boolean | null;
   isFeatured?: boolean | null;
   coverImage?: { url?: string } | null;
   images?: { _key: string; url: string }[] | null;
-  offeredAmenities?: { _key: string; amenity?: string; icon?: string }[] | null;
+  offeredAmenities?:
+    | { _key: string; amenity?: string; amenity_es?: string; icon?: string }[]
+    | null;
 };
 
 export type SanityBookingDoc = {
@@ -26,6 +33,7 @@ export type SanityBookingDoc = {
   hotelRoom?: {
     _id: string;
     name?: string | null;
+    name_es?: string | null;
     slug?: { current?: string } | null;
     price?: number | null;
   } | null;
@@ -36,6 +44,9 @@ export type SanityBookingDoc = {
   children: number;
   totalPrice: number;
   discount?: number | null;
+  currency?: string | null;
+  exchangeRate?: number | null;
+  amountCharged?: number | null;
 };
 
 export type SanityReviewDoc = {
@@ -56,29 +67,38 @@ export type SanityUserDoc = {
   image?: string | null;
 };
 
-export const toRoom = (doc: SanityRoomDoc): Room => ({
+const localized = (
+  base: string | null | undefined,
+  translation: string | null | undefined,
+  locale: ContentLocale
+) => (locale === "es" && translation?.trim() ? translation : base ?? "");
+
+export const toRoom = (doc: SanityRoomDoc, locale: ContentLocale = "en"): Room => ({
   id: doc._id,
   slug: doc.slug?.current ?? "",
-  name: doc.name ?? "",
+  name: localized(doc.name, doc.name_es, locale),
   type: doc.type ?? "",
-  description: doc.description ?? "",
+  description: localized(doc.description, doc.description_es, locale),
   dimension: doc.dimension ?? "",
   numberOfBeds: doc.numberOfBeds ?? 0,
   price: doc.price ?? 0,
   discount: doc.discount ?? 0,
-  specialNote: doc.specialNote ?? "",
+  specialNote: localized(doc.specialNote, doc.specialNote_es, locale),
   isBooked: doc.isBooked ?? false,
   isFeatured: doc.isFeatured ?? false,
   coverImageUrl: doc.coverImage?.url ?? "",
   images: (doc.images ?? []).map((image) => ({ id: image._key, url: image.url })),
   amenities: (doc.offeredAmenities ?? []).map((amenity) => ({
     id: amenity._key,
-    name: amenity.amenity ?? "",
+    name: localized(amenity.amenity, amenity.amenity_es, locale),
     icon: amenity.icon ?? "",
   })),
 });
 
-export const toBooking = (doc: SanityBookingDoc): Booking | null => {
+export const toBooking = (
+  doc: SanityBookingDoc,
+  locale: ContentLocale = "en"
+): Booking | null => {
   if (!doc.hotelRoom) return null;
 
   return {
@@ -86,7 +106,7 @@ export const toBooking = (doc: SanityBookingDoc): Booking | null => {
     room: {
       id: doc.hotelRoom._id,
       slug: doc.hotelRoom.slug?.current ?? "",
-      name: doc.hotelRoom.name ?? "",
+      name: localized(doc.hotelRoom.name, doc.hotelRoom.name_es, locale),
       price: doc.hotelRoom.price ?? 0,
     },
     checkinDate: doc.checkinDate,
@@ -96,6 +116,9 @@ export const toBooking = (doc: SanityBookingDoc): Booking | null => {
     children: doc.children,
     totalPrice: doc.totalPrice,
     discount: doc.discount ?? 0,
+    currency: isCurrency(doc.currency) ? doc.currency : BASE_CURRENCY,
+    exchangeRate: doc.exchangeRate ?? 1,
+    chargedAmount: doc.amountCharged ?? doc.totalPrice,
   };
 };
 

@@ -2,6 +2,7 @@ import type { SanityClient } from "next-sanity";
 
 import type { Booking, NewBooking } from "@/domain/booking/Booking";
 import type { BookingRepository } from "@/domain/booking/BookingRepository";
+import type { ContentLocale } from "@/domain/locale";
 
 import { toBooking, type SanityBookingDoc } from "./mappers";
 import { userBookingsQuery } from "./queries";
@@ -21,15 +22,20 @@ export class SanityBookingRepository implements BookingRepository {
       children: booking.children,
       totalPrice: booking.totalPrice,
       discount: booking.discount,
+      currency: booking.currency,
+      exchangeRate: booking.exchangeRate,
+      amountCharged: booking.chargedAmount,
     });
   }
 
-  async findByUser(userId: string): Promise<Booking[]> {
+  async findByUser(userId: string, locale: ContentLocale): Promise<Booking[]> {
     const docs = await this.client.fetch<SanityBookingDoc[]>(
       userBookingsQuery,
       { userId },
       { cache: "no-cache" }
     );
-    return docs.map(toBooking).filter((booking): booking is Booking => booking !== null);
+    return docs
+      .map((doc) => toBooking(doc, locale))
+      .filter((booking): booking is Booking => booking !== null);
   }
 }

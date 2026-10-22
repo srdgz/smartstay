@@ -21,6 +21,9 @@ const booking = {
   children: 0,
   totalPrice: 285,
   discount: 5,
+  currency: "EUR" as const,
+  exchangeRate: 0.9,
+  chargedAmount: 256.5,
 };
 
 const setup = () => {
@@ -36,8 +39,24 @@ describe("checkout metadata", () => {
     expect(fromCheckoutMetadata(toCheckoutMetadata(booking))).toEqual(booking);
   });
 
-  it("reports missing fields", () => {
+  it("reports missing fields with a translatable code", () => {
     expect(() => fromCheckoutMetadata({ user: "u" })).toThrow(ValidationError);
+    expect(() => fromCheckoutMetadata({ user: "u" })).toThrowError(
+      expect.objectContaining({ code: "checkoutMetadataInvalid" })
+    );
+  });
+
+  it("reads sessions created before currencies existed as US dollars", () => {
+    const { currency, exchangeRate, chargedAmount, ...legacy } = toCheckoutMetadata(booking);
+    void currency;
+    void exchangeRate;
+    void chargedAmount;
+
+    expect(fromCheckoutMetadata(legacy)).toMatchObject({
+      currency: "USD",
+      exchangeRate: 1,
+      chargedAmount: 285,
+    });
   });
 });
 

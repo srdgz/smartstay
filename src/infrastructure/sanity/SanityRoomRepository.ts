@@ -1,5 +1,6 @@
 import type { SanityClient } from "next-sanity";
 
+import type { ContentLocale } from "@/domain/locale";
 import type { Room } from "@/domain/room/Room";
 import type { RoomRepository } from "@/domain/room/RoomRepository";
 
@@ -11,19 +12,19 @@ const noCache = { cache: "no-cache" } as const;
 export class SanityRoomRepository implements RoomRepository {
   constructor(private readonly client: SanityClient) {}
 
-  async findFeatured(): Promise<Room | null> {
+  async findFeatured(locale: ContentLocale): Promise<Room | null> {
     const doc = await this.client.fetch<SanityRoomDoc | null>(featuredRoomQuery, {}, noCache);
-    return doc ? toRoom(doc) : null;
+    return doc ? toRoom(doc, locale) : null;
   }
 
-  async findAll(): Promise<Room[]> {
+  async findAll(locale: ContentLocale): Promise<Room[]> {
     const docs = await this.client.fetch<SanityRoomDoc[]>(roomsQuery, {}, noCache);
-    return docs.map(toRoom);
+    return docs.map((doc) => toRoom(doc, locale));
   }
 
-  async findBySlug(slug: string): Promise<Room | null> {
+  async findBySlug(slug: string, locale: ContentLocale): Promise<Room | null> {
     const doc = await this.client.fetch<SanityRoomDoc | null>(roomBySlugQuery, { slug }, noCache);
-    return doc ? toRoom(doc) : null;
+    return doc ? toRoom(doc, locale) : null;
   }
 
   async markAsBooked(roomId: string): Promise<void> {

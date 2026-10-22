@@ -1,5 +1,11 @@
+export type ErrorParams = Record<string, string | number>;
+
 export class DomainError extends Error {
-  constructor(message: string) {
+  constructor(
+    message: string,
+    readonly code: string = "generic",
+    readonly params: ErrorParams = {}
+  ) {
     super(message);
     this.name = new.target.name;
   }

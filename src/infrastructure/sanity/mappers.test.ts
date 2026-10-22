@@ -109,3 +109,81 @@ describe("toReview and toUser", () => {
     });
   });
 });
+
+describe("localized content", () => {
+  const doc = {
+    _id: "r1",
+    name: "Standard Room",
+    name_es: "Habitación estándar",
+    description: "Comfortable.",
+    description_es: "   ",
+    specialNote: "Noon",
+    offeredAmenities: [
+      { _key: "a1", amenity: "Free Wi-Fi", amenity_es: "Wi-Fi gratis", icon: "fa-wifi" },
+      { _key: "a2", amenity: "Basic TV Channels", icon: "fa-tv" },
+    ],
+  };
+
+  it("uses the Spanish fields when they are filled in", () => {
+    const room = toRoom(doc, "es");
+
+    expect(room.name).toBe("Habitación estándar");
+    expect(room.amenities[0].name).toBe("Wi-Fi gratis");
+  });
+
+  it("falls back to English for blank or missing translations", () => {
+    const room = toRoom(doc, "es");
+
+    expect(room.description).toBe("Comfortable.");
+    expect(room.specialNote).toBe("Noon");
+    expect(room.amenities[1].name).toBe("Basic TV Channels");
+  });
+
+  it("keeps English content for the English site", () => {
+    const room = toRoom(doc, "en");
+
+    expect(room.name).toBe("Standard Room");
+    expect(room.amenities[0].name).toBe("Free Wi-Fi");
+  });
+
+  it("localizes the room name inside bookings and reads the charged amount", () => {
+    const booking = toBooking(
+      {
+        _id: "b1",
+        hotelRoom: { _id: "r1", name: "Standard Room", name_es: "Habitación estándar", price: 100 },
+        checkinDate: "2026-12-01",
+        checkoutDate: "2026-12-04",
+        numberOfDays: 3,
+        adults: 2,
+        children: 0,
+        totalPrice: 285,
+        currency: "EUR",
+        exchangeRate: 0.9,
+        amountCharged: 256.5,
+      },
+      "es"
+    );
+
+    expect(booking).toMatchObject({
+      room: { name: "Habitación estándar" },
+      currency: "EUR",
+      exchangeRate: 0.9,
+      chargedAmount: 256.5,
+    });
+  });
+
+  it("treats legacy bookings as US dollars", () => {
+    const booking = toBooking({
+      _id: "b2",
+      hotelRoom: { _id: "r1", name: "Standard Room" },
+      checkinDate: "2026-12-01",
+      checkoutDate: "2026-12-02",
+      numberOfDays: 1,
+      adults: 1,
+      children: 0,
+      totalPrice: 95,
+    });
+
+    expect(booking).toMatchObject({ currency: "USD", exchangeRate: 1, chargedAmount: 95 });
+  });
+});

@@ -1,6 +1,8 @@
 import type { PaymentGateway, CheckoutRequest } from "@/application/ports/PaymentGateway";
 import type { Booking, NewBooking } from "@/domain/booking/Booking";
 import type { BookingRepository } from "@/domain/booking/BookingRepository";
+import type { ContentLocale } from "@/domain/locale";
+import type { ExchangeRateProvider, ExchangeRates } from "@/domain/money/ExchangeRates";
 import type { NewReview, Review, ReviewChanges } from "@/domain/review/Review";
 import type { ReviewRepository } from "@/domain/review/ReviewRepository";
 import type { Room } from "@/domain/room/Room";
@@ -26,17 +28,22 @@ export const buildRoom = (overrides: Partial<Room> = {}): Room => ({
 });
 
 export class InMemoryRoomRepository implements RoomRepository {
+  requestedLocales: ContentLocale[] = [];
+
   constructor(public rooms: Room[] = []) {}
 
-  async findFeatured() {
+  async findFeatured(locale: ContentLocale) {
+    this.requestedLocales.push(locale);
     return this.rooms.find((room) => room.isFeatured) ?? null;
   }
 
-  async findAll() {
+  async findAll(locale: ContentLocale) {
+    this.requestedLocales.push(locale);
     return this.rooms;
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(slug: string, locale: ContentLocale) {
+    this.requestedLocales.push(locale);
     return this.rooms.find((room) => room.slug === slug) ?? null;
   }
 
@@ -92,5 +99,18 @@ export class FakePaymentGateway implements PaymentGateway {
 
   async readCompletedCheckout() {
     return this.completed;
+  }
+}
+
+export class FakeExchangeRateProvider implements ExchangeRateProvider {
+  constructor(private readonly eur = 0.9) {}
+
+  async getRates(): Promise<ExchangeRates> {
+    return {
+      base: "USD",
+      rates: { USD: 1, EUR: this.eur },
+      date: "2026-10-22",
+      source: "live",
+    };
   }
 }

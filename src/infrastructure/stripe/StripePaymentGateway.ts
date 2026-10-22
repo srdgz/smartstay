@@ -44,6 +44,7 @@ export class StripePaymentGateway implements PaymentGateway {
           },
         },
       ],
+      locale: request.locale === "es" ? "es" : "en",
       success_url: request.successUrl,
       metadata: request.metadata,
     });
@@ -57,14 +58,14 @@ export class StripePaymentGateway implements PaymentGateway {
   ): Promise<CheckoutCompleted | null> {
     const webhookSecret = this.config.webhookSecret();
     if (!signature || !webhookSecret) {
-      throw new ValidationError("The Stripe signature is missing.");
+      throw new ValidationError("The Stripe signature is missing.", "stripeSignatureMissing");
     }
 
     let event: Stripe.Event;
     try {
       event = this.client().webhooks.constructEvent(payload, signature, webhookSecret);
     } catch {
-      throw new ValidationError("The Stripe signature is not valid.");
+      throw new ValidationError("The Stripe signature is not valid.", "stripeSignatureInvalid");
     }
 
     if (event.type !== "checkout.session.completed") return null;

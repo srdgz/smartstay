@@ -4,17 +4,20 @@ const roomFields = `{
     _id,
     coverImage,
     description,
+    description_es,
     dimension,
     discount,
     images,
     isBooked,
     isFeatured,
     name,
+    name_es,
     numberOfBeds,
     offeredAmenities,
     price,
     slug,
     specialNote,
+    specialNote_es,
     type
 }`;
 
@@ -29,6 +32,7 @@ export const userBookingsQuery = groq`*[_type == "booking" && user._ref == $user
     hotelRoom -> {
         _id,
         name,
+        name_es,
         slug,
         price
     },
@@ -38,7 +42,10 @@ export const userBookingsQuery = groq`*[_type == "booking" && user._ref == $user
     adults,
     children,
     totalPrice,
-    discount
+    discount,
+    currency,
+    exchangeRate,
+    amountCharged
 }`;
 
 export const userByIdQuery = groq`*[_type == "user" && _id == $userId][0] {

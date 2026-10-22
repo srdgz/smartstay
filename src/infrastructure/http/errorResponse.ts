@@ -18,3 +18,10 @@ export const messageFor = (error: unknown) => {
   if (error instanceof DomainError) return error.message;
   return "Something went wrong. Please try again.";
 };
+
+export const bodyFor = (error: unknown) => {
+  if (error instanceof DomainError) {
+    return { code: error.code, message: error.message, params: error.params };
+  }
+  return { code: "generic", message: messageFor(error), params: {} };
+};

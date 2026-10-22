@@ -61,9 +61,27 @@ const booking = {
     }),
     defineField({
       name: "totalPrice",
-      title: "Total Price",
+      title: "Total Price (USD)",
       type: "number",
       validation: (Rule) => Rule.required().min(0),
+    }),
+    defineField({
+      name: "currency",
+      title: "Currency charged",
+      type: "string",
+      options: { list: ["USD", "EUR"] },
+      initialValue: "USD",
+    }),
+    defineField({
+      name: "exchangeRate",
+      title: "Exchange rate (USD to charged currency)",
+      type: "number",
+      initialValue: 1,
+    }),
+    defineField({
+      name: "amountCharged",
+      title: "Amount charged",
+      type: "number",
     }),
   ],
 };

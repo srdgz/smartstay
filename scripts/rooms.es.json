@@ -1,0 +1,49 @@
+{
+  "specialNote": "La entrada es a las 12:00 y la salida a las 11:59. Si te dejas algún objeto, ponte en contacto con recepción.",
+  "amenities": {
+    "Free Wi-Fi": "Wi-Fi gratis",
+    "Basic TV Channels": "Canales de TV básicos",
+    "King-sized bed": "Cama king size",
+    "Free Coffee-bar": "Cafetería gratuita",
+    "Smoke-free rooms": "Habitaciones libres de humo",
+    "Room service": "Servicio de habitaciones",
+    "Free souvenirs for accommodation": "Recuerdos gratuitos para los huéspedes",
+    "Premium TV Channels": "Canales de TV premium",
+    "In-room Jacuzzi": "Jacuzzi en la habitación",
+    "Free Local TV Channels": "Canales de TV locales gratuitos"
+  },
+  "rooms": {
+    "classic-room": {
+      "name_es": "Habitación clásica",
+      "description_es": "Una opción cómoda y económica para tu estancia. Nuestra habitación clásica ofrece los servicios esenciales para una experiencia relajante."
+    },
+    "deluxe-room": {
+      "name_es": "Habitación deluxe",
+      "description_es": "Vive el lujo y la comodidad en nuestra amplia habitación deluxe. Esta habitación, elegantemente diseñada, combina servicios modernos con encanto clásico para asegurarte una estancia memorable."
+    },
+    "executive-suite": {
+      "name_es": "Suite ejecutiva",
+      "description_es": "La máxima sofisticación: nuestra suite ejecutiva ofrece un espacio amplio y bien equipado, perfecto para viajeros de negocios o para quienes buscan un refugio lujoso."
+    },
+    "first-class-suite": {
+      "name_es": "Suite de primera clase",
+      "description_es": "La máxima sofisticación: nuestra suite de primera clase ofrece un espacio amplio y bien equipado, perfecto para viajeros de negocios o para quienes buscan un refugio lujoso."
+    },
+    "normal-room": {
+      "name_es": "Habitación normal",
+      "description_es": "Una opción cómoda y económica para tu estancia. Nuestra habitación normal ofrece los servicios esenciales para una experiencia relajante."
+    },
+    "premier-suite": {
+      "name_es": "Suite premier",
+      "description_es": "Date un capricho de opulencia con nuestra suite premier. Esta lujosa habitación está decorada con mobiliario de alta gama y ofrece un nivel superior de confort."
+    },
+    "simple-room": {
+      "name_es": "Habitación sencilla",
+      "description_es": "Una opción cómoda y económica para tu estancia. Nuestra habitación sencilla ofrece los servicios esenciales para una experiencia relajante."
+    },
+    "standard-room": {
+      "name_es": "Habitación estándar",
+      "description_es": "Una opción cómoda y económica para tu estancia. Nuestra habitación estándar ofrece los servicios esenciales para una experiencia relajante."
+    }
+  }
+}

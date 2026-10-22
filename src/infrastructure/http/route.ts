@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 
 import { DomainError } from "@/domain/errors";
 
-import { messageFor, statusFor } from "./errorResponse";
+import { bodyFor, statusFor } from "./errorResponse";
 
 export const respond = async (action: () => Promise<unknown>) => {
   try {
     return NextResponse.json(await action());
   } catch (error) {
     if (!(error instanceof DomainError)) console.error(error);
-    return new NextResponse(messageFor(error), { status: statusFor(error) });
+    return NextResponse.json(bodyFor(error), { status: statusFor(error) });
   }
 };
 

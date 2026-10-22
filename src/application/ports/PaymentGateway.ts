@@ -3,6 +3,7 @@ export type CheckoutRequest = {
   productImages: string[];
   unitAmount: number;
   currency: string;
+  locale: string;
   successUrl: string;
   metadata: Record<string, string>;
 };
