@@ -17,4 +17,9 @@ export class SanityUserRepository implements UserRepository {
     );
     return doc ? toUser(doc) : null;
   }
+
+  async updateImage(userId: string, imageUrl: string | null): Promise<void> {
+    const patch = this.client.patch(userId);
+    await (imageUrl ? patch.set({ image: imageUrl }) : patch.unset(["image"])).commit();
+  }
 }

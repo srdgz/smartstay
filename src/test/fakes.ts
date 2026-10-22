@@ -1,3 +1,4 @@
+import type { AvatarStorage, AvatarUpload } from "@/application/ports/AvatarStorage";
 import type { PaymentGateway, CheckoutRequest } from "@/application/ports/PaymentGateway";
 import type { Booking, NewBooking } from "@/domain/booking/Booking";
 import type { BookingRepository } from "@/domain/booking/BookingRepository";
@@ -7,6 +8,8 @@ import type { NewReview, Review, ReviewChanges } from "@/domain/review/Review";
 import type { ReviewRepository } from "@/domain/review/ReviewRepository";
 import type { Room } from "@/domain/room/Room";
 import type { RoomRepository } from "@/domain/room/RoomRepository";
+import type { User } from "@/domain/user/User";
+import type { UserRepository } from "@/domain/user/UserRepository";
 
 export const buildRoom = (overrides: Partial<Room> = {}): Room => ({
   id: "room-1",
@@ -112,5 +115,39 @@ export class FakeExchangeRateProvider implements ExchangeRateProvider {
       date: "2026-10-22",
       source: "live",
     };
+  }
+}
+
+export const buildUser = (overrides: Partial<User> = {}): User => ({
+  id: "user-1",
+  name: "Ana",
+  email: "ana@example.com",
+  isAdmin: false,
+  about: null,
+  image: null,
+  createdAt: "2026-10-22T10:00:00Z",
+  ...overrides,
+});
+
+export class InMemoryUserRepository implements UserRepository {
+  constructor(public users: User[] = []) {}
+
+  async findById(userId: string) {
+    return this.users.find((user) => user.id === userId) ?? null;
+  }
+
+  async updateImage(userId: string, imageUrl: string | null) {
+    this.users = this.users.map((user) =>
+      user.id === userId ? { ...user, image: imageUrl } : user
+    );
+  }
+}
+
+export class FakeAvatarStorage implements AvatarStorage {
+  uploads: AvatarUpload[] = [];
+
+  async upload(upload: AvatarUpload) {
+    this.uploads.push(upload);
+    return { url: `https://cdn.example.com/${upload.filename}` };
   }
 }

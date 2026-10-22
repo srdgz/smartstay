@@ -11,6 +11,7 @@ const nextConfig = {
       { hostname: "lh3.googleusercontent.com" },
       { hostname: "images.unsplash.com" },
       { hostname: "plus.unsplash.com" },
+      { hostname: "cdn.sanity.io" },
     ],
   },
 };
