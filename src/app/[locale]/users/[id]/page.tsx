@@ -67,17 +67,22 @@ const UserDetails = () => {
 
   if (!userData) return <LoadingSpinner />;
 
+  const tabs = [
+    { key: "bookings", icon: BsJournalBookmarkFill, label: t("bookingsTab") },
+    { key: "amount", icon: GiMoneyStack, label: t("amountTab") },
+  ] as const;
+
   const avatarUrl = userData.image ?? session?.user?.image ?? null;
   const joinedDate = new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
     new Date(userData.createdAt)
   );
 
   return (
-    <div className="container mx-auto px-2 md:px-4 py10">
+    <div className="page-container py-10">
       <div className="grid md:grid-cols-12 gap-10">
         <aside
           aria-label={t("summary")}
-          className="hidden md:block md:col-span-4 lg:col-span-3 shadow-lg h-fit sticky top-10 bg-[#eff0f2] text-black rounded-lg px-6 py-4"
+          className="card hidden h-fit p-6 md:sticky md:top-28 md:col-span-4 md:block lg:col-span-3"
         >
           <div className="md:w-[143px] w-28 h-28 md:h-[143px] mx-auto mb-5 rounded-full overflow-hidden">
             {avatarUrl ? (
@@ -146,43 +151,26 @@ const UserDetails = () => {
 
           <nav
             aria-label={t("sections")}
-            className="sticky top-0 px-2 w-fit mx-auto md:w-full md:px-5 py-3 mb-8 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 mt-7"
+            className="mb-8 mt-7 rounded-2xl bg-surface p-1 dark:bg-neutral-900"
           >
-            <ul className="flex items-center">
-              <li
-                className={`${
-                  currentNav === "bookings" ? "text-blue-700" : "text-gray-700"
-                } mr-1 md:mr-5`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setCurrentNav("bookings")}
-                  aria-current={currentNav === "bookings" ? "page" : undefined}
-                  className="inline-flex items-center"
-                >
-                  <BsJournalBookmarkFill aria-hidden="true" />
-                  <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                    {t("bookingsTab")}
-                  </span>
-                </button>
-              </li>
-              <li
-                className={`${
-                  currentNav === "amount" ? "text-blue-700" : "text-gray-700"
-                } mr-1 md:mr-5`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setCurrentNav("amount")}
-                  aria-current={currentNav === "amount" ? "page" : undefined}
-                  className="inline-flex items-center"
-                >
-                  <GiMoneyStack aria-hidden="true" />
-                  <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                    {t("amountTab")}
-                  </span>
-                </button>
-              </li>
+            <ul className="flex gap-1">
+              {tabs.map(({ key, icon: Icon, label }) => (
+                <li key={key}>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentNav(key)}
+                    aria-current={currentNav === key ? "page" : undefined}
+                    className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                      currentNav === key
+                        ? "bg-white text-ink shadow dark:bg-neutral-800 dark:text-white"
+                        : "text-muted hover:text-ink dark:hover:text-white"
+                    }`}
+                  >
+                    <Icon aria-hidden="true" />
+                    {label}
+                  </button>
+                </li>
+              ))}
             </ul>
           </nav>
 

@@ -8,8 +8,8 @@ const Contact = () => {
   const t = useTranslations("Contact");
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="font-heading my-10">{t("title")}</h1>
+    <div className="page-container py-10 sm:py-16">
+      <h1 className="mx-auto mb-8 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">{t("title")}</h1>
       <Form />
     </div>
   );

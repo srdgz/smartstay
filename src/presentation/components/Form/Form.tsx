@@ -17,15 +17,15 @@ const Form = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 my-8 max-w-lg">
+    <div className="mx-auto w-full max-w-lg">
       <form
-        className="bg-white shadow-lg rounded-lg p-6 dark:bg-[#212529]"
+        className="card space-y-5 p-6 sm:p-8"
         onSubmit={handleSubmit}
       >
-        <label className="block mb-4 dark:text-white">
+        <label className="block text-sm font-semibold">
           {t("name")}
           <input
-            className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
+            className="field mt-1 font-normal"
             name="name"
             autoComplete="name"
             type="text"
@@ -35,10 +35,10 @@ const Form = () => {
           />
         </label>
 
-        <label className="block mb-4 dark:text-white">
+        <label className="block text-sm font-semibold">
           {t("email")}
           <input
-            className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
+            className="field mt-1 font-normal"
             name="email"
             autoComplete="email"
             type="email"
@@ -48,19 +48,19 @@ const Form = () => {
           />
         </label>
 
-        <label className="block mb-4 dark:text-white">
+        <label className="block text-sm font-semibold">
           {t("message")}
           <textarea
             name="message"
             rows={5}
-            className="form-input mt-1 block w-full border-2 rounded-lg p-2 dark:text-black"
+            className="field mt-1 font-normal"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
           />
         </label>
 
-        <button type="submit" className="btn btn-primary w-full mt-4">
+        <button type="submit" className="btn-primary w-full">
           {t("submit")}
         </button>
       </form>

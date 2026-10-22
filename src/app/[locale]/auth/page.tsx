@@ -27,8 +27,6 @@ const Auth = () => {
   const t = useTranslations("Auth");
   const locale = useLocale();
   const [formData, setFormData] = useState(defaultFormData);
-  const inputStyles =
-    "border border-gray-300 sm:text-sm text-black placeholder:text-gray-600 rounded-lg block w-full p-2.5";
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -72,37 +70,38 @@ const Auth = () => {
   };
 
   return (
-    <section className="container mx-auto">
-      <div className="p-6 space-y-4 md:space-y-6 sm:p-8 md:w-[70%] mx-auto">
-        <div className="flex mb-8 flex-col md:flex-row items-center justify-between">
-          <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
-            {t("createAccount")}
-          </h1>
-          <p>{t("or")}</p>
-          <span className="inline-flex items-center">
-            <button
-              type="button"
-              onClick={() => loginHandler("github")}
-              aria-label={t("signInGithub")}
-              className="mr-3"
-            >
-              <AiFillGithub
-                aria-hidden="true"
-                className="text-4xl text-black dark:text-white"
-              />
-            </button>
-            <span aria-hidden="true">|</span>
-            <button
-              type="button"
-              onClick={() => loginHandler("google")}
-              aria-label={t("signInGoogle")}
-              className="ml-3"
-            >
-              <FcGoogle aria-hidden="true" className="text-4xl" />
-            </button>
-          </span>
+    <section className="page-container py-10 sm:py-16">
+      <div className="card mx-auto max-w-md p-6 sm:p-8">
+        <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {t("createAccount")}
+        </h1>
+
+        <div className="mt-6 grid gap-3">
+          <button
+            type="button"
+            onClick={() => loginHandler("github")}
+            className="btn-outline w-full"
+          >
+            <AiFillGithub aria-hidden="true" className="text-2xl" />
+            {t("signInGithub")}
+          </button>
+          <button
+            type="button"
+            onClick={() => loginHandler("google")}
+            className="btn-outline w-full"
+          >
+            <FcGoogle aria-hidden="true" className="text-2xl" />
+            {t("signInGoogle")}
+          </button>
         </div>
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+
+        <p className="text-muted my-6 flex items-center gap-4 text-sm">
+          <span aria-hidden="true" className="h-px flex-1 bg-gray-200 dark:bg-neutral-700" />
+          {t("or")}
+          <span aria-hidden="true" className="h-px flex-1 bg-gray-200 dark:bg-neutral-700" />
+        </p>
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <label htmlFor="auth-name" className="sr-only">
             {t("name")}
           </label>
@@ -113,7 +112,7 @@ const Auth = () => {
             autoComplete="name"
             placeholder={t("namePlaceholder")}
             required
-            className={inputStyles}
+            className="field"
             value={formData.name}
             onChange={handleInputChange}
           />
@@ -127,7 +126,7 @@ const Auth = () => {
             autoComplete="email"
             placeholder={t("emailPlaceholder")}
             required
-            className={inputStyles}
+            className="field"
             value={formData.email}
             onChange={handleInputChange}
           />
@@ -142,21 +141,19 @@ const Auth = () => {
             placeholder={t("passwordPlaceholder")}
             required
             minLength={8}
-            className={inputStyles}
+            className="field"
             value={formData.password}
             onChange={handleInputChange}
           />
-          <button
-            type="submit"
-            className="w-full bg-tertiary-dark text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
+          <button type="submit" className="btn-primary w-full">
             {t("signUp")}
           </button>
         </form>
+
         <button
           type="button"
           onClick={() => loginHandler()}
-          className="text-blue-700 underline dark:text-blue-300"
+          className="mt-6 w-full text-center font-semibold text-blue-700 underline dark:text-blue-300"
         >
           {t("signIn")}
         </button>
