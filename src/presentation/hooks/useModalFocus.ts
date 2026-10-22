@@ -5,11 +5,13 @@ const FOCUSABLE =
 
 const useModalFocus = (
   isOpen: boolean,
-  dialogRef: RefObject<HTMLElement>,
+  dialogRef: RefObject<HTMLElement | null>,
   onClose: () => void
 ) => {
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!isOpen) return;

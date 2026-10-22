@@ -14,7 +14,7 @@ const authMiddleware = withAuth((request) => intlMiddleware(request as NextReque
 
 const protectedPath = new RegExp(`^/(${routing.locales.join("|")})/users(/.*)?$`);
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   if (protectedPath.test(request.nextUrl.pathname)) {
     return (authMiddleware as unknown as (request: NextRequest) => Response)(request);
   }

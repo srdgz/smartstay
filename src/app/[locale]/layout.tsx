@@ -26,14 +26,14 @@ const inter = Inter({
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: Omit<Props, "children">): Promise<Metadata> {
   const t = await getTranslations({
-    locale: resolveLocale(params.locale),
+    locale: resolveLocale((await params).locale),
     namespace: "Metadata",
   });
 
@@ -48,14 +48,15 @@ export async function generateMetadata({
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: Props) {
+  const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "Common" });
   const rates = await useCases.getExchangeRates();
-  const currency = resolveCurrency(cookies().get(CURRENCY_COOKIE)?.value, locale);
+  const currency = resolveCurrency((await cookies()).get(CURRENCY_COOKIE)?.value, locale);
 
   return (
     <html lang={locale}>

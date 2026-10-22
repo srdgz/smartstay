@@ -10,7 +10,8 @@ import PageSearch from "@/presentation/components/PageSearch/PageSearch";
 
 export const dynamic = "force-dynamic";
 
-const Home = async ({ params: { locale } }: { params: { locale: string } }) => {
+const Home = async ({ params }: { params: Promise<{ locale: string }> }) => {
+  const { locale } = await params;
   setRequestLocale(resolveLocale(locale));
   const featuredRoom = await useCases.getFeaturedRoom(locale);
 

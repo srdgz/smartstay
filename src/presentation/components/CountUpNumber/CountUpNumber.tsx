@@ -1,18 +1,30 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect, useState, useSyncExternalStore } from "react";
 
 type Props = {
   endValue: number;
   duration: number;
 };
 
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+const subscribeToMotionPreference = (onChange: () => void) => {
+  const query = window.matchMedia(REDUCED_MOTION);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+
+const prefersReducedMotion = () => window.matchMedia(REDUCED_MOTION).matches;
+
 const CountUpNumber: FC<Props> = ({ endValue, duration }) => {
   const [count, setCount] = useState(0);
+  const reducedMotion = useSyncExternalStore(
+    subscribeToMotionPreference,
+    prefersReducedMotion,
+    () => false
+  );
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setCount(endValue);
-      return;
-    }
+    if (reducedMotion) return;
 
     let startTime: number;
     let animationFrameId: number;
@@ -28,11 +40,11 @@ const CountUpNumber: FC<Props> = ({ endValue, duration }) => {
     };
     animationFrameId = requestAnimationFrame(updateCount);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [endValue, duration]);
+  }, [endValue, duration, reducedMotion]);
 
   return (
     <p className="text-3xl font-extrabold tracking-tight">
-      {Math.round(count)}
+      {Math.round(reducedMotion ? endValue : count)}
     </p>
   );
 };

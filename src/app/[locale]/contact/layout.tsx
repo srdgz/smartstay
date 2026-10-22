@@ -5,9 +5,9 @@ import { pageTitle } from "@/i18n/metadata";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  return { title: await pageTitle(params.locale, "contact") };
+  return { title: await pageTitle((await params).locale, "contact") };
 }
 
 export default function ContactLayout({

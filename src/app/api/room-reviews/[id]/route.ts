@@ -5,7 +5,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  return respond(() => useCases.getRoomReviews(params.id));
+  const { id } = await params;
+  return respond(() => useCases.getRoomReviews(id));
 }

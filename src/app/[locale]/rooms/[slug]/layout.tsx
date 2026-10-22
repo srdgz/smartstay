@@ -6,13 +6,14 @@ import { useCases } from "@/infrastructure/container";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
+  const { locale, slug } = await params;
   try {
-    const room = await useCases.getRoom(params.slug, resolveLocale(params.locale));
-    return { title: room.name || (await pageTitle(params.locale, "roomDetails")) };
+    const room = await useCases.getRoom(slug, resolveLocale(locale));
+    return { title: room.name || (await pageTitle(locale, "roomDetails")) };
   } catch {
-    return { title: await pageTitle(params.locale, "roomDetails") };
+    return { title: await pageTitle(locale, "roomDetails") };
   }
 }
 

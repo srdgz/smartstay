@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { Room } from "@/domain/room/Room";
 import { useRooms } from "@/presentation/hooks/useApi";
@@ -11,17 +11,18 @@ import RoomCard from "@/presentation/components/RoomCard/RoomCard";
 
 const Rooms = () => {
   const t = useTranslations("Rooms");
-  const [roomTypeFilter, setRoomTypeFilter] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
+  const [roomTypeFilter, setRoomTypeFilter] = useState(searchParams.get("roomType") ?? "");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("searchQuery") ?? "");
+  const [syncedParams, setSyncedParams] = useState(searchParams);
 
-  useEffect(() => {
-    const searchQuery = searchParams.get("searchQuery");
+  if (syncedParams !== searchParams) {
+    setSyncedParams(searchParams);
     const roomType = searchParams.get("roomType");
-
+    const query = searchParams.get("searchQuery");
     if (roomType) setRoomTypeFilter(roomType);
-    if (searchQuery) setSearchQuery(searchQuery);
-  }, [searchParams]);
+    if (query) setSearchQuery(query);
+  }
 
   const { data, error, isLoading } = useRooms();
 

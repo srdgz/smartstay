@@ -5,11 +5,11 @@ import { pageTitle } from "@/i18n/metadata";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   return {
     title: {
-      default: await pageTitle(params.locale, "stays"),
+      default: await pageTitle((await params).locale, "stays"),
       template: "%s | SmartStay",
     },
   };

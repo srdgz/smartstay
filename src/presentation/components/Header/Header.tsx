@@ -32,10 +32,12 @@ const Header = () => {
   const { data: profile } = useCurrentUser(Boolean(session?.user));
   const avatarUrl = profile?.image ?? session?.user?.image ?? null;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuPath, setMenuPath] = useState(pathname);
 
-  useEffect(() => {
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
     setMenuOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     if (!menuOpen) return;

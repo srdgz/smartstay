@@ -5,7 +5,7 @@ import { LiaFireExtinguisherSolid } from "react-icons/lia";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { GiSmokeBomb } from "react-icons/gi";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { use, useState } from "react";
 
 import { useRoom } from "@/presentation/hooks/useApi";
 import { createCheckoutSession } from "@/presentation/lib/apiClient";
@@ -21,10 +21,8 @@ import { useMoney } from "@/presentation/hooks/useMoney";
 import RoomReview from "@/presentation/components/RoomReview/RoomReview";
 import MobileBookBar from "@/presentation/components/MobileBookBar/MobileBookBar";
 
-const RoomDetails = (props: { params: { slug: string } }) => {
-  const {
-    params: { slug },
-  } = props;
+const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
+  const { slug } = use(props.params);
 
   const [checkinDate, setCheckinDate] = useState<Date | null>(null);
   const [checkoutDate, setCheckoutDate] = useState<Date | null>(null);

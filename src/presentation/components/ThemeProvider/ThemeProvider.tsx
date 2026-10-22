@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 import ThemeContext from "@/presentation/context/themeContext";
 
@@ -11,11 +11,11 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       : false;
 
   const [darkTheme, setDarkTheme] = useState<boolean>(themeFromStorage);
-  const [renderComponent, setRenderComponent] = useState(false);
-
-  useEffect(() => {
-    setRenderComponent(true);
-  }, []);
+  const renderComponent = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkTheme);

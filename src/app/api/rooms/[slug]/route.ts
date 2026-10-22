@@ -5,8 +5,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params;
   const locale = new URL(request.url).searchParams.get("locale") ?? "";
-  return respond(() => useCases.getRoom(params.slug, locale));
+  return respond(() => useCases.getRoom(slug, locale));
 }
