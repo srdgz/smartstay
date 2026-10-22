@@ -5,5 +5,82 @@
       "error",
       { "tags": [], "roles": ["tabpanel", "region"] }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/domain/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/application/*",
+                  "@/infrastructure/*",
+                  "@/presentation/*",
+                  "@/app/*",
+                  "react",
+                  "react-*",
+                  "next",
+                  "next/*",
+                  "next-*",
+                  "swr",
+                  "axios",
+                  "stripe",
+                  "@sanity/*"
+                ],
+                "message": "The domain layer must not depend on outer layers or frameworks."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/application/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/infrastructure/*",
+                  "@/presentation/*",
+                  "@/app/*",
+                  "react",
+                  "react-*",
+                  "next",
+                  "next/*",
+                  "next-*",
+                  "swr",
+                  "axios",
+                  "stripe",
+                  "@sanity/*"
+                ],
+                "message": "The application layer may only depend on the domain layer and its own ports."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/presentation/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/infrastructure/*", "@/app/*", "server-only", "stripe", "@sanity/client"],
+                "message": "The presentation layer must reach server code through the HTTP API, not directly."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
