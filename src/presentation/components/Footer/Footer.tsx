@@ -6,17 +6,28 @@ import { Link } from "@/i18n/navigation";
 
 type FooterItem = { label: string; href?: "/contact" | "/rooms" };
 
-const FooterList = ({ label, items }: { label: string; items: FooterItem[] }) => (
-  <nav aria-label={label} className="flex-1 md:text-right">
-    <ul>
+const FooterList = ({
+  id,
+  label,
+  items,
+}: {
+  id: string;
+  label: string;
+  items: FooterItem[];
+}) => (
+  <nav aria-labelledby={id}>
+    <h2 id={id} className="mb-4 text-base font-semibold">
+      {label}
+    </h2>
+    <ul className="space-y-3">
       {items.map((item) => (
-        <li key={item.label} className="pb-4">
+        <li key={item.label}>
           {item.href ? (
-            <Link href={item.href} className="hover:underline">
+            <Link href={item.href} className="text-muted hover:text-ink hover:underline dark:hover:text-white">
               {item.label}
             </Link>
           ) : (
-            item.label
+            <span className="text-muted">{item.label}</span>
           )}
         </li>
       ))}
@@ -42,36 +53,40 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-16">
-      <div className="container mx-auto px-4">
-        <Link
-          href="/"
-          className="font-black text-tertiary-dark dark:text-tertiary-darkmode"
-        >
-          SmartStay
-        </Link>
-        <h2 className="font-semibold text-[20px] py-6">{t("contact")}</h2>
-        <div className="flex flex-wrap gap-16 items-center justify-between">
-          <div className="flex-1">
+    <footer className="mt-20 border-t border-gray-200 bg-surface dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="page-container grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <Link
+            href="/"
+            className="text-2xl font-extrabold tracking-tight text-tertiary-dark dark:text-tertiary-darkmode"
+          >
+            SmartStay
+          </Link>
+          <h2 className="mb-4 mt-6 text-base font-semibold">{t("contact")}</h2>
+          <address className="space-y-3 not-italic text-muted">
             <p>Avda. Programación 123</p>
-            <div className="flex items-center py-4">
+            <p className="flex items-center gap-2">
               <BsFillSendFill aria-hidden="true" />
-              <p className="ml-2">Madrid, España</p>
-            </div>
-            <div className="flex items-center">
+              Madrid, España
+            </p>
+            <p className="flex items-center gap-2">
               <BsTelephoneOutbound aria-hidden="true" />
-              <p className="ml-2">111-222-333</p>
-            </div>
-            <div className="flex items-center pt-4">
+              111-222-333
+            </p>
+            <p className="flex items-center gap-2">
               <BiSolidMessageDetail aria-hidden="true" />
-              <p className="ml-2">SmartStay by srdgz</p>
-            </div>
-          </div>
-          <FooterList label={t("support")} items={supportLinks} />
-          <FooterList label={t("explore")} items={exploreLinks} />
+              SmartStay by srdgz
+            </p>
+          </address>
         </div>
+        <FooterList id="footer-support" label={t("support")} items={supportLinks} />
+        <FooterList id="footer-explore" label={t("explore")} items={exploreLinks} />
       </div>
-      <div className="bg-tertiary-light h-10 md:h-[70px] mt-16 w-full bottom-0 left-0 dark:bg-[#212529]"></div>
+      <div className="border-t border-gray-200 dark:border-neutral-800">
+        <p className="page-container py-6 text-sm text-muted">
+          © {new Date().getFullYear()} SmartStay
+        </p>
+      </div>
     </footer>
   );
 };

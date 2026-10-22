@@ -19,7 +19,9 @@
     "mainNav": "Main",
     "home": "Home",
     "stays": "Stays",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "Switchers": {
     "language": "Language",
@@ -75,7 +77,8 @@
   "RoomCard": {
     "roomOfType": "{type} room",
     "bookNow": "BOOK NOW",
-    "booked": "BOOKED"
+    "booked": "BOOKED",
+    "perNight": "night"
   },
   "RoomTypes": {
     "basic": "basic",
@@ -102,7 +105,8 @@
     "invalidPeriod": "Please choose a valid check-in period",
     "paymentsUnavailable": "Payments are not available right now. Please try again later.",
     "paymentIncomplete": "The payment could not be completed.",
-    "paymentFailed": "We could not start the payment. Please try again."
+    "paymentFailed": "We could not start the payment. Please try again.",
+    "perNight": "night"
   },
   "Gallery": {
     "dialog": "Room photo gallery",
@@ -112,11 +116,11 @@
     "roomPhoto": "Room photo {number}",
     "previous": "Previous photo",
     "next": "Next photo",
-    "close": "Close gallery"
+    "close": "Close gallery",
+    "showAll": "Show all photos"
   },
   "Booking": {
     "originalPrice": "Original price:",
-    "discountNow": "| discount {discount}%. Now",
     "checkIn": "Check In date",
     "checkOut": "Check Out date",
     "datePlaceholder": "dd/mm/yyyy",
@@ -124,7 +128,8 @@
     "children": "Children",
     "total": "Total Price: {price}",
     "bookNow": "Book Now",
-    "booked": "Booked"
+    "booked": "Booked",
+    "discountBadge": "-{discount}%"
   },
   "Reviews": {
     "loadFailed": "We could not load the reviews. Please try again later.",

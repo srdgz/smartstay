@@ -23,7 +23,7 @@ const CurrencySwitcher = () => {
         id="currency-switcher"
         value={currency}
         onChange={handleChange}
-        className="rounded border border-gray-500 bg-white px-2 py-1 text-sm text-black dark:bg-[#212529] dark:text-white"
+        className="h-10 cursor-pointer rounded-full border border-gray-300 bg-white px-3 text-sm font-medium text-ink transition hover:bg-gray-100 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800"
       >
         <option value="USD">{t("usd")}</option>
         <option value="EUR">{t("eur")}</option>

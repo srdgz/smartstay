@@ -19,7 +19,9 @@
     "mainNav": "Principal",
     "home": "Inicio",
     "stays": "Alojamientos",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "Switchers": {
     "language": "Idioma",
@@ -75,7 +77,8 @@
   "RoomCard": {
     "roomOfType": "habitación {type}",
     "bookNow": "RESERVAR",
-    "booked": "RESERVADA"
+    "booked": "RESERVADA",
+    "perNight": "noche"
   },
   "RoomTypes": {
     "basic": "básica",
@@ -102,7 +105,8 @@
     "invalidPeriod": "Elige un periodo de estancia válido",
     "paymentsUnavailable": "Los pagos no están disponibles ahora mismo. Inténtalo de nuevo más tarde.",
     "paymentIncomplete": "No se ha podido completar el pago.",
-    "paymentFailed": "No hemos podido iniciar el pago. Inténtalo de nuevo."
+    "paymentFailed": "No hemos podido iniciar el pago. Inténtalo de nuevo.",
+    "perNight": "noche"
   },
   "Gallery": {
     "dialog": "Galería de fotos de la habitación",
@@ -112,11 +116,11 @@
     "roomPhoto": "Foto de la habitación {number}",
     "previous": "Foto anterior",
     "next": "Foto siguiente",
-    "close": "Cerrar la galería"
+    "close": "Cerrar la galería",
+    "showAll": "Mostrar todas las fotos"
   },
   "Booking": {
     "originalPrice": "Precio original:",
-    "discountNow": "| {discount}% de descuento. Ahora",
     "checkIn": "Fecha de entrada",
     "checkOut": "Fecha de salida",
     "datePlaceholder": "dd/mm/aaaa",
@@ -124,7 +128,8 @@
     "children": "Niños",
     "total": "Precio total: {price}",
     "bookNow": "Reservar ahora",
-    "booked": "Reservada"
+    "booked": "Reservada",
+    "discountBadge": "-{discount}%"
   },
   "Reviews": {
     "loadFailed": "No hemos podido cargar las opiniones. Inténtalo de nuevo más tarde.",
