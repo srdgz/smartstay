@@ -1,8 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
-import Image from "next/image";
+import { FaSignOutAlt } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
 
 import { useCurrentUser, useUserBookings } from "@/presentation/hooks/useApi";
@@ -11,6 +10,7 @@ import LoadingSpinner from "../../loading";
 import { useState } from "react";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { GiMoneyStack } from "react-icons/gi";
+import AvatarUploader from "@/presentation/components/AvatarUploader/AvatarUploader";
 import Table from "@/presentation/components/Table/Table";
 import Chart from "@/presentation/components/Chart/Chart";
 import RatingModal from "@/presentation/components/RatingModal/RatingModal";
@@ -84,18 +84,8 @@ const UserDetails = () => {
           aria-label={t("summary")}
           className="card hidden h-fit p-6 md:sticky md:top-28 md:col-span-4 md:block lg:col-span-3"
         >
-          <div className="md:w-[143px] w-28 h-28 md:h-[143px] mx-auto mb-5 rounded-full overflow-hidden">
-            {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt=""
-                width={143}
-                height={143}
-                className="img scale-animation rounded-full"
-              />
-            ) : (
-              <FaUserCircle className="w-full h-full" aria-hidden="true" />
-            )}
+          <div className="mb-5">
+            <AvatarUploader imageUrl={avatarUrl} canRemove={Boolean(userData.image)} />
           </div>
           <div className="font-normal py-4 text-left">
             <h2 className="text-xl font-bold pb-3">{t("about")}</h2>
@@ -120,18 +110,8 @@ const UserDetails = () => {
               {t("hello", { name: userData.name })}
             </h1>
           </div>
-          <div className="md:hidden w-14 h-14 rounded-l-full overflow-hidden">
-            {avatarUrl ? (
-              <Image
-                className="img scale-animation rounded-full"
-                width={56}
-                height={56}
-                src={avatarUrl}
-                alt=""
-              />
-            ) : (
-              <FaUserCircle className="w-full h-full" aria-hidden="true" />
-            )}
+          <div className="my-4 md:hidden">
+            <AvatarUploader imageUrl={avatarUrl} canRemove={Boolean(userData.image)} />
           </div>
           <p className="block w-fit md:hidden text-sm py-2">
             {userData.about ?? ""}

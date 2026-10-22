@@ -30,3 +30,15 @@ export const submitReview = async (input: ReviewInput) => {
   const { data } = await axios.post<{ created: boolean }>("/api/reviews", input);
   return data;
 };
+
+export const uploadAvatar = async (file: File) => {
+  const form = new FormData();
+  form.append("avatar", file);
+  const { data } = await axios.post<{ url: string }>("/api/me/avatar", form);
+  return data;
+};
+
+export const removeAvatar = async () => {
+  const { data } = await axios.delete<{ url: null }>("/api/me/avatar");
+  return data;
+};

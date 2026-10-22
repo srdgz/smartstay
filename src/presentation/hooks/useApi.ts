@@ -28,4 +28,5 @@ export const useUserBookings = () => {
   return useSWR<Booking[]>(`/api/bookings?locale=${locale}`, fetcher);
 };
 
-export const useCurrentUser = () => useSWR<User>("/api/me", fetcher);
+export const useCurrentUser = (enabled = true) =>
+  useSWR<User>(enabled ? "/api/me" : null, fetcher);

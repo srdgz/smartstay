@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 
 import { Link, usePathname } from "@/i18n/navigation";
 import ThemeContext from "@/presentation/context/themeContext";
+import { useCurrentUser } from "@/presentation/hooks/useApi";
 
 import CurrencySwitcher from "../CurrencySwitcher/CurrencySwitcher";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
@@ -28,6 +29,8 @@ const Header = () => {
   const pathname = usePathname();
   const { darkTheme, setDarkTheme } = useContext(ThemeContext);
   const { data: session } = useSession();
+  const { data: profile } = useCurrentUser(Boolean(session?.user));
+  const avatarUrl = profile?.image ?? session?.user?.image ?? null;
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -78,9 +81,9 @@ const Header = () => {
       aria-label={t("myProfile")}
       className="block h-10 w-10 overflow-hidden rounded-full border border-gray-300 dark:border-neutral-600"
     >
-      {session.user.image ? (
+      {avatarUrl ? (
         <Image
-          src={session.user.image}
+          src={avatarUrl}
           alt=""
           width={40}
           height={40}

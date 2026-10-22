@@ -232,6 +232,20 @@
     "stripeSignatureInvalid": "The Stripe signature is not valid.",
     "checkoutMetadataInvalid": "The checkout data is incomplete.",
     "network": "Network error. Please check your connection and try again.",
-    "generic": "Something went wrong. Please try again."
+    "generic": "Something went wrong. Please try again.",
+    "avatarRequired": "Please choose an image.",
+    "avatarType": "Use a JPG, PNG or WebP image.",
+    "avatarTooLarge": "The image is too large. The maximum size is {max} MB."
+  },
+  "Avatar": {
+    "label": "Profile photo",
+    "add": "Add photo",
+    "change": "Change photo",
+    "remove": "Remove photo",
+    "hint": "JPG, PNG or WebP, up to {max} MB",
+    "uploading": "Uploading photo",
+    "uploaded": "Profile photo updated",
+    "removed": "Profile photo removed",
+    "failed": "We could not update your photo. Please try again."
   }
 }

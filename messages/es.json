@@ -232,6 +232,20 @@
     "stripeSignatureInvalid": "La firma de Stripe no es válida.",
     "checkoutMetadataInvalid": "Los datos del pago están incompletos.",
     "network": "Error de red. Comprueba tu conexión e inténtalo de nuevo.",
-    "generic": "Algo ha salido mal. Inténtalo de nuevo."
+    "generic": "Algo ha salido mal. Inténtalo de nuevo.",
+    "avatarRequired": "Elige una imagen.",
+    "avatarType": "Usa una imagen JPG, PNG o WebP.",
+    "avatarTooLarge": "La imagen es demasiado grande. El tamaño máximo es {max} MB."
+  },
+  "Avatar": {
+    "label": "Foto de perfil",
+    "add": "Añadir foto",
+    "change": "Cambiar foto",
+    "remove": "Quitar foto",
+    "hint": "JPG, PNG o WebP, hasta {max} MB",
+    "uploading": "Subiendo foto",
+    "uploaded": "Foto de perfil actualizada",
+    "removed": "Foto de perfil eliminada",
+    "failed": "No hemos podido actualizar tu foto. Inténtalo de nuevo."
   }
 }
