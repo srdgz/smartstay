@@ -61,7 +61,7 @@ const RatingModal: FC<Props> = (props) => {
                 type="button"
                 className={`w-6 h-6 ${
                   ratingValue !== null && value <= ratingValue
-                    ? "text-yellow-500"
+                    ? "text-amber-600"
                     : "text-gray-500"
                 }`}
                 onClick={() => setRatingValue(value)}
