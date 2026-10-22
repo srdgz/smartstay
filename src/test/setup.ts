@@ -6,6 +6,8 @@ import { afterEach, expect } from "vitest";
 expect.extend(toHaveNoViolations);
 
 afterEach(() => {
+  if (typeof document === "undefined") return;
+
   cleanup();
   localStorage.clear();
   document.documentElement.className = "";
