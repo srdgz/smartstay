@@ -5,6 +5,8 @@ import NewsLetter from "@/components/NewsLetter/NewsLetter";
 import PageSearch from "@/components/PageSearch/PageSearch";
 import { getFeaturedRoom } from "@/libs/apis";
 
+export const dynamic = "force-dynamic";
+
 const Home = async () => {
   const featuredRoom = await getFeaturedRoom();
 
