@@ -94,6 +94,7 @@
   "RoomDetails": {
     "description": "Descripción",
     "squareFeet": "{value} pies cuadrados",
+    "squareMeters": "{value} m²",
     "amenities": "Servicios ofrecidos",
     "safety": "Seguridad e higiene",
     "dailyCleaning": "Limpieza diaria",

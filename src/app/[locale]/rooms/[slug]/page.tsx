@@ -7,6 +7,7 @@ import { GiSmokeBomb } from "react-icons/gi";
 import { useLocale, useTranslations } from "next-intl";
 import { use, useState } from "react";
 
+import { parseSquareFeet, squareFeetToSquareMeters } from "@/domain/room/area";
 import { useRoom } from "@/presentation/hooks/useApi";
 import { createCheckoutSession } from "@/presentation/lib/apiClient";
 import { toDateOnly } from "@/presentation/lib/dateOnly";
@@ -38,7 +39,13 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
 
   if (!room) return <LoadingSpinner />;
 
-  const squareFeet = room.dimension.match(/^\s*(\d+)/)?.[1];
+  const squareFeet = parseSquareFeet(room.dimension);
+  const dimension =
+    squareFeet === null
+      ? room.dimension
+      : locale === "es"
+        ? t("squareMeters", { value: squareFeetToSquareMeters(squareFeet) })
+        : t("squareFeet", { value: squareFeet });
 
   const calcMinCheckoutDate = () => {
     if (checkinDate) {
@@ -87,7 +94,7 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
     <div className="page-container pt-6 sm:pt-8">
       <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{room.name}</h1>
       <p className="text-muted mt-1">
-        {squareFeet ? t("squareFeet", { value: squareFeet }) : room.dimension}
+        {dimension}
       </p>
 
       <div className="mt-6">
