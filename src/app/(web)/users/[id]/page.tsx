@@ -111,13 +111,14 @@ const UserDetails = (props: { params: { id: string } }) => {
           <div className="font-normal text-left">
             <h6 className="text-xl font-bold pb-3">{userData.name}</h6>
           </div>
-          <div className="flex items-center">
-            <p className="mr-2">Sign Out</p>
-            <FaSignOutAlt
-              className="text-3xl cursor-pointer"
-              onClick={() => signOut({ callbackUrl: "/" })}
-            />
-          </div>
+          <button
+            type="button"
+            className="flex items-center"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            <span className="mr-2">Sign Out</span>
+            <FaSignOutAlt className="text-3xl" aria-hidden="true" />
+          </button>
         </div>
 
         <div className="md:col-span-8 lg:col-span-9">
@@ -130,7 +131,7 @@ const UserDetails = (props: { params: { id: string } }) => {
               width={56}
               height={56}
               src={userData.image}
-              alt="User Name"
+              alt={userData.name}
             />
           </div>
           <p className="block w-fit md:hidden text-sm py-2">
@@ -140,45 +141,55 @@ const UserDetails = (props: { params: { id: string } }) => {
           <p className="text-xs py-2 font-medium">
             Joined In {userData._createdAt.split("T")[0]}
           </p>
-          <div className="md:hidden flex items-center my-2">
-            <p className="mr-2">Sign out</p>
-            <FaSignOutAlt
-              className="text-3xl cursor-pointer"
-              onClick={() => signOut({ callbackUrl: "/" })}
-            />
-          </div>
+          <button
+            type="button"
+            className="md:hidden flex items-center my-2"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            <span className="mr-2">Sign out</span>
+            <FaSignOutAlt className="text-3xl" aria-hidden="true" />
+          </button>
 
-          <nav className="sticky top-0 px-2 w-fit mx-auto md:w-full md:px-5 py-3 mb-8 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 mt-7">
-            <ol
-              className={`${
-                currentNav === "bookings" ? "text-blue-600" : "text-gray-700"
-              } inline-flex mr-1 md:mr-5 items-center space-x-1 md:space-x-3`}
-            >
+          <nav
+            aria-label="Profile sections"
+            className="sticky top-0 px-2 w-fit mx-auto md:w-full md:px-5 py-3 mb-8 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 mt-7"
+          >
+            <ul className="flex items-center">
               <li
-                onClick={() => setCurrentNav("bookings")}
-                className="inline-flex items-center cursor-pointer"
+                className={`${
+                  currentNav === "bookings" ? "text-blue-700" : "text-gray-700"
+                } mr-1 md:mr-5`}
               >
-                <BsJournalBookmarkFill />
-                <a className="inline-flex items-center mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                  Current Bookings
-                </a>
+                <button
+                  type="button"
+                  onClick={() => setCurrentNav("bookings")}
+                  aria-current={currentNav === "bookings" ? "page" : undefined}
+                  className="inline-flex items-center"
+                >
+                  <BsJournalBookmarkFill aria-hidden="true" />
+                  <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
+                    Current Bookings
+                  </span>
+                </button>
               </li>
-            </ol>
-            <ol
-              className={`${
-                currentNav === "amount" ? "text-blue-600" : "text-gray-700"
-              } inline-flex mr-1 md:mr-5 items-center space-x-1 md:space-x-3`}
-            >
               <li
-                onClick={() => setCurrentNav("amount")}
-                className="inline-flex items-center cursor-pointer"
+                className={`${
+                  currentNav === "amount" ? "text-blue-700" : "text-gray-700"
+                } mr-1 md:mr-5`}
               >
-                <GiMoneyStack />
-                <a className="inline-flex items-center mx-1 md:mx-3 text-xs md:text-sm font-medium">
-                  Amount Spent
-                </a>
+                <button
+                  type="button"
+                  onClick={() => setCurrentNav("amount")}
+                  aria-current={currentNav === "amount" ? "page" : undefined}
+                  className="inline-flex items-center"
+                >
+                  <GiMoneyStack aria-hidden="true" />
+                  <span className="mx-1 md:mx-3 text-xs md:text-sm font-medium">
+                    Amount Spent
+                  </span>
+                </button>
               </li>
-            </ol>
+            </ul>
           </nav>
 
           {currentNav === "bookings" ? (
