@@ -15,7 +15,10 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "SmartStay | Find your perfect refuge with just one click!",
+  title: {
+    default: "SmartStay | Find your perfect refuge with just one click!",
+    template: "%s | SmartStay",
+  },
   description: "Your journey, your style, your choice.",
 };
 
