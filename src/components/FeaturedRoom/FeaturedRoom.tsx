@@ -39,7 +39,7 @@ const FeaturedRoom: FC<Props> = (props) => {
         </div>
       </div>
       <div className="md:py-10 md:w-1/2 text-left">
-        <h3 className="font-heading mb-12">Featured Room</h3>
+        <h2 className="font-heading mb-12">Featured Room</h2>
         <p className="font-normal max-2-md">{featuredRoom.description}</p>
         <div className="flex flex-col md:flex-row md:items-end justify-between mt-5">
           <div className="flex mb-3 md:mb-0">
