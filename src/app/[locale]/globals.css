@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  color-scheme: light;
+  scroll-padding-top: 6rem;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-white font-sans text-ink antialiased;
+}
+
+.dark body {
+  @apply bg-neutral-950 text-neutral-100;
+}
+
+@layer components {
+  .img {
+    @apply h-full w-full object-cover;
+  }
+
+  .scale-animation {
+    @apply transition-transform duration-500 ease-out group-hover:scale-105;
+  }
+
+  .text-muted {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-base font-semibold transition duration-200 active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-base font-semibold text-white shadow-sm transition duration-200 hover:bg-primary-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-500;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-transparent px-5 py-3 text-base font-semibold transition duration-200 hover:border-gray-900 dark:border-neutral-600 dark:hover:border-white;
+  }
+
+  .field {
+    @apply block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-base text-ink placeholder:text-gray-600 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-gray-400;
+  }
+
+  .card {
+    @apply rounded-2xl border border-gray-200 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900;
+  }
+
+  .page-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+  }
+
+  .font-heading {
+    @apply text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl;
+  }
+
+  .font-normal {
+    @apply text-base;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid #1d3557;
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline-color: #f1faee;
+}
+
+.skip-link {
+  @apply absolute left-4 top-0 z-[100] -translate-y-full rounded-b-lg bg-white px-4 py-2 font-bold text-black;
+}
+
+.skip-link:focus {
+  @apply translate-y-0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+main:focus {
+  outline: none;
+}

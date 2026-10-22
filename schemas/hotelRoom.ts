@@ -19,6 +19,12 @@ const hotelRoom = {
         Rule.required().max(50).error("Maximum 50 characters"),
     }),
     defineField({
+      name: "name_es",
+      title: "Name (Spanish)",
+      type: "string",
+      validation: (Rule) => Rule.max(50).error("Maximum 50 characters"),
+    }),
+    defineField({
       name: "slug",
       type: "slug",
       options: {
@@ -32,6 +38,11 @@ const hotelRoom = {
       type: "text",
       validation: (Rule) =>
         Rule.required().min(100).error("Minimum 100 characters"),
+    }),
+    defineField({
+      name: "description_es",
+      title: "Description (Spanish)",
+      type: "text",
     }),
     defineField({
       name: "price",
@@ -100,6 +111,11 @@ const hotelRoom = {
         "Check-in time is 12:00PM, check-out time is 11:59AM. If you leave behind any times, please contact the receptionist.",
     }),
     defineField({
+      name: "specialNote_es",
+      title: "Special Note (Spanish)",
+      type: "text",
+    }),
+    defineField({
       name: "dimension",
       title: "Dimension",
       type: "string",
@@ -121,15 +137,10 @@ const hotelRoom = {
           fields: [
             { name: "icon", title: "Icon", type: "string" },
             { name: "amenity", title: "Amenity", type: "string" },
+            { name: "amenity_es", title: "Amenity (Spanish)", type: "string" },
           ],
         },
       ],
-    }),
-    defineField({
-      name: "isBooked",
-      title: "Is Booked",
-      type: "boolean",
-      initialValue: false,
     }),
     defineField({
       name: "isFeatured",
