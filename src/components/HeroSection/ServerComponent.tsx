@@ -21,7 +21,7 @@ export const section2 = (
     <div className="rounded-2xl overflow-hidden h-48">
       <Image
         src="/images/hero-1.jpg"
-        alt="hero-1"
+        alt=""
         width={300}
         height={300}
         className="img scale-animation"
@@ -32,7 +32,7 @@ export const section2 = (
       <div className="rounded-2xl overflow-hidden">
         <Image
           src="/images/hero-2.jpg"
-          alt="hero-2"
+          alt=""
           width={300}
           height={300}
           className="img scale-animation"
@@ -41,7 +41,7 @@ export const section2 = (
       <div className="rounded-2xl overflow-hidden">
         <Image
           src="/images/hero-3.jpg"
-          alt="hero-3"
+          alt=""
           width={300}
           height={300}
           className="img scale-animation"
