@@ -8,11 +8,11 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="container mx-auto">
-      <h2 className="font-heading text-[#1D3557] mb-10">
+    <div role="alert" className="container mx-auto">
+      <h1 className="font-heading text-[#1D3557] dark:text-white mb-10">
         Something went wrong!
-      </h2>
-      <button className="btn-primary" onClick={() => reset}>
+      </h1>
+      <button type="button" className="btn-primary" onClick={() => reset()}>
         Try Again
       </button>
     </div>

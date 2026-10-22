@@ -50,11 +50,13 @@ const BookRoomCta: FC<Props> = (props) => {
 
   return (
     <div className="px-7 py-6">
-      <h3>
+      <p>
         <span
-          className={`${discount ? "text-gray-400" : ""} font-bold text-xl`}
+          className={`${
+            discount ? "line-through text-gray-600 dark:text-gray-400" : ""
+          } font-bold text-xl`}
         >
-          $ {price}
+          <span className="sr-only">Original price: </span>$ {price}
         </span>
         {discount ? (
           <span className="font-bold text-xl">
@@ -65,11 +67,11 @@ const BookRoomCta: FC<Props> = (props) => {
         ) : (
           ""
         )}
-      </h3>
+      </p>
 
       <div className="w-full border-b-2 border-b-secondary my-2" />
 
-      <h4 className="my-8">{specialNote}</h4>
+      <p className="my-8">{specialNote}</p>
 
       <div className="flex">
         <div className="w-1/2 pr-2">
@@ -85,7 +87,9 @@ const BookRoomCta: FC<Props> = (props) => {
             dateFormat="dd/MM/yyyy"
             minDate={new Date()}
             id="check-in-date"
-            className="w-full border text-black border-gray-300 rounded-lg p-2.5 focus:ring-primary focus:border-primary"
+            placeholderText="dd/mm/yyyy"
+            autoComplete="off"
+            className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
           />
         </div>
         <div className="w-1/2 pl-2">
@@ -102,7 +106,9 @@ const BookRoomCta: FC<Props> = (props) => {
             disabled={!checkinDate}
             minDate={calcMinCheckoutDate()}
             id="check-out-date"
-            className="w-full border text-black border-gray-300 rounded-lg p-2.5 focus:ring-primary focus:border-primary"
+            placeholderText="dd/mm/yyyy"
+            autoComplete="off"
+            className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
           />
         </div>
       </div>
@@ -144,13 +150,16 @@ const BookRoomCta: FC<Props> = (props) => {
         </div>
       </div>
 
-      {calcNoOfDays() > 0 ? (
-        <p className="mt-3">Total Price: $ {calcNoOfDays() * discountPrice}</p>
-      ) : (
-        <></>
-      )}
+      <div aria-live="polite">
+        {calcNoOfDays() > 0 && (
+          <p className="mt-3">
+            Total Price: $ {calcNoOfDays() * discountPrice}
+          </p>
+        )}
+      </div>
 
       <button
+        type="button"
         disabled={isBooked}
         onClick={handleBookNowClick}
         className="btn-primary w-full mt-6 disabled:bg-gray-500 disabled:cursor-not-allowed"

@@ -57,12 +57,23 @@ const Rooms = () => {
 
   return (
     <div className="container mx-auto pt-10">
+      <h1 className="sr-only">Our stays</h1>
       <Search
         roomTypeFilter={roomTypeFilter}
         searchQuery={searchQuery}
         setRoomTypeFilter={setRoomTypeFilter}
         setSearchQuery={setSearchQuery}
       />
+
+      <p role="status" className={data && !filteredRooms.length ? "mt-20 text-center" : "sr-only"}>
+        {isLoading
+          ? "Loading stays"
+          : filteredRooms.length
+          ? `${filteredRooms.length} ${
+              filteredRooms.length === 1 ? "stay" : "stays"
+            } found`
+          : "No stays match your search."}
+      </p>
 
       <div className="flex mt-20 justify-between flex-wrap">
         {filteredRooms.map((room) => (

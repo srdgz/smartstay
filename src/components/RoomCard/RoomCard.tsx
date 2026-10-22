@@ -17,7 +17,7 @@ const RoomCard: FC<Props> = (props) => {
       <div className="h-60 overflow-hidden">
         <Image
           src={coverImage.url}
-          alt={name}
+          alt=""
           width={250}
           height={250}
           className="img scale-animation"
@@ -25,7 +25,7 @@ const RoomCard: FC<Props> = (props) => {
       </div>
       <div className="p-4 bg-white">
         <div className="flex justify-between text-xl font-semibold">
-          <p>{name}</p>
+          <h2>{name}</h2>
           <p>$ {price}</p>
         </div>
         <p className="pt-2 text-xs">{type} room</p>
@@ -35,6 +35,7 @@ const RoomCard: FC<Props> = (props) => {
           className="bg-primary inline-block text-center w-full py-4 rounded-xl text-white text-xl font-bold hover:-translate-y-2 hover:shadow-lg transition-all duration-500"
         >
           {isBooked ? "BOOKED" : "BOOK NOW"}
+          <span className="sr-only"> - {name}</span>
         </Link>
       </div>
     </div>
