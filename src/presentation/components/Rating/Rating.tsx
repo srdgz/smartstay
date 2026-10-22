@@ -22,8 +22,13 @@ const Rating: FC<Props> = ({ rating }) => {
   }
 
   return (
-    <span role="img" aria-label={t("rated", { rating })}>
-      {fullStarElements} {halfStarElement}
+    <span
+      role="img"
+      aria-label={t("rated", { rating })}
+      className="inline-flex items-center gap-0.5"
+    >
+      {fullStarElements}
+      {halfStarElement}
     </span>
   );
 };
