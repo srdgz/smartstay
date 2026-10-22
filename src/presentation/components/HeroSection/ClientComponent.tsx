@@ -14,24 +14,26 @@ const ClientComponent: FC<Props> = (props) => {
   const { heading1, section2 } = props;
   const t = useTranslations("Hero");
 
+  const stats = [
+    { label: t("basicRoom"), value: 200 },
+    { label: t("luxuryRoom"), value: 150 },
+    { label: t("suiteRoom"), value: 90 },
+  ];
+
   return (
-    <section className="flex px-4 items-center gap-12 container mx-auto">
-      <div className="py-10 h-full">
+    <section className="page-container grid items-center gap-10 py-10 lg:grid-cols-2 lg:gap-14 lg:py-16">
+      <div>
         {heading1}
-        <div className="flex justify-between mt-12">
-          <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">{t("basicRoom")}</p>
-            <CountUpNumber duration={3000} endValue={200} />
-          </div>
-          <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">{t("luxuryRoom")}</p>
-            <CountUpNumber duration={3000} endValue={150} />
-          </div>
-          <div className="flex gap-3 flex-col items-center justify-center">
-            <p className="text-xs lg:text-xl text-center">{t("suiteRoom")}</p>
-            <CountUpNumber duration={3000} endValue={90} />
-          </div>
-        </div>
+        <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-gray-200 pt-6 dark:border-neutral-800">
+          {stats.map((stat) => (
+            <div key={stat.label} className="flex flex-col-reverse gap-1">
+              <dt className="text-muted text-sm">{stat.label}</dt>
+              <dd>
+                <CountUpNumber duration={2000} endValue={stat.value} />
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
       {section2}
     </section>

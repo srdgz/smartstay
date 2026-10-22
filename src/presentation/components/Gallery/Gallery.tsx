@@ -1,69 +1,34 @@
 import Image from "next/image";
 
+const tiles = [
+  { src: "/images/gallery-1.jpg", className: "col-span-2 row-span-2" },
+  { src: "/images/gallery-2.jpg", className: "" },
+  { src: "/images/gallery-3.jpg", className: "" },
+  { src: "/images/gallery-4.jpg", className: "col-span-2" },
+  { src: "/images/gallery-5.jpg", className: "md:col-span-2" },
+  { src: "/images/gallery-6.jpg", className: "md:col-span-2" },
+];
+
 const Gallery = () => {
   return (
-    <div className="mx-auto px-4 container py-14 h-full">
-      <div className="flex flex-wrap md:-m-2">
-        <div className="flex w-1/2 flex-wrap">
-          <div className="w-1/2 p-1 md:p-2 h-48">
+    <section className="page-container py-14">
+      <div className="grid auto-rows-[9rem] grid-cols-2 gap-3 sm:auto-rows-[12rem] md:grid-cols-4">
+        {tiles.map((tile) => (
+          <div
+            key={tile.src}
+            className={`group relative overflow-hidden rounded-2xl ${tile.className}`}
+          >
             <Image
               alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-1.jpg"
-              width={200}
-              height={200}
+              src={tile.src}
+              fill
+              sizes="(min-width: 768px) 25vw, 50vw"
+              className="img scale-animation"
             />
           </div>
-          <div className="w-1/2 p-1 md:p-2 h-48">
-            <Image
-              alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-2.jpg"
-              width={200}
-              height={200}
-            />
-          </div>
-          <div className="w-full p-1 md:p-2 h-48">
-            <Image
-              alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-3.jpg"
-              width={200}
-              height={200}
-            />
-          </div>
-        </div>
-        <div className="flex w-1/2 flex-wrap">
-          <div className="w-full p-1 md:p-2 h-48">
-            <Image
-              alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-4.jpg"
-              width={200}
-              height={200}
-            />
-          </div>
-          <div className="w-1/2 p-1 md:p-2 h-48">
-            <Image
-              alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-5.jpg"
-              width={200}
-              height={200}
-            />
-          </div>
-          <div className="w-1/2 p-1 md:p-2 h-48">
-            <Image
-              alt=""
-              className="img rounded-2xl"
-              src="/images/gallery-6.jpg"
-              width={200}
-              height={200}
-            />
-          </div>
-        </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 

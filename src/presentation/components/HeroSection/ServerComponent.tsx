@@ -8,50 +8,37 @@ export const HeroHeading = () => {
 
   return (
     <>
-      <h1 className="font-heading mb-6" style={{ lineHeight: "1.2" }}>
-        {t("title")}
-      </h1>
-      <p className="text-[#4a4a4a] dark:text-[#ffffffea] mb-12 max-w-lg">
-        {t("text")}
-      </p>
-      <Link href="/rooms" className="btn btn-primary">
+      <h1 className="font-heading mb-6">{t("title")}</h1>
+      <p className="text-muted mb-8 max-w-xl text-lg">{t("text")}</p>
+      <Link href="/rooms" className="btn-primary px-8 py-4 text-lg">
         {t("cta")}
       </Link>
     </>
   );
 };
 
-export const HeroImages = () => (
-  <div className="md:grid hidden gap-8 grid-cols-1">
-    <div className="rounded-2xl overflow-hidden h-48">
-      <Image
-        src="/images/hero-1.jpg"
-        alt=""
-        width={300}
-        height={300}
-        className="img scale-animation"
-      />
-    </div>
+const heroTiles = [
+  { src: "/images/hero-1.jpg", className: "col-span-2 aspect-[16/9]" },
+  { src: "/images/hero-2.jpg", className: "aspect-square" },
+  { src: "/images/hero-3.jpg", className: "aspect-square" },
+];
 
-    <div className="grid grid-cols-2 gap-8 h-48">
-      <div className="rounded-2xl overflow-hidden">
+export const HeroImages = () => (
+  <div className="grid grid-cols-2 gap-4">
+    {heroTiles.map((tile) => (
+      <div
+        key={tile.src}
+        className={`group relative overflow-hidden rounded-3xl ${tile.className}`}
+      >
         <Image
-          src="/images/hero-2.jpg"
+          src={tile.src}
           alt=""
-          width={300}
-          height={300}
+          fill
+          priority={tile.src.endsWith("hero-1.jpg")}
+          sizes="(min-width: 1024px) 45vw, 100vw"
           className="img scale-animation"
         />
       </div>
-      <div className="rounded-2xl overflow-hidden">
-        <Image
-          src="/images/hero-3.jpg"
-          alt=""
-          width={300}
-          height={300}
-          className="img scale-animation"
-        />
-      </div>
-    </div>
+    ))}
   </div>
 );

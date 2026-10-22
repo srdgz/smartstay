@@ -16,55 +16,59 @@ const FeaturedRoom: FC<Props> = (props) => {
   const t = useTranslations("FeaturedRoom");
 
   return (
-    <section className="flex md:flex-row flex-col px-4 py-10 items-center gap-12 container mx-auto">
-      <div className="md:grid gap-8 grid-cols-1">
-        <div className="rounded-2xl overflow-hidden h-48 mb-4 md:mb-0">
-          <Image
-            src={featuredRoom.coverImageUrl}
-            alt={featuredRoom.name}
-            width={300}
-            height={300}
-            className="img scale-animation"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-8 h-48">
+    <section className="page-container py-14">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="group relative col-span-2 aspect-[16/10] overflow-hidden rounded-3xl">
+            <Image
+              src={featuredRoom.coverImageUrl}
+              alt={featuredRoom.name}
+              fill
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="img scale-animation"
+            />
+          </div>
           {featuredRoom.images.slice(1, 3).map((image, index) => (
-            <div key={image.id} className="rounded-2xl overflow-hidden">
+            <div
+              key={image.id}
+              className="group relative aspect-[4/3] overflow-hidden rounded-2xl"
+            >
               <Image
                 src={image.url}
                 alt={t("photoAlt", { name: featuredRoom.name, number: index + 2 })}
-                width={300}
-                height={300}
+                fill
+                sizes="(min-width: 1024px) 22vw, 50vw"
                 className="img scale-animation"
               />
             </div>
           ))}
         </div>
-      </div>
-      <div className="md:py-10 md:w-1/2 text-left">
-        <h2 className="font-heading mb-12">{t("title")}</h2>
-        <p className="font-normal max-2-md">{featuredRoom.description}</p>
-        <div className="flex flex-col md:flex-row md:items-end justify-between mt-5">
-          <div className="flex mb-3 md:mb-0">
-            <div className="flex gap-3 flex-col items-center justify-center mr-4">
-              <p className="text-xs lg:text-xl text-center">{t("startFrom")}</p>
-              <p className="md:font-bold flex font-medium text-lg xl:text-5xl">
+        <div>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {t("title")}
+          </h2>
+          <p className="mt-2 text-xl font-semibold">{featuredRoom.name}</p>
+          <p className="text-muted mt-4 max-w-xl text-lg">{featuredRoom.description}</p>
+          <div className="mt-8 flex flex-wrap items-end gap-8">
+            <div>
+              <p className="text-muted text-sm">{t("startFrom")}</p>
+              <p className="text-3xl font-extrabold">
                 <Money amount={featuredRoom.price} />
               </p>
             </div>
-            <div className="flex gap-3 flex-col items-center justify-center mr-4">
-              <p className="text-xs lg:text-xl text-center">{t("discount")}</p>
-              <p className="md:font-bold flex font-medium text-lg xl:text-5xl">
+            <div>
+              <p className="text-muted text-sm">{t("discount")}</p>
+              <p className="text-3xl font-extrabold text-tertiary-dark dark:text-tertiary-darkmode">
                 {featuredRoom.discount}%
               </p>
             </div>
+            <Link
+              href={`/rooms/${featuredRoom.slug}`}
+              className="btn-outline ml-auto"
+            >
+              {t("moreDetails")}
+            </Link>
           </div>
-          <Link
-            href={`/rooms/${featuredRoom.slug}`}
-            className="border h-fit text-center border-tertiary-dark text-tertiary-dark dark:border-tertiary-darkmode dark:text-tertiary-darkmode px-3 py-2 lg:py-5 lg:px-7 rounded-2xl font-bold lg:text-xl"
-          >
-            {t("moreDetails")}
-          </Link>
         </div>
       </div>
     </section>

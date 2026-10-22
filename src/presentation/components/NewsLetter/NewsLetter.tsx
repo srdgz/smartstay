@@ -4,16 +4,14 @@ const NewsLetter = () => {
   const t = useTranslations("Newsletter");
 
   return (
-    <section className="container mx-auto px-4">
-      <form className="bg-tertiary-light text-[#1E1E1E] px-4 rounded-xl md:rounded-[30px] flex flex-col justify-center items-center py-6 md:py-24 dark:bg-[#212529] dark:text-white">
-        <p className="md:font-semibold text-lg md:text-xl text-center mb-3">
-          {t("eyebrow")}
-        </p>
-        <h2 className="md:font-semibold font-medium text-2xl md:text-3xl lg:text-5xl text-center">
+    <section className="page-container">
+      <form className="flex flex-col items-center justify-center rounded-4xl bg-secondary px-4 py-12 text-center text-ink dark:bg-neutral-900 dark:text-neutral-100 md:py-20">
+        <p className="text-muted mb-3 text-base font-medium md:text-lg">{t("eyebrow")}</p>
+        <h2 className="max-w-2xl text-3xl font-extrabold tracking-tight md:text-4xl lg:text-5xl">
           {t("title")}
         </h2>
 
-        <div className="flex-col justify-center w-full md:flex-row flex pt-12">
+        <div className="mt-10 flex w-full max-w-xl flex-col gap-3 sm:flex-row">
           <label htmlFor="newsletter-email" className="sr-only">
             {t("emailLabel")}
           </label>
@@ -23,7 +21,7 @@ const NewsLetter = () => {
             type="email"
             autoComplete="email"
             placeholder={t("emailLabel")}
-            className="bg-[#457B9D] h-11 md:h-16 mb-2 md:mb-0 rounded-xl pl-6 md:mr-5 md:w-[452px] text-white placeholder:text-white dark:placeholder:text-black dark:bg-[#F1FAEE]"
+            className="field flex-1"
           />
           <button type="button" className="btn-primary">
             {t("subscribe")}
