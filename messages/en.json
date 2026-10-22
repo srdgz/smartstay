@@ -1,0 +1,232 @@
+{
+  "Metadata": {
+    "defaultTitle": "SmartStay | Find your perfect refuge with just one click!",
+    "description": "Your journey, your style, your choice.",
+    "stays": "Stays",
+    "contact": "Contact",
+    "auth": "Sign in or create an account",
+    "profile": "My profile",
+    "roomDetails": "Room details"
+  },
+  "Common": {
+    "skipToContent": "Skip to main content",
+    "loading": "Loading"
+  },
+  "Header": {
+    "myProfile": "My profile",
+    "signIn": "Sign in",
+    "darkMode": "Dark mode",
+    "mainNav": "Main",
+    "home": "Home",
+    "stays": "Stays",
+    "contact": "Contact"
+  },
+  "Switchers": {
+    "language": "Language",
+    "currency": "Currency",
+    "english": "English",
+    "spanish": "Español",
+    "usd": "USD ($)",
+    "eur": "EUR (€)"
+  },
+  "Hero": {
+    "title": "Your perfect getaway starts here!",
+    "text": "Dive into the excellence of rest: exploring our accommodations is opening the door to a world of comfort and elegance.",
+    "cta": "Get Started",
+    "basicRoom": "Basic Room",
+    "luxuryRoom": "Luxury Room",
+    "suiteRoom": "Suite Room"
+  },
+  "Search": {
+    "roomType": "Room Type",
+    "search": "Search",
+    "placeholder": "Search...",
+    "all": "All",
+    "basic": "Basic",
+    "luxury": "Luxury",
+    "suite": "Suite"
+  },
+  "Newsletter": {
+    "eyebrow": "Explore More About Our Hotel",
+    "title": "Sign Up for Our Newsletter",
+    "emailLabel": "Your email",
+    "subscribe": "Subscribe"
+  },
+  "Footer": {
+    "contact": "Contact",
+    "support": "Support",
+    "explore": "Explore",
+    "communityForum": "Community Forum",
+    "helpCenter": "Help Center",
+    "privacy": "Privacy",
+    "terms": "Terms of Service",
+    "stays": "Stays",
+    "experiences": "Experiences",
+    "newFeatures": "New Features",
+    "giftCards": "Gift Cards"
+  },
+  "FeaturedRoom": {
+    "title": "Featured Room",
+    "startFrom": "Start From",
+    "discount": "Discount",
+    "moreDetails": "More details",
+    "photoAlt": "{name} photo {number}"
+  },
+  "RoomCard": {
+    "roomOfType": "{type} room",
+    "bookNow": "BOOK NOW",
+    "booked": "BOOKED"
+  },
+  "RoomTypes": {
+    "basic": "basic",
+    "luxury": "luxury",
+    "suite": "suite"
+  },
+  "Rooms": {
+    "title": "Our stays",
+    "loading": "Loading stays",
+    "count": "{count, plural, one {# stay found} other {# stays found}}",
+    "none": "No stays match your search."
+  },
+  "RoomDetails": {
+    "description": "Description",
+    "amenities": "Offered Amenities",
+    "safety": "Safety and hygiene",
+    "dailyCleaning": "Daily Cleaning",
+    "fireExtinguishers": "Fire Extinguishers",
+    "disinfection": "Disinfections and Sterilizations",
+    "smokeDetectors": "Smoke Detectors",
+    "reviews": "Customer Reviews",
+    "bookAside": "Book this room",
+    "provideDates": "Please provide check-in / check-out dates",
+    "invalidPeriod": "Please choose a valid check-in period",
+    "paymentsUnavailable": "Payments are not available right now. Please try again later.",
+    "paymentIncomplete": "The payment could not be completed.",
+    "paymentFailed": "We could not start the payment. Please try again."
+  },
+  "Gallery": {
+    "dialog": "Room photo gallery",
+    "open": "Open photo gallery",
+    "openPhoto": "Open photo {number} in gallery",
+    "morePhotos": "View {count} more photos",
+    "roomPhoto": "Room photo {number}",
+    "previous": "Previous photo",
+    "next": "Next photo",
+    "close": "Close gallery"
+  },
+  "Booking": {
+    "originalPrice": "Original price:",
+    "discountNow": "| discount {discount}%. Now",
+    "checkIn": "Check In date",
+    "checkOut": "Check Out date",
+    "datePlaceholder": "dd/mm/yyyy",
+    "adults": "Adults",
+    "children": "Children",
+    "total": "Total Price: {price}",
+    "bookNow": "Book Now",
+    "booked": "Booked"
+  },
+  "Reviews": {
+    "loadFailed": "We could not load the reviews. Please try again later.",
+    "none": "No reviews yet.",
+    "rated": "Rated {rating} out of 5"
+  },
+  "RatingModal": {
+    "title": "Rate Your Experience",
+    "rating": "Rating",
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "reviewText": "Review Text",
+    "submit": "Submit",
+    "submitting": "Submitting",
+    "cancel": "Cancel"
+  },
+  "Profile": {
+    "summary": "Profile summary",
+    "about": "About",
+    "signOut": "Sign Out",
+    "hello": "Hello, {name}",
+    "joined": "Joined In {date}",
+    "sections": "Profile sections",
+    "bookingsTab": "Current Bookings",
+    "amountTab": "Amount Spent",
+    "reviewRequired": "Please provide a rating text and a rating",
+    "reviewRoomMissing": "We could not find the room to review. Please try again.",
+    "reviewSubmitted": "Review submitted",
+    "reviewFailed": "We could not save your review. Please try again."
+  },
+  "Table": {
+    "caption": "Current bookings",
+    "region": "Current bookings table",
+    "room": "Room name",
+    "unitPrice": "Unit Price",
+    "price": "Price",
+    "discount": "Discount",
+    "daysBooked": "Nº Days Booked",
+    "daysLeft": "Days Left",
+    "actions": "Actions",
+    "rate": "Rate",
+    "rateRoom": "Rate {name}"
+  },
+  "Chart": {
+    "title": "Amount spent per booking ({currency})",
+    "summary": "Bar chart of the amount spent per booking. Total: {total}.",
+    "dataset": "Amount spent",
+    "room": "Room",
+    "total": "Total"
+  },
+  "Auth": {
+    "createAccount": "Create an account",
+    "or": "or",
+    "signInGithub": "Sign in with GitHub",
+    "signInGoogle": "Sign in with Google",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "email@email.com",
+    "password": "Password (at least 8 characters)",
+    "passwordPlaceholder": "Your password",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "accountCreated": "Account created. Please sign in.",
+    "signUpFailed": "We could not create your account. If you already registered, use Sign In.",
+    "errors": {
+      "OAuthAccountNotLinked": "An account with this email already exists. Sign in with the method you used originally.",
+      "CredentialsSignin": "Incorrect email or password.",
+      "AccessDenied": "Access denied. You do not have permission to sign in.",
+      "Default": "We could not sign you in. Please try again."
+    }
+  },
+  "Contact": {
+    "title": "Contact Us",
+    "name": "Your name:",
+    "email": "Your e-mail:",
+    "message": "Your message:",
+    "submit": "Submit",
+    "success": "Message submitted successfully"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong!",
+    "retry": "Try Again"
+  },
+  "Errors": {
+    "unauthorized": "You must be logged in.",
+    "roomRequired": "Please choose a room.",
+    "invalidDates": "Please provide valid check-in and check-out dates.",
+    "checkinPast": "The check-in date cannot be in the past.",
+    "checkoutAfterCheckin": "The check-out date must be after the check-in date.",
+    "adultsRange": "The number of adults must be between {min} and {max}.",
+    "childrenRange": "The number of children must be between {min} and {max}.",
+    "roomNotFound": "We could not find that room.",
+    "roomBooked": "This room is already booked.",
+    "reviewRoomRequired": "Please choose a room to review.",
+    "reviewTextRequired": "Please write your review.",
+    "ratingRange": "The rating must be between {min} and {max}.",
+    "userNotFound": "We could not find your profile.",
+    "unsupportedCurrency": "That currency is not supported.",
+    "stripeSignatureMissing": "The Stripe signature is missing.",
+    "stripeSignatureInvalid": "The Stripe signature is not valid.",
+    "checkoutMetadataInvalid": "The checkout data is incomplete.",
+    "network": "Network error. Please check your connection and try again.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

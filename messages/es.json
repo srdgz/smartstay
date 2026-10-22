@@ -1,0 +1,232 @@
+{
+  "Metadata": {
+    "defaultTitle": "SmartStay | ¡Encuentra tu refugio perfecto con un solo clic!",
+    "description": "Tu viaje, tu estilo, tu elección.",
+    "stays": "Alojamientos",
+    "contact": "Contacto",
+    "auth": "Inicia sesión o crea una cuenta",
+    "profile": "Mi perfil",
+    "roomDetails": "Detalles de la habitación"
+  },
+  "Common": {
+    "skipToContent": "Saltar al contenido principal",
+    "loading": "Cargando"
+  },
+  "Header": {
+    "myProfile": "Mi perfil",
+    "signIn": "Iniciar sesión",
+    "darkMode": "Modo oscuro",
+    "mainNav": "Principal",
+    "home": "Inicio",
+    "stays": "Alojamientos",
+    "contact": "Contacto"
+  },
+  "Switchers": {
+    "language": "Idioma",
+    "currency": "Moneda",
+    "english": "English",
+    "spanish": "Español",
+    "usd": "USD ($)",
+    "eur": "EUR (€)"
+  },
+  "Hero": {
+    "title": "¡Tu escapada perfecta empieza aquí!",
+    "text": "Sumérgete en la excelencia del descanso: explorar nuestros alojamientos es abrir la puerta a un mundo de confort y elegancia.",
+    "cta": "Empezar",
+    "basicRoom": "Habitación básica",
+    "luxuryRoom": "Habitación de lujo",
+    "suiteRoom": "Habitación suite"
+  },
+  "Search": {
+    "roomType": "Tipo de habitación",
+    "search": "Buscar",
+    "placeholder": "Buscar...",
+    "all": "Todas",
+    "basic": "Básica",
+    "luxury": "Lujo",
+    "suite": "Suite"
+  },
+  "Newsletter": {
+    "eyebrow": "Descubre más sobre nuestro hotel",
+    "title": "Suscríbete a nuestra newsletter",
+    "emailLabel": "Tu correo electrónico",
+    "subscribe": "Suscribirme"
+  },
+  "Footer": {
+    "contact": "Contacto",
+    "support": "Ayuda",
+    "explore": "Explorar",
+    "communityForum": "Foro de la comunidad",
+    "helpCenter": "Centro de ayuda",
+    "privacy": "Privacidad",
+    "terms": "Términos del servicio",
+    "stays": "Alojamientos",
+    "experiences": "Experiencias",
+    "newFeatures": "Novedades",
+    "giftCards": "Tarjetas regalo"
+  },
+  "FeaturedRoom": {
+    "title": "Habitación destacada",
+    "startFrom": "Desde",
+    "discount": "Descuento",
+    "moreDetails": "Más detalles",
+    "photoAlt": "{name}, foto {number}"
+  },
+  "RoomCard": {
+    "roomOfType": "habitación {type}",
+    "bookNow": "RESERVAR",
+    "booked": "RESERVADA"
+  },
+  "RoomTypes": {
+    "basic": "básica",
+    "luxury": "de lujo",
+    "suite": "suite"
+  },
+  "Rooms": {
+    "title": "Nuestros alojamientos",
+    "loading": "Cargando alojamientos",
+    "count": "{count, plural, one {# alojamiento encontrado} other {# alojamientos encontrados}}",
+    "none": "Ningún alojamiento coincide con tu búsqueda."
+  },
+  "RoomDetails": {
+    "description": "Descripción",
+    "amenities": "Servicios ofrecidos",
+    "safety": "Seguridad e higiene",
+    "dailyCleaning": "Limpieza diaria",
+    "fireExtinguishers": "Extintores",
+    "disinfection": "Desinfección y esterilización",
+    "smokeDetectors": "Detectores de humo",
+    "reviews": "Opiniones de clientes",
+    "bookAside": "Reservar esta habitación",
+    "provideDates": "Indica las fechas de entrada y de salida",
+    "invalidPeriod": "Elige un periodo de estancia válido",
+    "paymentsUnavailable": "Los pagos no están disponibles ahora mismo. Inténtalo de nuevo más tarde.",
+    "paymentIncomplete": "No se ha podido completar el pago.",
+    "paymentFailed": "No hemos podido iniciar el pago. Inténtalo de nuevo."
+  },
+  "Gallery": {
+    "dialog": "Galería de fotos de la habitación",
+    "open": "Abrir la galería de fotos",
+    "openPhoto": "Abrir la foto {number} en la galería",
+    "morePhotos": "Ver {count} fotos más",
+    "roomPhoto": "Foto de la habitación {number}",
+    "previous": "Foto anterior",
+    "next": "Foto siguiente",
+    "close": "Cerrar la galería"
+  },
+  "Booking": {
+    "originalPrice": "Precio original:",
+    "discountNow": "| {discount}% de descuento. Ahora",
+    "checkIn": "Fecha de entrada",
+    "checkOut": "Fecha de salida",
+    "datePlaceholder": "dd/mm/aaaa",
+    "adults": "Adultos",
+    "children": "Niños",
+    "total": "Precio total: {price}",
+    "bookNow": "Reservar ahora",
+    "booked": "Reservada"
+  },
+  "Reviews": {
+    "loadFailed": "No hemos podido cargar las opiniones. Inténtalo de nuevo más tarde.",
+    "none": "Aún no hay opiniones.",
+    "rated": "Valoración: {rating} de 5"
+  },
+  "RatingModal": {
+    "title": "Valora tu experiencia",
+    "rating": "Valoración",
+    "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+    "reviewText": "Texto de la opinión",
+    "submit": "Enviar",
+    "submitting": "Enviando",
+    "cancel": "Cancelar"
+  },
+  "Profile": {
+    "summary": "Resumen del perfil",
+    "about": "Acerca de",
+    "signOut": "Cerrar sesión",
+    "hello": "Hola, {name}",
+    "joined": "Miembro desde {date}",
+    "sections": "Secciones del perfil",
+    "bookingsTab": "Reservas actuales",
+    "amountTab": "Importe gastado",
+    "reviewRequired": "Escribe tu opinión y elige una valoración",
+    "reviewRoomMissing": "No hemos encontrado la habitación que quieres valorar. Inténtalo de nuevo.",
+    "reviewSubmitted": "Opinión enviada",
+    "reviewFailed": "No hemos podido guardar tu opinión. Inténtalo de nuevo."
+  },
+  "Table": {
+    "caption": "Reservas actuales",
+    "region": "Tabla de reservas actuales",
+    "room": "Habitación",
+    "unitPrice": "Precio unitario",
+    "price": "Precio",
+    "discount": "Descuento",
+    "daysBooked": "Nº de días reservados",
+    "daysLeft": "Días restantes",
+    "actions": "Acciones",
+    "rate": "Valorar",
+    "rateRoom": "Valorar {name}"
+  },
+  "Chart": {
+    "title": "Importe gastado por reserva ({currency})",
+    "summary": "Gráfico de barras del importe gastado por reserva. Total: {total}.",
+    "dataset": "Importe gastado",
+    "room": "Habitación",
+    "total": "Total"
+  },
+  "Auth": {
+    "createAccount": "Crea una cuenta",
+    "or": "o",
+    "signInGithub": "Iniciar sesión con GitHub",
+    "signInGoogle": "Iniciar sesión con Google",
+    "name": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "correo@ejemplo.com",
+    "password": "Contraseña (mínimo 8 caracteres)",
+    "passwordPlaceholder": "Tu contraseña",
+    "signUp": "Registrarme",
+    "signIn": "Iniciar sesión",
+    "accountCreated": "Cuenta creada. Inicia sesión.",
+    "signUpFailed": "No hemos podido crear tu cuenta. Si ya te registraste, usa Iniciar sesión.",
+    "errors": {
+      "OAuthAccountNotLinked": "Ya existe una cuenta con este correo. Inicia sesión con el método que usaste al principio.",
+      "CredentialsSignin": "Correo o contraseña incorrectos.",
+      "AccessDenied": "Acceso denegado. No tienes permiso para iniciar sesión.",
+      "Default": "No hemos podido iniciar tu sesión. Inténtalo de nuevo."
+    }
+  },
+  "Contact": {
+    "title": "Contáctanos",
+    "name": "Tu nombre:",
+    "email": "Tu correo electrónico:",
+    "message": "Tu mensaje:",
+    "submit": "Enviar",
+    "success": "Mensaje enviado correctamente"
+  },
+  "ErrorPage": {
+    "title": "¡Algo ha salido mal!",
+    "retry": "Intentar de nuevo"
+  },
+  "Errors": {
+    "unauthorized": "Debes iniciar sesión.",
+    "roomRequired": "Elige una habitación.",
+    "invalidDates": "Indica fechas de entrada y de salida válidas.",
+    "checkinPast": "La fecha de entrada no puede ser pasada.",
+    "checkoutAfterCheckin": "La fecha de salida debe ser posterior a la de entrada.",
+    "adultsRange": "El número de adultos debe estar entre {min} y {max}.",
+    "childrenRange": "El número de niños debe estar entre {min} y {max}.",
+    "roomNotFound": "No hemos encontrado esa habitación.",
+    "roomBooked": "Esta habitación ya está reservada.",
+    "reviewRoomRequired": "Elige una habitación para valorar.",
+    "reviewTextRequired": "Escribe tu opinión.",
+    "ratingRange": "La valoración debe estar entre {min} y {max}.",
+    "userNotFound": "No hemos encontrado tu perfil.",
+    "unsupportedCurrency": "Esa moneda no está disponible.",
+    "stripeSignatureMissing": "Falta la firma de Stripe.",
+    "stripeSignatureInvalid": "La firma de Stripe no es válida.",
+    "checkoutMetadataInvalid": "Los datos del pago están incompletos.",
+    "network": "Error de red. Comprueba tu conexión e inténtalo de nuevo.",
+    "generic": "Algo ha salido mal. Inténtalo de nuevo."
+  }
+}
