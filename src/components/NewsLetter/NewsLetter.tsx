@@ -13,7 +13,7 @@ const NewsLetter = () => {
           <input
             type="email"
             placeholder="Your email"
-            className="bg-[#457B9D] h-11 md:h-16 mb-2 md:mb-0 rounded-xl pl-6 md:mr-5 md:w-[452px] text-white placeholder:text-white focus:outline-none dark:placeholder:text-black dark:bg-[#F1FAEE]"
+            className="bg-[#457B9D] h-11 md:h-16 mb-2 md:mb-0 rounded-xl pl-6 md:mr-5 md:w-[452px] text-white placeholder:text-white dark:placeholder:text-black dark:bg-[#F1FAEE]"
           />
           <button type="button" className="btn-primary">
             Subscribe
