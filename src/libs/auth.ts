@@ -4,7 +4,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
 import sanityClient from "./sanity";
-import { SanityClient } from "sanity";
+import type { SanityClient } from "next-sanity";
 
 export const authOptions: NextAuthOptions = {
   providers: [
