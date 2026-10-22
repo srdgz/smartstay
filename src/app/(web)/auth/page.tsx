@@ -31,9 +31,9 @@ const Auth = () => {
     if (session) router.push("/");
   }, [router, session]);
 
-  const loginHandler = async () => {
+  const loginHandler = async (provider?: string) => {
     try {
-      await signIn();
+      await signIn(provider);
       router.push("/");
     } catch (error) {
       toast.error("Algo no fue bien.");
@@ -63,39 +63,65 @@ const Auth = () => {
           </h1>
           <p>or</p>
           <span className="inline-flex items-center">
-            <AiFillGithub
-              onClick={loginHandler}
-              className="mr-3 text-4xl cursor-pointer text-black dark:text-white"
-            />
-            |
-            <FcGoogle
-              onClick={loginHandler}
-              className="ml-3 text-4xl cursor-pointer"
-            />
+            <button
+              type="button"
+              onClick={() => loginHandler("github")}
+              aria-label="Sign in with GitHub"
+              className="mr-3"
+            >
+              <AiFillGithub
+                aria-hidden="true"
+                className="text-4xl text-black dark:text-white"
+              />
+            </button>
+            <span aria-hidden="true">|</span>
+            <button
+              type="button"
+              onClick={() => loginHandler("google")}
+              aria-label="Sign in with Google"
+              className="ml-3"
+            >
+              <FcGoogle aria-hidden="true" className="text-4xl" />
+            </button>
           </span>
         </div>
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+          <label htmlFor="auth-name" className="sr-only">
+            Name
+          </label>
           <input
+            id="auth-name"
             type="text"
             name="name"
+            autoComplete="name"
             placeholder="Your name"
             required
             className={inputStyles}
             value={formData.name}
             onChange={handleInputChange}
           />
+          <label htmlFor="auth-email" className="sr-only">
+            Email
+          </label>
           <input
+            id="auth-email"
             type="email"
             name="email"
+            autoComplete="email"
             placeholder="email@email.com"
             required
             className={inputStyles}
             value={formData.email}
             onChange={handleInputChange}
           />
+          <label htmlFor="auth-password" className="sr-only">
+            Password (at least 8 characters)
+          </label>
           <input
+            id="auth-password"
             type="password"
             name="password"
+            autoComplete="new-password"
             placeholder="Your password"
             required
             minLength={8}
@@ -105,12 +131,16 @@ const Auth = () => {
           />
           <button
             type="submit"
-            className="w-full bg-tertiary-dark font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full bg-tertiary-dark text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Sign Up
           </button>
         </form>
-        <button onClick={loginHandler} className="text-blue-700 underline">
+        <button
+          type="button"
+          onClick={() => loginHandler()}
+          className="text-blue-700 underline dark:text-blue-300"
+        >
           Sign In
         </button>
       </div>
