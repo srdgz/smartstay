@@ -1,3 +1,9 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/strict"]
+  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/strict"],
+  "rules": {
+    "jsx-a11y/no-noninteractive-tabindex": [
+      "error",
+      { "tags": [], "roles": ["tabpanel", "region"] }
+    ]
+  }
 }

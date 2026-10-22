@@ -13,7 +13,12 @@ type Props = {
 
 const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
   return (
-    <div className="overflow-x-auto max-w-[340px] rounded-lg mx-auto md:max-w-full shadow-md sm:rounded-lg">
+    <div
+      role="region"
+      aria-label="Current bookings table"
+      tabIndex={0}
+      className="overflow-x-auto max-w-[340px] rounded-lg mx-auto md:max-w-full shadow-md sm:rounded-lg"
+    >
       <table className="w-full text-sm text-left text-gray-500">
         <caption className="sr-only">Current bookings</caption>
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">

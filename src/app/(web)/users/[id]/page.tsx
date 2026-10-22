@@ -94,22 +94,25 @@ const UserDetails = (props: { params: { id: string } }) => {
   return (
     <div className="container mx-auto px-2 md:px-4 py10">
       <div className="grid md:grid-cols-12 gap-10">
-        <div className="hidden md:block md:col-span-4 lg:col-span-3 shadow-lg h-fit sticky top-10 bg-[#eff0f2] text-black rounded-lg px-6 py-4">
+        <aside
+          aria-label="Profile summary"
+          className="hidden md:block md:col-span-4 lg:col-span-3 shadow-lg h-fit sticky top-10 bg-[#eff0f2] text-black rounded-lg px-6 py-4"
+        >
           <div className="md:w-[143px] w-28 h-28 md:h-[143px] mx-auto mb-5 rounded-full overflow-hidden">
             <Image
               src={userData.image}
-              alt={userData.name}
+              alt=""
               width={143}
               height={143}
               className="img scale-animation rounded-full"
             />
           </div>
           <div className="font-normal py-4 text-left">
-            <h6 className="text-xl font-bold pb-3">About</h6>
+            <h2 className="text-xl font-bold pb-3">About</h2>
             <p className="text-sm">{userData.about ?? ""}</p>
           </div>
           <div className="font-normal text-left">
-            <h6 className="text-xl font-bold pb-3">{userData.name}</h6>
+            <p className="text-xl font-bold pb-3">{userData.name}</p>
           </div>
           <button
             type="button"
@@ -119,11 +122,11 @@ const UserDetails = (props: { params: { id: string } }) => {
             <span className="mr-2">Sign Out</span>
             <FaSignOutAlt className="text-3xl" aria-hidden="true" />
           </button>
-        </div>
+        </aside>
 
         <div className="md:col-span-8 lg:col-span-9">
           <div className="flex items-center">
-            <h5 className="text-2xl font-bold mr-3">Hello, {userData.name}</h5>
+            <h1 className="text-2xl font-bold mr-3">Hello, {userData.name}</h1>
           </div>
           <div className="md:hidden w-14 h-14 rounded-l-full overflow-hidden">
             <Image
@@ -131,7 +134,7 @@ const UserDetails = (props: { params: { id: string } }) => {
               width={56}
               height={56}
               src={userData.image}
-              alt={userData.name}
+              alt=""
             />
           </div>
           <p className="block w-fit md:hidden text-sm py-2">
@@ -191,6 +194,10 @@ const UserDetails = (props: { params: { id: string } }) => {
               </li>
             </ul>
           </nav>
+
+          <h2 className="sr-only" aria-live="polite">
+            {currentNav === "bookings" ? "Current Bookings" : "Amount Spent"}
+          </h2>
 
           {currentNav === "bookings" ? (
             userBookings && (
