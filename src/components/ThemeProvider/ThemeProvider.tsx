@@ -17,6 +17,10 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     setRenderComponent(true);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkTheme);
+  }, [darkTheme]);
+
   if (!renderComponent) return <></>;
 
   return (
