@@ -40,6 +40,10 @@
     "suiteRoom": "Habitación suite"
   },
   "Search": {
+    "checkIn": "Llegada",
+    "checkOut": "Salida",
+    "datePlaceholder": "Añadir fecha",
+    "datesIncomplete": "Elige una fecha de llegada y una de salida.",
     "roomType": "Tipo de habitación",
     "search": "Buscar",
     "placeholder": "Buscar...",
@@ -77,7 +81,6 @@
   "RoomCard": {
     "roomOfType": "habitación {type}",
     "bookNow": "RESERVAR",
-    "booked": "RESERVADA",
     "perNight": "noche"
   },
   "RoomTypes": {
@@ -89,7 +92,8 @@
     "title": "Nuestros alojamientos",
     "loading": "Cargando alojamientos",
     "count": "{count, plural, one {# alojamiento encontrado} other {# alojamientos encontrados}}",
-    "none": "Ningún alojamiento coincide con tu búsqueda."
+    "none": "Ningún alojamiento coincide con tu búsqueda.",
+    "noneForDates": "No hay alojamientos disponibles en esas fechas. Prueba con otras fechas."
   },
   "RoomDetails": {
     "description": "Descripción",
@@ -129,7 +133,7 @@
     "children": "Niños",
     "total": "Precio total: {price}",
     "bookNow": "Reservar ahora",
-    "booked": "Reservada",
+    "unavailable": "Esta habitación no está disponible en las fechas seleccionadas.",
     "discountBadge": "-{discount}%"
   },
   "Reviews": {
@@ -223,7 +227,7 @@
     "adultsRange": "El número de adultos debe estar entre {min} y {max}.",
     "childrenRange": "El número de niños debe estar entre {min} y {max}.",
     "roomNotFound": "No hemos encontrado esa habitación.",
-    "roomBooked": "Esta habitación ya está reservada.",
+    "roomUnavailable": "Esta habitación no está disponible en esas fechas.",
     "reviewRoomRequired": "Elige una habitación para valorar.",
     "reviewTextRequired": "Escribe tu opinión.",
     "ratingRange": "La valoración debe estar entre {min} y {max}.",

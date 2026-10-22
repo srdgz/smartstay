@@ -40,6 +40,10 @@
     "suiteRoom": "Suite Room"
   },
   "Search": {
+    "checkIn": "Check In",
+    "checkOut": "Check Out",
+    "datePlaceholder": "Add date",
+    "datesIncomplete": "Choose both a check-in and a check-out date.",
     "roomType": "Room Type",
     "search": "Search",
     "placeholder": "Search...",
@@ -77,7 +81,6 @@
   "RoomCard": {
     "roomOfType": "{type} room",
     "bookNow": "BOOK NOW",
-    "booked": "BOOKED",
     "perNight": "night"
   },
   "RoomTypes": {
@@ -89,7 +92,8 @@
     "title": "Our stays",
     "loading": "Loading stays",
     "count": "{count, plural, one {# stay found} other {# stays found}}",
-    "none": "No stays match your search."
+    "none": "No stays match your search.",
+    "noneForDates": "No stays are available on those dates. Try different dates."
   },
   "RoomDetails": {
     "description": "Description",
@@ -129,7 +133,7 @@
     "children": "Children",
     "total": "Total Price: {price}",
     "bookNow": "Book Now",
-    "booked": "Booked",
+    "unavailable": "This room is not available on the selected dates.",
     "discountBadge": "-{discount}%"
   },
   "Reviews": {
@@ -223,7 +227,7 @@
     "adultsRange": "The number of adults must be between {min} and {max}.",
     "childrenRange": "The number of children must be between {min} and {max}.",
     "roomNotFound": "We could not find that room.",
-    "roomBooked": "This room is already booked.",
+    "roomUnavailable": "This room is not available on those dates.",
     "reviewRoomRequired": "Please choose a room to review.",
     "reviewTextRequired": "Please write your review.",
     "ratingRange": "The rating must be between {min} and {max}.",

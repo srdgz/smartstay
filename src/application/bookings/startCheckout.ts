@@ -1,25 +1,21 @@
+import { isRoomAvailable } from "@/domain/booking/availability";
+import type { BookingRepository } from "@/domain/booking/BookingRepository";
 import {
   MAX_ADULTS,
   MAX_CHILDREN,
   MIN_ADULTS,
   MIN_CHILDREN,
 } from "@/domain/booking/limits";
+import { assertValidStay } from "@/domain/booking/stay";
 import { ConflictError, NotFoundError, ValidationError } from "@/domain/errors";
 import { toContentLocale } from "@/domain/locale";
 import { convertAmount, isCurrency, type Currency } from "@/domain/money/Currency";
 import type { ExchangeRateProvider } from "@/domain/money/ExchangeRates";
-import {
-  nightsBetween,
-  parseDateOnly,
-  stayTotal,
-  toMinorUnits,
-} from "@/domain/room/pricing";
+import { stayTotal, toMinorUnits } from "@/domain/room/pricing";
 import type { RoomRepository } from "@/domain/room/RoomRepository";
 
 import type { PaymentGateway } from "../ports/PaymentGateway";
 import { toCheckoutMetadata } from "./checkoutMetadata";
-
-const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 export type StartCheckoutInput = {
   userId: string;
@@ -35,6 +31,7 @@ export type StartCheckoutInput = {
 
 type Dependencies = {
   rooms: RoomRepository;
+  bookings: BookingRepository;
   payments: PaymentGateway;
   rates: ExchangeRateProvider;
   now?: () => Date;
@@ -44,7 +41,7 @@ const isIntegerBetween = (value: number, min: number, max: number) =>
   Number.isInteger(value) && value >= min && value <= max;
 
 export const makeStartCheckout =
-  ({ rooms, payments, rates, now = () => new Date() }: Dependencies) =>
+  ({ rooms, bookings, payments, rates, now = () => new Date() }: Dependencies) =>
   async (input: StartCheckoutInput) => {
     const { userId, roomSlug, checkinDate, checkoutDate, adults, children } = input;
 
@@ -55,25 +52,7 @@ export const makeStartCheckout =
     }
     const currency: Currency = input.currency;
 
-    if (parseDateOnly(checkinDate) === null || parseDateOnly(checkoutDate) === null) {
-      throw new ValidationError(
-        "Please provide valid check-in and check-out dates.",
-        "invalidDates"
-      );
-    }
-
-    const earliest = new Date(now().getTime() - DAY_IN_MS).toISOString().slice(0, 10);
-    if (checkinDate < earliest) {
-      throw new ValidationError("The check-in date cannot be in the past.", "checkinPast");
-    }
-
-    const numberOfDays = nightsBetween(checkinDate, checkoutDate);
-    if (numberOfDays < 1) {
-      throw new ValidationError(
-        "The check-out date must be after the check-in date.",
-        "checkoutAfterCheckin"
-      );
-    }
+    const numberOfDays = assertValidStay(checkinDate, checkoutDate, now());
 
     if (!isIntegerBetween(adults, MIN_ADULTS, MAX_ADULTS)) {
       throw new ValidationError(
@@ -93,7 +72,10 @@ export const makeStartCheckout =
 
     const room = await rooms.findBySlug(roomSlug, toContentLocale(input.locale));
     if (!room) throw new NotFoundError("We could not find that room.", "roomNotFound");
-    if (room.isBooked) throw new ConflictError("This room is already booked.", "roomBooked");
+    const bookedRanges = await bookings.findBookedRanges(checkinDate);
+    if (!isRoomAvailable(room.id, { checkinDate, checkoutDate }, bookedRanges)) {
+      throw new ConflictError("This room is not available on those dates.", "roomUnavailable");
+    }
 
     const totalPrice = stayTotal(room.price, room.discount, numberOfDays);
     const { rates: exchangeRates } = await rates.getRates();

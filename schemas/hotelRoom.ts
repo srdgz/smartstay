@@ -143,12 +143,6 @@ const hotelRoom = {
       ],
     }),
     defineField({
-      name: "isBooked",
-      title: "Is Booked",
-      type: "boolean",
-      initialValue: false,
-    }),
-    defineField({
       name: "isFeatured",
       title: "Is Featured",
       type: "boolean",

@@ -6,6 +6,7 @@ import { makeStartCheckout } from "@/application/bookings/startCheckout";
 import { makeGetExchangeRates } from "@/application/money/getExchangeRates";
 import { makeGetFeaturedRoom } from "@/application/rooms/getFeaturedRoom";
 import { makeGetRoom } from "@/application/rooms/getRoom";
+import { makeGetRoomAvailability } from "@/application/rooms/getRoomAvailability";
 import { makeGetRooms } from "@/application/rooms/getRooms";
 import { makeGetRoomReviews } from "@/application/reviews/getRoomReviews";
 import { makeSubmitReview } from "@/application/reviews/submitReview";
@@ -45,8 +46,9 @@ const payments = new StripePaymentGateway({
 
 export const useCases = {
   getFeaturedRoom: makeGetFeaturedRoom({ rooms }),
-  getRooms: makeGetRooms({ rooms }),
+  getRooms: makeGetRooms({ rooms, bookings }),
   getRoom: makeGetRoom({ rooms }),
+  getRoomAvailability: makeGetRoomAvailability({ rooms, bookings }),
   getRoomReviews: makeGetRoomReviews({ reviews }),
   submitReview: makeSubmitReview({ reviews }),
   getUser: makeGetUser({ users }),
@@ -54,6 +56,6 @@ export const useCases = {
   removeAvatar: makeRemoveAvatar({ users }),
   getUserBookings: makeGetUserBookings({ bookings }),
   getExchangeRates: makeGetExchangeRates({ rates }),
-  startCheckout: makeStartCheckout({ rooms, payments, rates }),
-  completeBooking: makeCompleteBooking({ payments, bookings, rooms }),
+  startCheckout: makeStartCheckout({ rooms, bookings, payments, rates }),
+  completeBooking: makeCompleteBooking({ payments, bookings }),
 };

@@ -9,10 +9,9 @@ import { useMoney } from "@/presentation/hooks/useMoney";
 type Props = {
   price: number;
   discount: number;
-  isBooked: boolean;
 };
 
-const MobileBookBar: FC<Props> = ({ price, discount, isBooked }) => {
+const MobileBookBar: FC<Props> = ({ price, discount }) => {
   const t = useTranslations("Booking");
   const tRoom = useTranslations("RoomDetails");
   const { format } = useMoney();
@@ -23,15 +22,9 @@ const MobileBookBar: FC<Props> = ({ price, discount, isBooked }) => {
         {format(discountedPrice(price, discount))}
         <span className="text-muted ml-1 text-sm font-normal">/ {tRoom("perNight")}</span>
       </p>
-      {isBooked ? (
-        <span className="rounded-xl bg-gray-200 px-5 py-3 font-semibold text-gray-700 dark:bg-neutral-800 dark:text-gray-300">
-          {t("booked")}
-        </span>
-      ) : (
-        <a href="#booking" className="btn-primary">
-          {t("bookNow")}
-        </a>
-      )}
+      <a href="#booking" className="btn-primary">
+        {t("bookNow")}
+      </a>
     </div>
   );
 };

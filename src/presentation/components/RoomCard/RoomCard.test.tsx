@@ -29,10 +29,15 @@ describe("RoomCard", () => {
     expect(screen.getByText("habitación de lujo")).toBeInTheDocument();
   });
 
-  it("announces when the room is already booked", () => {
-    renderWithProviders(<RoomCard room={buildRoom({ isBooked: true })} />);
+  it("keeps the searched dates in the link to the room", () => {
+    renderWithProviders(
+      <RoomCard room={buildRoom()} stay={{ checkin: "2030-05-10", checkout: "2030-05-15" }} />
+    );
 
-    expect(screen.getByRole("link", { name: "Standard Room - BOOKED" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Standard Room" })).toHaveAttribute(
+      "href",
+      "/en/rooms/standard-room?checkin=2030-05-10&checkout=2030-05-15"
+    );
   });
 
   it("has no accessibility violations", async () => {

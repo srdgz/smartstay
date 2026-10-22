@@ -1,5 +1,6 @@
 import type { AvatarStorage, AvatarUpload } from "@/application/ports/AvatarStorage";
 import type { PaymentGateway, CheckoutRequest } from "@/application/ports/PaymentGateway";
+import type { BookedRange } from "@/domain/booking/availability";
 import type { Booking, NewBooking } from "@/domain/booking/Booking";
 import type { BookingRepository } from "@/domain/booking/BookingRepository";
 import type { ContentLocale } from "@/domain/locale";
@@ -22,7 +23,6 @@ export const buildRoom = (overrides: Partial<Room> = {}): Room => ({
   price: 100,
   discount: 5,
   specialNote: "Check-in is at noon.",
-  isBooked: false,
   isFeatured: false,
   coverImageUrl: "https://images.example.com/cover.jpg",
   images: [{ id: "img-1", url: "https://images.example.com/1.jpg" }],
@@ -50,18 +50,18 @@ export class InMemoryRoomRepository implements RoomRepository {
     return this.rooms.find((room) => room.slug === slug) ?? null;
   }
 
-  async markAsBooked(roomId: string) {
-    this.rooms = this.rooms.map((room) =>
-      room.id === roomId ? { ...room, isBooked: true } : room
-    );
-  }
 }
 
 export class InMemoryBookingRepository implements BookingRepository {
   created: NewBooking[] = [];
+  booked: BookedRange[] = [];
 
   async create(booking: NewBooking) {
     this.created.push(booking);
+  }
+
+  async findBookedRanges(fromDate: string) {
+    return this.booked.filter((range) => range.checkoutDate > fromDate);
   }
 
   async findByUser(): Promise<Booking[]> {

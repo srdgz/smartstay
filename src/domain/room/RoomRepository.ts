@@ -5,5 +5,4 @@ export interface RoomRepository {
   findFeatured(locale: ContentLocale): Promise<Room | null>;
   findAll(locale: ContentLocale): Promise<Room[]>;
   findBySlug(slug: string, locale: ContentLocale): Promise<Room | null>;
-  markAsBooked(roomId: string): Promise<void>;
 }

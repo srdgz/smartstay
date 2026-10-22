@@ -1,11 +1,12 @@
 import type { SanityClient } from "next-sanity";
 
+import type { BookedRange } from "@/domain/booking/availability";
 import type { Booking, NewBooking } from "@/domain/booking/Booking";
 import type { BookingRepository } from "@/domain/booking/BookingRepository";
 import type { ContentLocale } from "@/domain/locale";
 
 import { toBooking, type SanityBookingDoc } from "./mappers";
-import { userBookingsQuery } from "./queries";
+import { bookedRangesQuery, userBookingsQuery } from "./queries";
 
 export class SanityBookingRepository implements BookingRepository {
   constructor(private readonly client: SanityClient) {}
@@ -37,5 +38,9 @@ export class SanityBookingRepository implements BookingRepository {
     return docs
       .map((doc) => toBooking(doc, locale))
       .filter((booking): booking is Booking => booking !== null);
+  }
+
+  async findBookedRanges(fromDate: string): Promise<BookedRange[]> {
+    return this.client.fetch<BookedRange[]>(bookedRangesQuery, { fromDate }, { cache: "no-cache" });
   }
 }

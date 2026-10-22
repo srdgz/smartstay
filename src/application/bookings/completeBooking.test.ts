@@ -2,10 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { ValidationError } from "@/domain/errors";
 import {
-  buildRoom,
   FakePaymentGateway,
   InMemoryBookingRepository,
-  InMemoryRoomRepository,
 } from "@/test/fakes";
 
 import { fromCheckoutMetadata, toCheckoutMetadata } from "./checkoutMetadata";
@@ -29,9 +27,8 @@ const booking = {
 const setup = () => {
   const payments = new FakePaymentGateway();
   const bookings = new InMemoryBookingRepository();
-  const rooms = new InMemoryRoomRepository([buildRoom()]);
-  const completeBooking = makeCompleteBooking({ payments, bookings, rooms });
-  return { payments, bookings, rooms, completeBooking };
+  const completeBooking = makeCompleteBooking({ payments, bookings });
+  return { payments, bookings, completeBooking };
 };
 
 describe("checkout metadata", () => {
@@ -61,24 +58,22 @@ describe("checkout metadata", () => {
 });
 
 describe("completeBooking", () => {
-  it("creates the booking and marks the room as booked", async () => {
-    const { payments, bookings, rooms, completeBooking } = setup();
+  it("creates the booking", async () => {
+    const { payments, bookings, completeBooking } = setup();
     payments.completed = { metadata: toCheckoutMetadata(booking) };
 
     const result = await completeBooking("payload", "signature");
 
     expect(result).toEqual({ handled: true });
     expect(bookings.created).toEqual([booking]);
-    expect(rooms.rooms[0].isBooked).toBe(true);
   });
 
   it("ignores events that are not completed checkouts", async () => {
-    const { bookings, rooms, completeBooking } = setup();
+    const { bookings, completeBooking } = setup();
 
     const result = await completeBooking("payload", "signature");
 
     expect(result).toEqual({ handled: false });
     expect(bookings.created).toHaveLength(0);
-    expect(rooms.rooms[0].isBooked).toBe(false);
   });
 });

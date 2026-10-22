@@ -12,9 +12,10 @@ import {
   MIN_ADULTS,
   MIN_CHILDREN,
 } from "@/domain/booking/limits";
+import { nextBookedCheckin, type DateRange } from "@/domain/booking/availability";
 import { discountedPrice, nightsBetween, stayTotal } from "@/domain/room/pricing";
 import { useMoney } from "@/presentation/hooks/useMoney";
-import { toDateOnly } from "@/presentation/lib/dateOnly";
+import { addDays, fromDateOnly, toDateOnly } from "@/presentation/lib/dateOnly";
 
 registerLocale("es", es);
 
@@ -31,7 +32,8 @@ type Props = {
   adults: number;
   noOfChildren: number;
   specialNote: string;
-  isBooked: boolean;
+  bookedRanges: DateRange[];
+  unavailable: boolean;
   handleBookNowClick: () => void;
 };
 
@@ -52,7 +54,8 @@ const BookRoomCta: FC<Props> = (props) => {
     setNoOfChildren,
     adults,
     noOfChildren,
-    isBooked,
+    bookedRanges,
+    unavailable,
     handleBookNowClick,
   } = props;
 
@@ -63,6 +66,20 @@ const BookRoomCta: FC<Props> = (props) => {
 
   const discountPrice = discountedPrice(price, discount);
   const datePickerLocale = locale === "es" ? "es" : undefined;
+
+  const blockedNights = bookedRanges.flatMap((range) => {
+    const start = fromDateOnly(range.checkinDate);
+    const end = fromDateOnly(range.checkoutDate);
+    return start && end ? [{ start, end: addDays(end, -1) }] : [];
+  });
+  const nextBooking = checkinDate
+    ? fromDateOnly(nextBookedCheckin(bookedRanges, toDateOnly(checkinDate)))
+    : null;
+
+  const handleCheckinChange = (date: Date | null) => {
+    setCheckinDate(date);
+    if (date && checkoutDate && checkoutDate <= date) setCheckoutDate(null);
+  };
 
   const calcNoOfDays = () => {
     if (!checkinDate || !checkoutDate) return 0;
@@ -102,7 +119,8 @@ const BookRoomCta: FC<Props> = (props) => {
           </label>
           <DatePicker
             selected={checkinDate}
-            onChange={(date: Date | null) => setCheckinDate(date)}
+            onChange={handleCheckinChange}
+            excludeDateIntervals={blockedNights}
             dateFormat="dd/MM/yyyy"
             minDate={new Date()}
             id="check-in-date"
@@ -123,6 +141,7 @@ const BookRoomCta: FC<Props> = (props) => {
             dateFormat="dd/MM/yyyy"
             disabled={!checkinDate}
             minDate={calcMinCheckoutDate() ?? undefined}
+            maxDate={nextBooking ?? undefined}
             id="check-out-date"
             locale={datePickerLocale}
             placeholderText={t("datePlaceholder")}
@@ -169,13 +188,17 @@ const BookRoomCta: FC<Props> = (props) => {
         )}
       </div>
 
+      <p role="status" className="mt-4 text-sm font-semibold text-red-700 dark:text-red-400">
+        {unavailable ? t("unavailable") : null}
+      </p>
+
       <button
         type="button"
-        disabled={isBooked}
+        disabled={unavailable}
         onClick={handleBookNowClick}
         className="btn-primary mt-6 w-full py-4 text-lg"
       >
-        {isBooked ? t("booked") : t("bookNow")}
+        {t("bookNow")}
       </button>
     </div>
   );

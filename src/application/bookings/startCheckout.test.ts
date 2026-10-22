@@ -5,6 +5,7 @@ import {
   buildRoom,
   FakeExchangeRateProvider,
   FakePaymentGateway,
+  InMemoryBookingRepository,
   InMemoryRoomRepository,
 } from "@/test/fakes";
 
@@ -27,14 +28,17 @@ const validInput: StartCheckoutInput = {
 
 describe("startCheckout", () => {
   let rooms: InMemoryRoomRepository;
+  let bookings: InMemoryBookingRepository;
   let payments: FakePaymentGateway;
   let startCheckout: ReturnType<typeof makeStartCheckout>;
 
   beforeEach(() => {
     rooms = new InMemoryRoomRepository([buildRoom()]);
+    bookings = new InMemoryBookingRepository();
     payments = new FakePaymentGateway();
     startCheckout = makeStartCheckout({
       rooms,
+      bookings,
       payments,
       rates: new FakeExchangeRateProvider(0.9),
       now: () => NOW,
@@ -142,9 +146,28 @@ describe("startCheckout", () => {
     ).rejects.toBeInstanceOf(NotFoundError);
   });
 
-  it("fails when the room is already booked", async () => {
-    rooms.rooms = [buildRoom({ isBooked: true })];
+  it("fails when the room is booked on an overlapping date", async () => {
+    bookings.booked = [
+      { roomId: "room-1", checkinDate: "2026-12-03", checkoutDate: "2026-12-06" },
+    ];
+    await expect(startCheckout(validInput)).rejects.toMatchObject({
+      code: "roomUnavailable",
+    });
     await expect(startCheckout(validInput)).rejects.toBeInstanceOf(ConflictError);
     expect(payments.requests).toHaveLength(0);
+  });
+
+  it("allows a stay that starts when another one ends", async () => {
+    bookings.booked = [
+      { roomId: "room-1", checkinDate: "2026-11-27", checkoutDate: "2026-12-01" },
+    ];
+    await expect(startCheckout(validInput)).resolves.toBeDefined();
+  });
+
+  it("allows the dates when only another room is booked", async () => {
+    bookings.booked = [
+      { roomId: "room-2", checkinDate: "2026-12-01", checkoutDate: "2026-12-04" },
+    ];
+    await expect(startCheckout(validInput)).resolves.toBeDefined();
   });
 });

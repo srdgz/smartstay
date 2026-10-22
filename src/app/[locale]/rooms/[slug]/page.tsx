@@ -5,12 +5,14 @@ import { LiaFireExtinguisherSolid } from "react-icons/lia";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { GiSmokeBomb } from "react-icons/gi";
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { use, useState } from "react";
 
+import { rangesOverlap } from "@/domain/booking/availability";
 import { parseSquareFeet, squareFeetToSquareMeters } from "@/domain/room/area";
-import { useRoom } from "@/presentation/hooks/useApi";
+import { useRoom, useRoomAvailability } from "@/presentation/hooks/useApi";
 import { createCheckoutSession } from "@/presentation/lib/apiClient";
-import { toDateOnly } from "@/presentation/lib/dateOnly";
+import { fromDateOnly, toDateOnly } from "@/presentation/lib/dateOnly";
 import LoadingSpinner from "../../loading";
 import HotelPhotoGallery from "@/presentation/components/HotelPhotoGallery/HotelPhotoGallery";
 import BookRoomCta from "@/presentation/components/BookRoomCta/BookRoomCta";
@@ -24,8 +26,9 @@ import MobileBookBar from "@/presentation/components/MobileBookBar/MobileBookBar
 const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
   const { slug } = use(props.params);
 
-  const [checkinDate, setCheckinDate] = useState<Date | null>(null);
-  const [checkoutDate, setCheckoutDate] = useState<Date | null>(null);
+  const searchParams = useSearchParams();
+  const [checkinDate, setCheckinDate] = useState<Date | null>(fromDateOnly(searchParams.get("checkin")));
+  const [checkoutDate, setCheckoutDate] = useState<Date | null>(fromDateOnly(searchParams.get("checkout")));
   const [adults, setAdults] = useState(1);
   const [noOfChildren, setNoOfChildren] = useState(0);
   const t = useTranslations("RoomDetails");
@@ -34,6 +37,16 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
   const errorMessage = useErrorMessage();
 
   const { data: room, error } = useRoom(slug);
+  const bookedRanges = useRoomAvailability(slug).data?.booked ?? [];
+  const unavailable =
+    checkinDate !== null &&
+    checkoutDate !== null &&
+    bookedRanges.some((range) =>
+      rangesOverlap(
+        { checkinDate: toDateOnly(checkinDate), checkoutDate: toDateOnly(checkoutDate) },
+        range
+      )
+    );
 
   if (error) throw new Error("Cannot fetch data");
 
@@ -162,14 +175,15 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
               noOfChildren={noOfChildren}
               setAdults={setAdults}
               setNoOfChildren={setNoOfChildren}
-              isBooked={room.isBooked}
+              bookedRanges={bookedRanges}
+              unavailable={unavailable}
               handleBookNowClick={handleBookNowClick}
             />
           </div>
         </aside>
       </div>
 
-      <MobileBookBar price={room.price} discount={room.discount} isBooked={room.isBooked} />
+      <MobileBookBar price={room.price} discount={room.discount} />
     </div>
   );
 };

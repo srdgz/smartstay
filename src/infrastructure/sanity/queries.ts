@@ -8,7 +8,6 @@ const roomFields = `{
     dimension,
     discount,
     images,
-    isBooked,
     isFeatured,
     name,
     name_es,
@@ -70,4 +69,10 @@ export const roomReviewsQuery = groq`*[_type == "review" && hotelRoom._ref == $r
 
 export const reviewIdByUserAndRoomQuery = groq`*[_type == "review" && user._ref == $userId && hotelRoom._ref == $roomId][0] {
     _id
+}`;
+
+export const bookedRangesQuery = groq`*[_type == "booking" && checkoutDate > $fromDate] {
+    "roomId": hotelRoom._ref,
+    checkinDate,
+    checkoutDate
 }`;

@@ -9,11 +9,13 @@ import Money from "../Money/Money";
 
 type Props = {
   room: Room;
+  stay?: { checkin: string; checkout: string };
 };
 
 const RoomCard: FC<Props> = (props) => {
   const {
-    room: { coverImageUrl, name, price, type, description, slug, isBooked },
+    room: { coverImageUrl, name, price, type, description, slug },
+    stay,
   } = props;
   const t = useTranslations("RoomCard");
   const tTypes = useTranslations("RoomTypes");
@@ -32,21 +34,15 @@ const RoomCard: FC<Props> = (props) => {
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="img scale-animation"
         />
-        {isBooked && (
-          <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink shadow">
-            {t("booked")}
-          </span>
-        )}
       </div>
       <div className="mt-4 flex flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-lg font-semibold leading-snug">
             <Link
-              href={`/rooms/${slug}`}
+              href={stay ? `/rooms/${slug}?checkin=${stay.checkin}&checkout=${stay.checkout}` : `/rooms/${slug}`}
               className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-offset-4"
             >
               {name}
-              {isBooked && <span className="sr-only"> - {t("booked")}</span>}
             </Link>
           </h2>
           <p className="shrink-0 text-lg font-bold">
@@ -60,7 +56,7 @@ const RoomCard: FC<Props> = (props) => {
           aria-hidden="true"
           className="mt-4 inline-flex w-fit items-center rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition group-hover:bg-primary-dark"
         >
-          {isBooked ? t("booked") : t("bookNow")}
+          {t("bookNow")}
         </span>
       </div>
     </article>

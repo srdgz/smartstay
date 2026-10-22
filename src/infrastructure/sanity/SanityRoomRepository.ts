@@ -27,7 +27,4 @@ export class SanityRoomRepository implements RoomRepository {
     return doc ? toRoom(doc, locale) : null;
   }
 
-  async markAsBooked(roomId: string): Promise<void> {
-    await this.client.patch(roomId).set({ isBooked: true }).commit();
-  }
 }

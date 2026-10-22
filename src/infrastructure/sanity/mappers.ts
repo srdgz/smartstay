@@ -19,7 +19,6 @@ export type SanityRoomDoc = {
   discount?: number | null;
   specialNote?: string | null;
   specialNote_es?: string | null;
-  isBooked?: boolean | null;
   isFeatured?: boolean | null;
   coverImage?: { url?: string } | null;
   images?: { _key: string; url: string }[] | null;
@@ -84,7 +83,6 @@ export const toRoom = (doc: SanityRoomDoc, locale: ContentLocale = "en"): Room =
   price: doc.price ?? 0,
   discount: doc.discount ?? 0,
   specialNote: localized(doc.specialNote, doc.specialNote_es, locale),
-  isBooked: doc.isBooked ?? false,
   isFeatured: doc.isFeatured ?? false,
   coverImageUrl: doc.coverImage?.url ?? "",
   images: (doc.images ?? []).map((image) => ({ id: image._key, url: image.url })),

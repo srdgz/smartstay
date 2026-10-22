@@ -12,10 +12,14 @@ vi.mock("@/i18n/navigation", () => ({
   useRouter: () => ({ push }),
 }));
 
-const renderSearch = () => {
+const renderSearch = (dates: { checkinDate?: Date; checkoutDate?: Date } = {}) => {
   const props = {
     roomTypeFilter: "Luxury",
     searchQuery: "sea",
+    checkinDate: dates.checkinDate ?? null,
+    checkoutDate: dates.checkoutDate ?? null,
+    setCheckinDate: vi.fn(),
+    setCheckoutDate: vi.fn(),
     setRoomTypeFilter: vi.fn(),
     setSearchQuery: vi.fn(),
   };
@@ -28,6 +32,8 @@ describe("Search", () => {
     renderSearch();
     expect(screen.getByLabelText("Room Type")).toHaveValue("Luxury");
     expect(screen.getByLabelText("Search")).toHaveValue("sea");
+    expect(screen.getByLabelText("Check In")).toBeInTheDocument();
+    expect(screen.getByLabelText("Check Out")).toBeInTheDocument();
   });
 
   it("reports changes to the filters", async () => {
@@ -45,6 +51,25 @@ describe("Search", () => {
     renderSearch();
     await userEvent.setup().click(screen.getByRole("button", { name: "Search" }));
     expect(push).toHaveBeenCalledWith("/rooms?roomType=Luxury&searchQuery=sea");
+  });
+
+  it("adds the dates to the search when both are chosen", async () => {
+    renderSearch({
+      checkinDate: new Date(2030, 4, 10),
+      checkoutDate: new Date(2030, 4, 15),
+    });
+    push.mockClear();
+    await userEvent.setup().click(screen.getByRole("button", { name: "Search" }));
+    expect(push).toHaveBeenCalledWith(
+      "/rooms?roomType=Luxury&searchQuery=sea&checkin=2030-05-10&checkout=2030-05-15"
+    );
+  });
+
+  it("asks for both dates when only one is chosen", async () => {
+    renderSearch({ checkinDate: new Date(2030, 4, 10) });
+    push.mockClear();
+    await userEvent.setup().click(screen.getByRole("button", { name: "Search" }));
+    expect(push).not.toHaveBeenCalled();
   });
 
   it("has no accessibility violations", async () => {

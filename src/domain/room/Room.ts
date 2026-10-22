@@ -20,7 +20,6 @@ export type Room = {
   price: number;
   discount: number;
   specialNote: string;
-  isBooked: boolean;
   isFeatured: boolean;
   coverImageUrl: string;
   images: RoomImage[];
