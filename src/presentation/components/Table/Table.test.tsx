@@ -3,24 +3,28 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "@/test/axe";
 import { describe, expect, it, vi } from "vitest";
 
-import type { Booking } from "@/models/booking";
+import type { Booking } from "@/domain/booking/Booking";
 
 import Table from "./Table";
 
-const bookings = [
+const bookings: Booking[] = [
   {
-    _id: "b1",
-    totalPrice: 190,
-    discount: 5,
-    numberOfDays: 2,
-    hotelRoom: {
-      _id: "r1",
+    id: "b1",
+    room: {
+      id: "r1",
+      slug: "standard-room",
       name: "Standard Room",
       price: 100,
-      slug: { current: "standard-room" },
     },
+    checkinDate: "2026-12-01",
+    checkoutDate: "2026-12-03",
+    numberOfDays: 2,
+    adults: 2,
+    children: 0,
+    totalPrice: 190,
+    discount: 5,
   },
-] as unknown as Booking[];
+];
 
 const setup = () => {
   const setRoomId = vi.fn();

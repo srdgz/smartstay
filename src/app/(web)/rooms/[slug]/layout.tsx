@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getRoom } from "@/libs/apis";
+import { useCases } from "@/infrastructure/container";
 
 export async function generateMetadata({
   params,
@@ -8,8 +8,8 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   try {
-    const room = await getRoom(params.slug);
-    return { title: room?.name ?? "Room details" };
+    const room = await useCases.getRoom(params.slug);
+    return { title: room.name || "Room details" };
   } catch {
     return { title: "Room details" };
   }

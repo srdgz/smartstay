@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useRef } from "react";
 import { BsStarFill } from "react-icons/bs";
 
-import useModalFocus from "@/hooks/useModalFocus";
+import useModalFocus from "@/presentation/hooks/useModalFocus";
 
 type Props = {
   isOpen: boolean;

@@ -1,29 +1,24 @@
 "use client";
 
-import useSWR from "swr";
 import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
-import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 
-import { getUserBookings } from "@/libs/apis";
-import { User } from "@/models/user";
+import { useCurrentUser, useUserBookings } from "@/presentation/hooks/useApi";
+import { submitReview } from "@/presentation/lib/apiClient";
 import LoadingSpinner from "../../loading";
 import { useState } from "react";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import { GiMoneyStack } from "react-icons/gi";
-import Table from "@/components/Table/Table";
-import Chart from "@/components/Chart/Chart";
-import RatingModal from "@/components/RatingModal/RatingModal";
-import BackDrop from "@/components/BackDrop/BackDrop";
+import Table from "@/presentation/components/Table/Table";
+import Chart from "@/presentation/components/Chart/Chart";
+import RatingModal from "@/presentation/components/RatingModal/RatingModal";
+import BackDrop from "@/presentation/components/BackDrop/BackDrop";
 import toast from "react-hot-toast";
-import { getErrorMessage } from "@/libs/errorMessage";
+import { notifyError } from "@/presentation/lib/notify";
+import { getErrorMessage } from "@/presentation/lib/errorMessage";
 
-const UserDetails = (props: { params: { id: string } }) => {
-  const {
-    params: { id: userId },
-  } = props;
-
+const UserDetails = () => {
   const [currentNav, setCurrentNav] = useState<
     "bookings" | "amount" | "ratings"
   >("bookings");
@@ -38,28 +33,24 @@ const UserDetails = (props: { params: { id: string } }) => {
 
   const reviewSubmitHandler = async () => {
     if (!ratingText.trim().length || !ratingValue) {
-      return toast.error("Please provide a rating text and a rating");
+      return notifyError("Please provide a rating text and a rating");
     }
 
     if (!roomId) {
-      return toast.error("We could not find the room to review. Please try again.");
+      return notifyError("We could not find the room to review. Please try again.");
     }
 
     setIsSubmittingReview(true);
 
     try {
-      await axios.post("/api/users", {
-        reviewText: ratingText,
-        ratingValue,
-        roomId,
-      });
+      await submitReview({ roomId, rating: ratingValue, text: ratingText });
       toast.success("Review submitted");
       setRatingText("");
       setRatingValue(null);
       setRoomId(null);
       setIsRatingVisible(false);
     } catch (error) {
-      toast.error(
+      notifyError(
         getErrorMessage(error, "We could not save your review. Please try again.")
       );
     } finally {
@@ -67,32 +58,12 @@ const UserDetails = (props: { params: { id: string } }) => {
     }
   };
 
-  const fetchUserBooking = async () => getUserBookings(userId);
-  const fetchUserData = async () => {
-    const { data } = await axios.get<User>("/api/users");
-    return data;
-  };
-
-  const {
-    data: userBookings,
-    error,
-    isLoading,
-  } = useSWR("/api/userbooking", fetchUserBooking);
-
-  const {
-    data: userData,
-    isLoading: loadingUserData,
-    error: errorGettingUserData,
-  } = useSWR("/api/users", fetchUserData);
+  const { data: userBookings, error } = useUserBookings();
+  const { data: userData, error: errorGettingUserData } = useCurrentUser();
 
   if (error || errorGettingUserData) throw new Error("Cannot fetch data");
-  if (typeof userBookings === "undefined" && !isLoading)
-    throw new Error("Cannot fetch data");
-  if (typeof userData === "undefined" && !loadingUserData)
-    throw new Error("Cannot fetch data");
 
-  if (loadingUserData) return <LoadingSpinner />;
-  if (!userData) throw new Error("Cannot fetch data");
+  if (!userData) return <LoadingSpinner />;
 
   const avatarUrl = userData.image ?? session?.user?.image ?? null;
 
@@ -155,7 +126,7 @@ const UserDetails = (props: { params: { id: string } }) => {
           </p>
 
           <p className="text-xs py-2 font-medium">
-            Joined In {userData._createdAt.split("T")[0]}
+            Joined In {userData.createdAt.split("T")[0]}
           </p>
           <button
             type="button"

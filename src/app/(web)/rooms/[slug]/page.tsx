@@ -1,22 +1,22 @@
 "use client";
 
-import useSWR from "swr";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { LiaFireExtinguisherSolid } from "react-icons/lia";
 import { AiOutlineMedicineBox } from "react-icons/ai";
 import { GiSmokeBomb } from "react-icons/gi";
 import { useState } from "react";
-import axios from "axios";
 
-import { getRoom } from "@/libs/apis";
+import { useRoom } from "@/presentation/hooks/useApi";
+import { createCheckoutSession } from "@/presentation/lib/apiClient";
+import { toDateOnly } from "@/presentation/lib/dateOnly";
 import LoadingSpinner from "../../loading";
-import HotelPhotoGallery from "@/components/HotelPhotoGallery/HotelPhotoGallery";
-import BookRoomCta from "@/components/BookRoomCta/BookRoomCta";
+import HotelPhotoGallery from "@/presentation/components/HotelPhotoGallery/HotelPhotoGallery";
+import BookRoomCta from "@/presentation/components/BookRoomCta/BookRoomCta";
 import toast from "react-hot-toast";
-import { getStripe } from "@/libs/stripe";
-import { getErrorMessage } from "@/libs/errorMessage";
-import RoomReview from "@/components/RoomReview/RoomReview";
-// import RoomReview from "@/components/RoomReview/RoomReview";
+import { notifyError } from "@/presentation/lib/notify";
+import { getStripe } from "@/presentation/lib/stripeBrowser";
+import { getErrorMessage } from "@/presentation/lib/errorMessage";
+import RoomReview from "@/presentation/components/RoomReview/RoomReview";
 
 const RoomDetails = (props: { params: { slug: string } }) => {
   const {
@@ -28,13 +28,9 @@ const RoomDetails = (props: { params: { slug: string } }) => {
   const [adults, setAdults] = useState(1);
   const [noOfChildren, setNoOfChildren] = useState(0);
 
-  const fetchRoom = async () => getRoom(slug);
-
-  const { data: room, error, isLoading } = useSWR("/api/room", fetchRoom);
+  const { data: room, error } = useRoom(slug);
 
   if (error) throw new Error("Cannot fetch data");
-  if (typeof room === "undefined" && !isLoading)
-    throw new Error("Cannot fetch data");
 
   if (!room) return <LoadingSpinner />;
 
@@ -49,31 +45,26 @@ const RoomDetails = (props: { params: { slug: string } }) => {
 
   const handleBookNowClick = async () => {
     if (!checkinDate || !checkoutDate)
-      return toast.error("Please provide checkin / checkout date");
+      return notifyError("Please provide checkin / checkout date");
 
     if (checkinDate > checkoutDate)
-      return toast.error("Please choose a valid checkin period");
-
-    const numberOfDays = calcNumDays();
-
-    const hotelRoomSlug = room.slug.current;
+      return notifyError("Please choose a valid checkin period");
 
     try {
       const stripe = await getStripe();
 
       if (!stripe) {
-        return toast.error(
+        return notifyError(
           "Payments are not available right now. Please try again later."
         );
       }
 
-      const { data: stripeSession } = await axios.post("/api/stripe", {
-        checkinDate,
-        checkoutDate,
+      const stripeSession = await createCheckoutSession({
+        roomSlug: room.slug,
+        checkinDate: toDateOnly(checkinDate),
+        checkoutDate: toDateOnly(checkoutDate),
         adults,
         children: noOfChildren,
-        numberOfDays,
-        hotelRoomSlug,
       });
 
       const result = await stripe.redirectToCheckout({
@@ -81,20 +72,13 @@ const RoomDetails = (props: { params: { slug: string } }) => {
       });
 
       if (result.error) {
-        toast.error(result.error.message ?? "The payment could not be completed.");
+        notifyError(result.error.message ?? "The payment could not be completed.");
       }
     } catch (error) {
-      toast.error(
+      notifyError(
         getErrorMessage(error, "We could not start the payment. Please try again.")
       );
     }
-  };
-
-  const calcNumDays = () => {
-    if (!checkinDate || !checkoutDate) return;
-    const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
-    const noOfDays = Math.ceil(timeDiff / (24 * 60 * 60 * 1000));
-    return noOfDays;
   };
 
   return (
@@ -108,9 +92,9 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                 {room.name} ({room.dimension})
               </h1>
               <div className="flex my-11">
-                {room.offeredAmenities.map((amenity) => (
+                {room.amenities.map((amenity) => (
                   <div
-                    key={amenity._key}
+                    key={amenity.id}
                     className="md:w-44 w-fit text-center px-2 md:px-0 h-20 md:h-40 mr-3 bg-[#eff0f2] dark:bg-gray-800 rounded-lg grid place-content-center"
                   >
                     <i
@@ -118,7 +102,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                       aria-hidden="true"
                     ></i>
                     <p className="text-xs md:text-base pt-3">
-                      {amenity.amenity}
+                      {amenity.name}
                     </p>
                   </div>
                 ))}
@@ -130,9 +114,9 @@ const RoomDetails = (props: { params: { slug: string } }) => {
               <div className="mb-11">
                 <h2 className="font-bold text-3xl mb-2">Offered Amenities</h2>
                 <div className="grid grid-cols-2">
-                  {room.offeredAmenities.map((amenity) => (
+                  {room.amenities.map((amenity) => (
                     <div
-                      key={amenity._key}
+                      key={amenity.id}
                       className="flex items-center md:my-0 my-1"
                     >
                       <i
@@ -140,7 +124,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                         aria-hidden="true"
                       ></i>
                       <p className="text-xs md:text-base ml-2">
-                        {amenity.amenity}
+                        {amenity.name}
                       </p>
                     </div>
                   ))}
@@ -176,7 +160,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                   <h2 className="md:text-lg font-semibold">Customer Reviews</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <RoomReview roomId={room._id} />
+                  <RoomReview roomId={room.id} />
                 </div>
               </div>
             </div>

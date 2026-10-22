@@ -1,22 +1,12 @@
-import axios from "axios";
 import { FC } from "react";
-import useSWR from "swr";
 
-import { Review } from "@/models/reviews";
+import { useRoomReviews } from "@/presentation/hooks/useApi";
+import { getErrorMessage } from "@/presentation/lib/errorMessage";
+
 import Rating from "../Rating/Rating";
-import { getErrorMessage } from "@/libs/errorMessage";
 
 const RoomReview: FC<{ roomId: string }> = ({ roomId }) => {
-  const fetchRoomReviews = async () => {
-    const { data } = await axios.get<Review[]>(`/api/room-reviews/${roomId}`);
-    return data;
-  };
-
-  const {
-    data: roomReviews,
-    error,
-    isLoading,
-  } = useSWR(`/api/room-reviews/${roomId}`, fetchRoomReviews);
+  const { data: roomReviews, error, isLoading } = useRoomReviews(roomId);
 
   if (error) {
     return (
@@ -36,12 +26,12 @@ const RoomReview: FC<{ roomId: string }> = ({ roomId }) => {
         roomReviews.map((review) => (
           <div
             className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg"
-            key={review._id}
+            key={review.id}
           >
             <div className="font-semibold mb-2 flex">
-              <p>{review.user.name}</p>
+              <p>{review.authorName}</p>
               <div className="ml-4 flex items-center text-amber-700 dark:text-yellow-500 text-lg">
-                <Rating rating={review.userRating} />
+                <Rating rating={review.rating} />
               </div>
             </div>
 

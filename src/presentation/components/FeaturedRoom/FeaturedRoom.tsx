@@ -1,6 +1,5 @@
-// "use client";
 
-import { Room } from "@/models/room";
+import type { Room } from "@/domain/room/Room";
 import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +16,7 @@ const FeaturedRoom: FC<Props> = (props) => {
       <div className="md:grid gap-8 grid-cols-1">
         <div className="rounded-2xl overflow-hidden h-48 mb-4 md:mb-0">
           <Image
-            src={featuredRoom.coverImage.url}
+            src={featuredRoom.coverImageUrl}
             alt={featuredRoom.name}
             width={300}
             height={300}
@@ -25,8 +24,8 @@ const FeaturedRoom: FC<Props> = (props) => {
           />
         </div>
         <div className="grid grid-cols-2 gap-8 h-48">
-          {featuredRoom.images.splice(1, 2).map((image, index) => (
-            <div key={image._key} className="rounded-2xl overflow-hidden">
+          {featuredRoom.images.slice(1, 3).map((image, index) => (
+            <div key={image.id} className="rounded-2xl overflow-hidden">
               <Image
                 src={image.url}
                 alt={`${featuredRoom.name} photo ${index + 2}`}
@@ -57,7 +56,7 @@ const FeaturedRoom: FC<Props> = (props) => {
             </div>
           </div>
           <Link
-            href={`/rooms/${featuredRoom.slug.current}`}
+            href={`/rooms/${featuredRoom.slug}`}
             className="border h-fit text-center border-tertiary-dark text-tertiary-dark dark:border-tertiary-darkmode dark:text-tertiary-darkmode px-3 py-2 lg:py-5 lg:px-7 rounded-2xl font-bold lg:text-xl"
           >
             More details

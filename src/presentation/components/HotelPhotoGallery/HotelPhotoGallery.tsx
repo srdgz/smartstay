@@ -1,14 +1,14 @@
 "use client";
 
 import { FC, useRef, useState } from "react";
-import { Image as ImageType } from "@/models/room";
+import type { RoomImage } from "@/domain/room/Room";
 import Image from "next/image";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 
-import useModalFocus from "@/hooks/useModalFocus";
+import useModalFocus from "@/presentation/hooks/useModalFocus";
 
-const HotelPhotoGallery: FC<{ photos: ImageType[] }> = ({ photos }) => {
+const HotelPhotoGallery: FC<{ photos: RoomImage[] }> = ({ photos }) => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);

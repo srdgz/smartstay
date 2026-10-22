@@ -10,15 +10,15 @@ import {
 import { FC, useContext } from "react";
 import { Bar } from "react-chartjs-2";
 
-import ThemeContext from "@/context/themeContext";
-import { Booking } from "@/models/booking";
+import ThemeContext from "@/presentation/context/themeContext";
+import type { Booking } from "@/domain/booking/Booking";
 
 ChartJS.register(Tooltip, CategoryScale, LinearScale, BarElement);
 
 const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
   const { darkTheme } = useContext(ThemeContext);
 
-  const labels = userBookings.map((booking) => booking.hotelRoom.name);
+  const labels = userBookings.map((booking) => booking.room.name);
   const amountSpent = userBookings.map((booking) => booking.totalPrice);
   const totalSpent = amountSpent.reduce((sum, amount) => sum + amount, 0);
 
@@ -67,8 +67,8 @@ const Chart: FC<{ userBookings: Booking[] }> = ({ userBookings }) => {
         </thead>
         <tbody>
           {userBookings.map((booking) => (
-            <tr key={booking._id}>
-              <th scope="row">{booking.hotelRoom.name}</th>
+            <tr key={booking.id}>
+              <th scope="row">{booking.room.name}</th>
               <td>{booking.totalPrice}</td>
             </tr>
           ))}

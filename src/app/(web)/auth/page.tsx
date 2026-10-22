@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signUp } from "next-auth-sanity/client";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { notifyError } from "@/presentation/lib/notify";
 import { useRouter } from "next/navigation";
 
 const defaultFormData = {
@@ -42,7 +43,7 @@ const Auth = () => {
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get("error");
     if (code) {
-      toast.error(signInErrors[code] ?? signInErrors.Default, { id: code });
+      notifyError(signInErrors[code] ?? signInErrors.Default, code);
     }
   }, []);
 
@@ -51,7 +52,7 @@ const Auth = () => {
       await signIn(provider);
       router.push("/");
     } catch (error) {
-      toast.error(signInErrors.Default);
+      notifyError(signInErrors.Default);
     }
   };
 
@@ -64,7 +65,7 @@ const Auth = () => {
         setFormData(defaultFormData);
       }
     } catch (error) {
-      toast.error(
+      notifyError(
         "We could not create your account. If you already registered, use Sign In."
       );
     }

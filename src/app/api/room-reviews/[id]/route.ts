@@ -1,19 +1,11 @@
-import { getRoomReviews } from "@/libs/apis";
-import { NextResponse } from "next/server";
+import { useCases } from "@/infrastructure/container";
+import { respond } from "@/infrastructure/http/route";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
-  const roomId = params.id;
-  try {
-    const rommReviews = await getRoomReviews(roomId);
-    return NextResponse.json(rommReviews, {
-      status: 200,
-      statusText: "Succesful",
-    });
-  } catch (error: any) {
-    console.log("Getting review failed", error);
-    return new NextResponse("Unable to fetch", { status: 400 });
-  }
+  return respond(() => useCases.getRoomReviews(params.id));
 }

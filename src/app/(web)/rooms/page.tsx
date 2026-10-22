@@ -2,12 +2,11 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 
-import { getRooms } from "@/libs/apis";
-import { Room } from "@/models/room";
-import Search from "@/components/Search/Search";
-import RoomCard from "@/components/RoomCard/RoomCard";
+import type { Room } from "@/domain/room/Room";
+import { useRooms } from "@/presentation/hooks/useApi";
+import Search from "@/presentation/components/Search/Search";
+import RoomCard from "@/presentation/components/RoomCard/RoomCard";
 
 const Rooms = () => {
   const [roomTypeFilter, setRoomTypeFilter] = useState("");
@@ -22,15 +21,9 @@ const Rooms = () => {
     if (searchQuery) setSearchQuery(searchQuery);
   }, [searchParams]);
 
-  async function fetchData() {
-    return getRooms();
-  }
-
-  const { data, error, isLoading } = useSWR("get/hotelRooms", fetchData);
+  const { data, error, isLoading } = useRooms();
 
   if (error) throw new Error("Cannot fetch data");
-  if (typeof data === "undefined" && !isLoading)
-    throw new Error("Cannot fetch data");
 
   const filterRooms = (rooms: Room[]) => {
     return rooms.filter((room) => {
@@ -77,7 +70,7 @@ const Rooms = () => {
 
       <div className="flex mt-20 justify-between flex-wrap">
         {filteredRooms.map((room) => (
-          <RoomCard key={room._id} room={room} />
+          <RoomCard key={room.id} room={room} />
         ))}
       </div>
     </div>

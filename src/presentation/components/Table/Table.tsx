@@ -3,7 +3,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import Link from "next/link";
 
-import { Booking } from "@/models/booking";
+import type { Booking } from "@/domain/booking/Booking";
 
 type Props = {
   bookingDetails: Booking[];
@@ -37,7 +37,7 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
         <tbody>
           {bookingDetails.map((booking) => (
             <tr
-              key={booking._id}
+              key={booking.id}
               className="bg-white border-b hover:bg-gray-50"
             >
               <th
@@ -45,13 +45,13 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
                 className="px-6 py-4 font-medium whitespace-nowrap"
               >
                 <Link
-                  href={`/rooms/${booking.hotelRoom.slug.current}`}
+                  href={`/rooms/${booking.room.slug}`}
                   className="underline text-blue-600"
                 >
-                  {booking.hotelRoom.name}
+                  {booking.room.name}
                 </Link>
               </th>
-              <td className="px-6 py-4">{booking.hotelRoom.price}</td>
+              <td className="px-6 py-4">{booking.room.price}</td>
               <td className="px-6 py-4">{booking.totalPrice}</td>
               <td className="px-6 py-4">{booking.discount}</td>
               <td className="px-6 py-4">{booking.numberOfDays}</td>
@@ -59,9 +59,9 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
               <td className="px-6 py-4">
                 <button
                   type="button"
-                  aria-label={`Rate ${booking.hotelRoom.name}`}
+                  aria-label={`Rate ${booking.room.name}`}
                   onClick={() => {
-                    setRoomId(booking.hotelRoom._id);
+                    setRoomId(booking.room.id);
                     toggleRatingModal();
                   }}
                   className="font-medium text-blue-600 hover:underline"

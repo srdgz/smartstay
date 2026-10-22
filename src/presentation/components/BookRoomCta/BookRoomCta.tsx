@@ -4,6 +4,15 @@ import { Dispatch, FC, SetStateAction } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import {
+  MAX_ADULTS,
+  MAX_CHILDREN,
+  MIN_ADULTS,
+  MIN_CHILDREN,
+} from "@/domain/booking/limits";
+import { discountedPrice, nightsBetween, stayTotal } from "@/domain/room/pricing";
+import { toDateOnly } from "@/presentation/lib/dateOnly";
+
 type Props = {
   checkinDate: Date | null;
   setCheckinDate: Dispatch<SetStateAction<Date | null>>;
@@ -39,13 +48,11 @@ const BookRoomCta: FC<Props> = (props) => {
     handleBookNowClick,
   } = props;
 
-  const discountPrice = price - (price / 100) * discount;
+  const discountPrice = discountedPrice(price, discount);
 
   const calcNoOfDays = () => {
     if (!checkinDate || !checkoutDate) return 0;
-    const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
-    const noOfDays = Math.ceil(timeDiff / (24 * 60 * 60 * 1000));
-    return noOfDays;
+    return nightsBetween(toDateOnly(checkinDate), toDateOnly(checkoutDate));
   };
 
   return (
@@ -126,8 +133,8 @@ const BookRoomCta: FC<Props> = (props) => {
             id="adults"
             value={adults}
             onChange={(e) => setAdults(+e.target.value)}
-            min={1}
-            max={5}
+            min={MIN_ADULTS}
+            max={MAX_ADULTS}
             className="w-full border border-gray-300 rounded-lg p-2.5"
           />
         </div>
@@ -143,8 +150,8 @@ const BookRoomCta: FC<Props> = (props) => {
             id="children"
             value={noOfChildren}
             onChange={(e) => setNoOfChildren(+e.target.value)}
-            min={0}
-            max={3}
+            min={MIN_CHILDREN}
+            max={MAX_CHILDREN}
             className="w-full border border-gray-300 rounded-lg p-2.5"
           />
         </div>
@@ -153,7 +160,7 @@ const BookRoomCta: FC<Props> = (props) => {
       <div aria-live="polite">
         {calcNoOfDays() > 0 && (
           <p className="mt-3">
-            Total Price: $ {calcNoOfDays() * discountPrice}
+            Total Price: $ {stayTotal(price, discount, calcNoOfDays())}
           </p>
         )}
       </div>

@@ -1,9 +1,6 @@
 import { signUpHandler } from "next-auth-sanity";
-import sanityClient from "@/libs/sanity";
-import { SanityClient } from "@sanity/client";
+import type { SanityClient } from "next-sanity";
 
-const castToSanityClient = (client: any): SanityClient => client;
+import { sanityClient } from "@/infrastructure/sanity/client";
 
-const sanitizedClient = castToSanityClient(sanityClient);
-
-export const POST = signUpHandler(sanitizedClient);
+export const POST = signUpHandler(sanityClient as SanityClient);
