@@ -40,9 +40,7 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
             <th scope="col" className="px-6 py-3">{t("room")}</th>
             <th scope="col" className="px-6 py-3">{t("checkIn")}</th>
             <th scope="col" className="px-6 py-3">{t("checkOut")}</th>
-            <th scope="col" className="px-6 py-3">{t("unitPrice")}</th>
             <th scope="col" className="px-6 py-3">{t("price")}</th>
-            <th scope="col" className="px-6 py-3">{t("discount")}</th>
             <th scope="col" className="px-6 py-3">{t("daysBooked")}</th>
             <th scope="col" className="px-6 py-3">{t("status")}</th>
             <th scope="col" className="px-6 py-3">
@@ -74,12 +72,8 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
                 <time dateTime={booking.checkoutDate}>{formatDate(booking.checkoutDate)}</time>
               </td>
               <td className="px-6 py-4">
-                {formatIn(booking.room.price * booking.exchangeRate, booking.currency)}
-              </td>
-              <td className="px-6 py-4">
                 {formatIn(booking.chargedAmount, booking.currency)}
               </td>
-              <td className="px-6 py-4">{booking.discount}%</td>
               <td className="px-6 py-4">{booking.numberOfDays}</td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {t(stayStatus(booking.checkinDate, booking.checkoutDate, today))}

@@ -68,9 +68,8 @@ describe("Table", () => {
 
   it("shows the amount in the currency the booking was charged in", () => {
     setup();
-    expect(screen.getByText("€90")).toBeInTheDocument();
     expect(screen.getByText("€171")).toBeInTheDocument();
-    expect(screen.getByText("5%")).toBeInTheDocument();
+    expect(screen.queryByText("€90")).not.toBeInTheDocument();
   });
 
   it("opens the rating dialog for the chosen room", async () => {
