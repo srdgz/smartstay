@@ -22,7 +22,7 @@ export class StripePaymentGateway implements PaymentGateway {
     if (!this.stripe) {
       const secretKey = this.config.secretKey();
       if (!secretKey) throw new Error("STRIPE_SECRET_KEY is not configured");
-      this.stripe = new Stripe(secretKey, { apiVersion: "2023-10-16" });
+      this.stripe = new Stripe(secretKey);
     }
     return this.stripe;
   }
@@ -30,7 +30,6 @@ export class StripePaymentGateway implements PaymentGateway {
   async createCheckoutSession(request: CheckoutRequest): Promise<CheckoutSession> {
     const session = await this.client().checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card"],
       line_items: [
         {
           quantity: 1,
@@ -49,7 +48,7 @@ export class StripePaymentGateway implements PaymentGateway {
       metadata: request.metadata,
     });
 
-    return { id: session.id };
+    return { id: session.id, url: session.url };
   }
 
   async readCompletedCheckout(

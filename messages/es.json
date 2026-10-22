@@ -103,7 +103,6 @@
     "bookAside": "Reservar esta habitación",
     "provideDates": "Indica las fechas de entrada y de salida",
     "invalidPeriod": "Elige un periodo de estancia válido",
-    "paymentsUnavailable": "Los pagos no están disponibles ahora mismo. Inténtalo de nuevo más tarde.",
     "paymentIncomplete": "No se ha podido completar el pago.",
     "paymentFailed": "No hemos podido iniciar el pago. Inténtalo de nuevo.",
     "perNight": "noche"

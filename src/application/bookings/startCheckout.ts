@@ -123,5 +123,5 @@ export const makeStartCheckout =
       }),
     });
 
-    return { sessionId: session.id };
+    return { sessionId: session.id, url: session.url };
   };

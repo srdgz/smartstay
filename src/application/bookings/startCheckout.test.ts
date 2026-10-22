@@ -44,7 +44,10 @@ describe("startCheckout", () => {
   it("creates a checkout session priced on the server", async () => {
     const result = await startCheckout(validInput);
 
-    expect(result).toEqual({ sessionId: "cs_test_123" });
+    expect(result).toEqual({
+      sessionId: "cs_test_123",
+      url: "https://checkout.stripe.test/cs_test_123",
+    });
     expect(payments.requests).toHaveLength(1);
 
     const request = payments.requests[0];

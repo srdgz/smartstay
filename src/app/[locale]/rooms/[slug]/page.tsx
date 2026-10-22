@@ -15,7 +15,6 @@ import HotelPhotoGallery from "@/presentation/components/HotelPhotoGallery/Hotel
 import BookRoomCta from "@/presentation/components/BookRoomCta/BookRoomCta";
 import toast from "react-hot-toast";
 import { notifyError } from "@/presentation/lib/notify";
-import { getStripe } from "@/presentation/lib/stripeBrowser";
 import { useErrorMessage } from "@/presentation/hooks/useErrorMessage";
 import { useMoney } from "@/presentation/hooks/useMoney";
 import RoomReview from "@/presentation/components/RoomReview/RoomReview";
@@ -56,12 +55,6 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
       return notifyError(t("invalidPeriod"));
 
     try {
-      const stripe = await getStripe();
-
-      if (!stripe) {
-        return notifyError(t("paymentsUnavailable"));
-      }
-
       const stripeSession = await createCheckoutSession({
         roomSlug: room.slug,
         checkinDate: toDateOnly(checkinDate),
@@ -72,13 +65,9 @@ const RoomDetails = (props: { params: Promise<{ slug: string }> }) => {
         locale,
       });
 
-      const result = await stripe.redirectToCheckout({
-        sessionId: stripeSession.id,
-      });
+      if (!stripeSession.url) return notifyError(t("paymentIncomplete"));
 
-      if (result.error) {
-        notifyError(result.error.message ?? t("paymentIncomplete"));
-      }
+      window.location.assign(stripeSession.url);
     } catch (error) {
       notifyError(errorMessage(error, t("paymentFailed")));
     }

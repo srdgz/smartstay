@@ -10,6 +10,7 @@ export type CheckoutRequest = {
 
 export type CheckoutSession = {
   id: string;
+  url: string | null;
 };
 
 export type CheckoutCompleted = {

@@ -16,7 +16,7 @@ export type CheckoutInput = {
 };
 
 export const createCheckoutSession = async (input: CheckoutInput) => {
-  const { data } = await axios.post<{ id: string }>("/api/checkout", input);
+  const { data } = await axios.post<{ id: string; url: string | null }>("/api/checkout", input);
   return data;
 };
 

@@ -103,7 +103,6 @@
     "bookAside": "Book this room",
     "provideDates": "Please provide check-in / check-out dates",
     "invalidPeriod": "Please choose a valid check-in period",
-    "paymentsUnavailable": "Payments are not available right now. Please try again later.",
     "paymentIncomplete": "The payment could not be completed.",
     "paymentFailed": "We could not start the payment. Please try again.",
     "perNight": "night"

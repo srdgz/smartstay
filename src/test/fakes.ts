@@ -97,7 +97,7 @@ export class FakePaymentGateway implements PaymentGateway {
 
   async createCheckoutSession(request: CheckoutRequest) {
     this.requests.push(request);
-    return { id: "cs_test_123" };
+    return { id: "cs_test_123", url: "https://checkout.stripe.test/cs_test_123" };
   }
 
   async readCompletedCheckout() {

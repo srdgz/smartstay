@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const locale = toContentLocale(body.locale);
     const origin = request.headers.get("origin") ?? new URL(request.url).origin;
 
-    const { sessionId } = await useCases.startCheckout({
+    const { sessionId, url } = await useCases.startCheckout({
       userId,
       roomSlug: String(body.roomSlug ?? ""),
       checkinDate: String(body.checkinDate ?? ""),
@@ -22,6 +22,6 @@ export async function POST(request: Request) {
       successUrl: `${origin}/${locale}/users/${userId}`,
     });
 
-    return { id: sessionId };
+    return { id: sessionId, url };
   });
 }

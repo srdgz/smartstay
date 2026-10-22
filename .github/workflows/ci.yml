@@ -28,7 +28,6 @@ jobs:
       NEXT_PUBLIC_SANITY_PROJECT_ID: ci000000
       NEXT_PUBLIC_SANITY_DATASET: production
       SANITY_STUDIO_TOKEN: ci-placeholder
-      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
       STRIPE_SECRET_KEY: sk_test_placeholder
       STRIPE_WEBHOOK_SECRET: whsec_placeholder
       NEXTAUTH_SECRET: ci-placeholder
