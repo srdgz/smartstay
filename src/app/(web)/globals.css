@@ -25,3 +25,35 @@
 .font-normal {
   @apply text-sm md:text-base;
 }
+
+:focus-visible {
+  outline: 3px solid #1d3557;
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline-color: #f1faee;
+}
+
+.skip-link {
+  @apply absolute left-4 top-0 z-[100] -translate-y-full rounded-b-lg bg-white px-4 py-2 font-bold text-black;
+}
+
+.skip-link:focus {
+  @apply translate-y-0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+main:focus {
+  outline: none;
+}

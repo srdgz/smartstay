@@ -38,11 +38,16 @@ export default function RootLayout({
         <NextAuthProvider>
           <ThemeProvider>
             <Toast />
-            <main className="font-normal">
+            <a href="#main-content" className="skip-link">
+              Skip to main content
+            </a>
+            <div className="font-normal">
               <Header />
-              {children}
+              <main id="main-content" tabIndex={-1}>
+                {children}
+              </main>
               <Footer />
-            </main>
+            </div>
           </ThemeProvider>
         </NextAuthProvider>
       </body>
