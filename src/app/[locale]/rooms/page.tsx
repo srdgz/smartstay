@@ -51,7 +51,7 @@ const Rooms = () => {
   const filteredRooms = filterRooms(data || []);
 
   return (
-    <div className="container mx-auto pt-10">
+    <div className="pt-8 sm:pt-10">
       <h1 className="sr-only">{t("title")}</h1>
       <Search
         roomTypeFilter={roomTypeFilter}
@@ -60,18 +60,27 @@ const Rooms = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <p role="status" className={data && !filteredRooms.length ? "mt-20 text-center" : "sr-only"}>
-        {isLoading
-          ? t("loading")
-          : filteredRooms.length
-          ? t("count", { count: filteredRooms.length })
-          : t("none")}
-      </p>
+      <div className="page-container">
+        <p
+          role="status"
+          className={
+            data && !filteredRooms.length
+              ? "text-muted py-20 text-center text-lg"
+              : "sr-only"
+          }
+        >
+          {isLoading
+            ? t("loading")
+            : filteredRooms.length
+            ? t("count", { count: filteredRooms.length })
+            : t("none")}
+        </p>
 
-      <div className="flex mt-20 justify-between flex-wrap">
-        {filteredRooms.map((room) => (
-          <RoomCard key={room.id} room={room} />
-        ))}
+        <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filteredRooms.map((room) => (
+            <RoomCard key={room.id} room={room} />
+          ))}
+        </div>
       </div>
     </div>
   );

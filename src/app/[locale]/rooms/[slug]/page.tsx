@@ -19,6 +19,7 @@ import { getStripe } from "@/presentation/lib/stripeBrowser";
 import { useErrorMessage } from "@/presentation/hooks/useErrorMessage";
 import { useMoney } from "@/presentation/hooks/useMoney";
 import RoomReview from "@/presentation/components/RoomReview/RoomReview";
+import MobileBookBar from "@/presentation/components/MobileBookBar/MobileBookBar";
 
 const RoomDetails = (props: { params: { slug: string } }) => {
   const {
@@ -85,94 +86,71 @@ const RoomDetails = (props: { params: { slug: string } }) => {
     }
   };
 
+  const section = "border-b border-gray-200 py-8 first:pt-0 dark:border-neutral-800";
+  const safetyItems = [
+    { icon: MdOutlineCleaningServices, label: t("dailyCleaning") },
+    { icon: LiaFireExtinguisherSolid, label: t("fireExtinguishers") },
+    { icon: AiOutlineMedicineBox, label: t("disinfection") },
+    { icon: GiSmokeBomb, label: t("smokeDetectors") },
+  ];
+
   return (
-    <div>
-      <HotelPhotoGallery photos={room.images} />
-      <div className="container mx-auto mt-20">
-        <div className="md:grid md:grid-cols-12 gap-10 px-3">
-          <div className="md:col-span-8 md:w-full">
-            <div className="">
-              <h1 className="font-bold text-left text-lg md:text-2xl">
-                {room.name} ({room.dimension})
-              </h1>
-              <div className="flex my-11">
-                {room.amenities.map((amenity) => (
-                  <div
-                    key={amenity.id}
-                    className="md:w-44 w-fit text-center px-2 md:px-0 h-20 md:h-40 mr-3 bg-[#eff0f2] dark:bg-gray-800 rounded-lg grid place-content-center"
-                  >
-                    <i
-                      className={`fa-solid ${amenity.icon} md:text-2xl`}
-                      aria-hidden="true"
-                    ></i>
-                    <p className="text-xs md:text-base pt-3">
-                      {amenity.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">{t("description")}</h2>
-                <p className="">{room.description}</p>
-              </div>
-              <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">{t("amenities")}</h2>
-                <div className="grid grid-cols-2">
-                  {room.amenities.map((amenity) => (
-                    <div
-                      key={amenity.id}
-                      className="flex items-center md:my-0 my-1"
-                    >
-                      <i
-                        className={`fa-solid ${amenity.icon}`}
-                        aria-hidden="true"
-                      ></i>
-                      <p className="text-xs md:text-base ml-2">
-                        {amenity.name}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">{t("safety")}</h2>
-                <div className="grid grid-cols-2">
-                  <div className="flex items-center my-1 md:my-0">
-                    <MdOutlineCleaningServices aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">{t("dailyCleaning")}</p>
-                  </div>
-                  <div className="flex items-center my-1 md:my-0">
-                    <LiaFireExtinguisherSolid aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">
-                      {t("fireExtinguishers")}
-                    </p>
-                  </div>
-                  <div className="flex items-center my-1 md:my-0">
-                    <AiOutlineMedicineBox aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">
-                      {t("disinfection")}
-                    </p>
-                  </div>
-                  <div className="flex items-center my-1 md:my-0">
-                    <GiSmokeBomb aria-hidden="true" />
-                    <p className="ml-2 md:text-base text-xs">{t("smokeDetectors")}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="shadow dark:shadow-white rounded-lg p-6">
-                <div className="items-center mb-4">
-                  <h2 className="md:text-lg font-semibold">{t("reviews")}</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <RoomReview roomId={room.id} />
-                </div>
-              </div>
+    <div className="page-container pt-6 sm:pt-8">
+      <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{room.name}</h1>
+      <p className="text-muted mt-1">{room.dimension}</p>
+
+      <div className="mt-6">
+        <HotelPhotoGallery photos={room.images} />
+      </div>
+
+      <div className="mt-10 grid gap-10 pb-24 lg:grid-cols-12 lg:gap-16 lg:pb-0">
+        <div className="lg:col-span-7 xl:col-span-8">
+          <section className={section}>
+            <h2 className="text-2xl font-bold">{t("description")}</h2>
+            <p className="text-muted mt-3 text-lg leading-relaxed">{room.description}</p>
+          </section>
+
+          <section className={section}>
+            <h2 className="text-2xl font-bold">{t("amenities")}</h2>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+              {room.amenities.map((amenity) => (
+                <li key={amenity.id} className="flex items-center gap-3 text-lg">
+                  <i
+                    className={`fa-solid ${amenity.icon} w-6 text-center text-xl`}
+                    aria-hidden="true"
+                  ></i>
+                  {amenity.name}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className={section}>
+            <h2 className="text-2xl font-bold">{t("safety")}</h2>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+              {safetyItems.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex items-center gap-3 text-lg">
+                  <Icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="py-8">
+            <h2 className="text-2xl font-bold">{t("reviews")}</h2>
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <RoomReview roomId={room.id} />
             </div>
-          </div>
-          <aside
-            aria-label={t("bookAside")}
-            className="md:col-span-4 rounded-xl shadow-lg dark:shadow dark:shadow-white sticky top-10 h-fit overflow-auto"
-          >
+          </section>
+        </div>
+
+        <aside
+          id="booking"
+          aria-label={t("bookAside")}
+          className="lg:col-span-5 xl:col-span-4"
+        >
+          <div className="card p-6 lg:sticky lg:top-28">
             <BookRoomCta
               discount={room.discount}
               price={room.price}
@@ -189,9 +167,11 @@ const RoomDetails = (props: { params: { slug: string } }) => {
               isBooked={room.isBooked}
               handleBookNowClick={handleBookNowClick}
             />
-          </aside>
-        </div>
+          </div>
+        </aside>
       </div>
+
+      <MobileBookBar price={room.price} discount={room.discount} isBooked={room.isBooked} />
     </div>
   );
 };

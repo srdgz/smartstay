@@ -35,6 +35,9 @@ type Props = {
   handleBookNowClick: () => void;
 };
 
+const labelClass = "mb-1 block text-sm font-semibold";
+const fieldClass = "field px-3 text-sm";
+
 const BookRoomCta: FC<Props> = (props) => {
   const {
     price,
@@ -54,6 +57,7 @@ const BookRoomCta: FC<Props> = (props) => {
   } = props;
 
   const t = useTranslations("Booking");
+  const tRoom = useTranslations("RoomDetails");
   const locale = useLocale();
   const { format } = useMoney();
 
@@ -66,39 +70,34 @@ const BookRoomCta: FC<Props> = (props) => {
   };
 
   return (
-    <div className="px-7 py-6">
-      <p>
-        <span
-          className={`${
-            discount ? "line-through text-gray-600 dark:text-gray-400" : ""
-          } font-bold text-xl`}
-        >
-          <span className="sr-only">{t("originalPrice")} </span>
-          {format(price)}
-        </span>
+    <div>
+      <p className="flex flex-wrap items-baseline gap-x-2">
         {discount ? (
-          <span className="font-bold text-xl">
-            {" "}
-            {t("discountNow", { discount })}{" "}
-            <span className="text-tertiary-dark dark:text-tertiary-darkmode">
+          <>
+            <span className="text-2xl font-extrabold text-tertiary-dark dark:text-tertiary-darkmode">
               {format(discountPrice)}
             </span>
-          </span>
+            <span className="text-muted text-lg line-through">
+              <span className="sr-only">{t("originalPrice")} </span>
+              {format(price)}
+            </span>
+          </>
         ) : (
-          ""
+          <span className="text-2xl font-extrabold">{format(price)}</span>
         )}
+        <span className="text-muted text-sm">/ {tRoom("perNight")}</span>
+        {discount ? (
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-bold text-ink dark:bg-neutral-800 dark:text-neutral-100">
+            {t("discountBadge", { discount })}
+          </span>
+        ) : null}
       </p>
 
-      <div className="w-full border-b-2 border-b-secondary my-2" />
+      <p className="text-muted mt-4 text-sm">{specialNote}</p>
 
-      <p className="my-8">{specialNote}</p>
-
-      <div className="flex">
-        <div className="w-1/2 pr-2">
-          <label
-            htmlFor="check-in-date"
-            className="block text-sm font-medium text-gray-900 dark:text-gray-400"
-          >
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <div>
+          <label htmlFor="check-in-date" className={labelClass}>
             {t("checkIn")}
           </label>
           <DatePicker
@@ -110,14 +109,12 @@ const BookRoomCta: FC<Props> = (props) => {
             locale={datePickerLocale}
             placeholderText={t("datePlaceholder")}
             autoComplete="off"
-            className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
+            className={fieldClass}
+            wrapperClassName="block"
           />
         </div>
-        <div className="w-1/2 pl-2">
-          <label
-            htmlFor="check-out-date"
-            className="block text-sm font-medium text-gray-900 dark:text-gray-400"
-          >
+        <div>
+          <label htmlFor="check-out-date" className={labelClass}>
             {t("checkOut")}
           </label>
           <DatePicker
@@ -130,17 +127,12 @@ const BookRoomCta: FC<Props> = (props) => {
             locale={datePickerLocale}
             placeholderText={t("datePlaceholder")}
             autoComplete="off"
-            className="w-full border text-black text-sm border-gray-300 rounded-lg px-2 py-2.5 focus:ring-primary focus:border-primary"
+            className={`${fieldClass} disabled:opacity-60`}
+            wrapperClassName="block"
           />
         </div>
-      </div>
-
-      <div className="flex mt-4">
-        <div className="w-1/2 pr-2">
-          <label
-            htmlFor="adults"
-            className="block text-sm font-medium text-gray-900 dark:text-gray-400"
-          >
+        <div>
+          <label htmlFor="adults" className={labelClass}>
             {t("adults")}
           </label>
           <input
@@ -150,14 +142,11 @@ const BookRoomCta: FC<Props> = (props) => {
             onChange={(e) => setAdults(+e.target.value)}
             min={MIN_ADULTS}
             max={MAX_ADULTS}
-            className="w-full border border-gray-300 rounded-lg p-2.5"
+            className="field"
           />
         </div>
-        <div className="w-1/2 pl-2">
-          <label
-            htmlFor="children"
-            className="block text-sm font-medium text-gray-900 dark:text-gray-400"
-          >
+        <div>
+          <label htmlFor="children" className={labelClass}>
             {t("children")}
           </label>
           <input
@@ -167,14 +156,14 @@ const BookRoomCta: FC<Props> = (props) => {
             onChange={(e) => setNoOfChildren(+e.target.value)}
             min={MIN_CHILDREN}
             max={MAX_CHILDREN}
-            className="w-full border border-gray-300 rounded-lg p-2.5"
+            className="field"
           />
         </div>
       </div>
 
       <div aria-live="polite">
         {calcNoOfDays() > 0 && (
-          <p className="mt-3">
+          <p className="mt-5 flex items-center justify-between border-t border-gray-200 pt-4 text-lg font-bold dark:border-neutral-800">
             {t("total", { price: format(stayTotal(price, discount, calcNoOfDays())) })}
           </p>
         )}
@@ -184,7 +173,7 @@ const BookRoomCta: FC<Props> = (props) => {
         type="button"
         disabled={isBooked}
         onClick={handleBookNowClick}
-        className="btn-primary w-full mt-6 disabled:bg-gray-500 disabled:cursor-not-allowed"
+        className="btn-primary mt-6 w-full py-4 text-lg"
       >
         {isBooked ? t("booked") : t("bookNow")}
       </button>

@@ -23,34 +23,47 @@ const RoomCard: FC<Props> = (props) => {
     : type;
 
   return (
-    <div className="rounded-xl w-72 mb-10 mx-auto md:mx-0 overflow-hidden text-black">
-      <div className="h-60 overflow-hidden">
+    <article className="group relative flex flex-col">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface dark:bg-neutral-800">
         <Image
           src={coverImageUrl}
           alt=""
-          width={250}
-          height={250}
+          fill
+          sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="img scale-animation"
         />
+        {isBooked && (
+          <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink shadow">
+            {t("booked")}
+          </span>
+        )}
       </div>
-      <div className="p-4 bg-white">
-        <div className="flex justify-between text-xl font-semibold">
-          <h2>{name}</h2>
-          <p>
+      <div className="mt-4 flex flex-1 flex-col">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-lg font-semibold leading-snug">
+            <Link
+              href={`/rooms/${slug}`}
+              className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-offset-4"
+            >
+              {name}
+              {isBooked && <span className="sr-only"> - {t("booked")}</span>}
+            </Link>
+          </h2>
+          <p className="shrink-0 text-lg font-bold">
             <Money amount={price} />
+            <span className="text-muted ml-1 text-sm font-normal">/ {t("perNight")}</span>
           </p>
         </div>
-        <p className="pt-2 text-xs">{t("roomOfType", { type: typeLabel })}</p>
-        <p className="pt-3 pb-6">{description.slice(0, 100)}...</p>
-        <Link
-          href={`/rooms/${slug}`}
-          className="bg-primary inline-block text-center w-full py-4 rounded-xl text-white text-xl font-bold hover:-translate-y-2 hover:shadow-lg transition-all duration-500"
+        <p className="text-muted mt-1 text-sm">{t("roomOfType", { type: typeLabel })}</p>
+        <p className="text-muted mt-2 line-clamp-2 text-sm">{description}</p>
+        <span
+          aria-hidden="true"
+          className="mt-4 inline-flex w-fit items-center rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition group-hover:bg-primary-dark"
         >
           {isBooked ? t("booked") : t("bookNow")}
-          <span className="sr-only"> - {name}</span>
-        </Link>
+        </span>
       </div>
-    </div>
+    </article>
   );
 };
 
