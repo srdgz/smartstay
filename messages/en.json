@@ -172,7 +172,12 @@
     "price": "Price",
     "discount": "Discount",
     "daysBooked": "Nº Days Booked",
-    "daysLeft": "Days Left",
+    "checkIn": "Check In",
+    "checkOut": "Check Out",
+    "status": "Status",
+    "upcoming": "Upcoming",
+    "inProgress": "In progress",
+    "completed": "Completed",
     "actions": "Actions",
     "rate": "Rate",
     "rateRoom": "Rate {name}"

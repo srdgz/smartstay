@@ -172,7 +172,12 @@
     "price": "Precio",
     "discount": "Descuento",
     "daysBooked": "Nº de días reservados",
-    "daysLeft": "Días restantes",
+    "checkIn": "Llegada",
+    "checkOut": "Salida",
+    "status": "Estado",
+    "upcoming": "Próxima",
+    "inProgress": "En curso",
+    "completed": "Finalizada",
     "actions": "Acciones",
     "rate": "Valorar",
     "rateRoom": "Valorar {name}"

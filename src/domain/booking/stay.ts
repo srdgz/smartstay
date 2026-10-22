@@ -26,3 +26,15 @@ export const assertValidStay = (checkinDate: string, checkoutDate: string, now: 
 
   return numberOfDays;
 };
+
+export type StayStatus = "upcoming" | "inProgress" | "completed";
+
+export const stayStatus = (
+  checkinDate: string,
+  checkoutDate: string,
+  today: string
+): StayStatus => {
+  if (today < checkinDate) return "upcoming";
+  if (today < checkoutDate) return "inProgress";
+  return "completed";
+};

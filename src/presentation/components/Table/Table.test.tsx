@@ -51,6 +51,13 @@ describe("Table", () => {
     expect(screen.getByRole("table", { name: "Current bookings" })).toBeInTheDocument();
   });
 
+  it("shows the check-in and check-out dates in the site language", () => {
+    setup();
+    expect(screen.getByRole("columnheader", { name: "Check In" })).toBeInTheDocument();
+    expect(screen.getByText("Dec 1, 2026")).toHaveAttribute("datetime", "2026-12-01");
+    expect(screen.getByText("Dec 3, 2026")).toHaveAttribute("datetime", "2026-12-03");
+  });
+
   it("links the room name to its page", () => {
     setup();
     expect(screen.getByRole("link", { name: "Standard Room" })).toHaveAttribute(

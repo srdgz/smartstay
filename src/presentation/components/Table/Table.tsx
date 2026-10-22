@@ -1,11 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import type { Booking } from "@/domain/booking/Booking";
+import { stayStatus } from "@/domain/booking/stay";
 import { Link } from "@/i18n/navigation";
 import { useMoney } from "@/presentation/hooks/useMoney";
+import { fromDateOnly, toDateOnly } from "@/presentation/lib/dateOnly";
 
 type Props = {
   bookingDetails: Booking[];
@@ -16,6 +18,13 @@ type Props = {
 const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
   const t = useTranslations("Table");
   const { formatIn } = useMoney();
+  const format = useFormatter();
+  const today = toDateOnly(new Date());
+
+  const formatDate = (value: string) => {
+    const date = fromDateOnly(value);
+    return date ? format.dateTime(date, { dateStyle: "medium" }) : value;
+  };
 
   return (
     <div
@@ -29,11 +38,13 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
             <th scope="col" className="px-6 py-3">{t("room")}</th>
+            <th scope="col" className="px-6 py-3">{t("checkIn")}</th>
+            <th scope="col" className="px-6 py-3">{t("checkOut")}</th>
             <th scope="col" className="px-6 py-3">{t("unitPrice")}</th>
             <th scope="col" className="px-6 py-3">{t("price")}</th>
             <th scope="col" className="px-6 py-3">{t("discount")}</th>
             <th scope="col" className="px-6 py-3">{t("daysBooked")}</th>
-            <th scope="col" className="px-6 py-3">{t("daysLeft")}</th>
+            <th scope="col" className="px-6 py-3">{t("status")}</th>
             <th scope="col" className="px-6 py-3">
               <span className="sr-only">{t("actions")}</span>
             </th>
@@ -56,6 +67,12 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
                   {booking.room.name}
                 </Link>
               </th>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <time dateTime={booking.checkinDate}>{formatDate(booking.checkinDate)}</time>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <time dateTime={booking.checkoutDate}>{formatDate(booking.checkoutDate)}</time>
+              </td>
               <td className="px-6 py-4">
                 {formatIn(booking.room.price * booking.exchangeRate, booking.currency)}
               </td>
@@ -64,7 +81,9 @@ const Table: FC<Props> = ({ bookingDetails, setRoomId, toggleRatingModal }) => {
               </td>
               <td className="px-6 py-4">{booking.discount}%</td>
               <td className="px-6 py-4">{booking.numberOfDays}</td>
-              <td className="px-6 py-4">0</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {t(stayStatus(booking.checkinDate, booking.checkoutDate, today))}
+              </td>
               <td className="px-6 py-4">
                 <button
                   type="button"
