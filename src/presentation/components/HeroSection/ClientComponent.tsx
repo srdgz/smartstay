@@ -26,7 +26,7 @@ const ClientComponent: FC<Props> = (props) => {
         {heading1}
         <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-gray-200 pt-6 dark:border-neutral-800">
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse gap-1">
+            <div key={stat.label} className="flex flex-col-reverse justify-end gap-1">
               <dt className="text-muted text-sm">{stat.label}</dt>
               <dd>
                 <CountUpNumber duration={2000} endValue={stat.value} />
