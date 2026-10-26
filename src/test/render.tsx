@@ -9,6 +9,7 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 
 const messages = { en, es };
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const defaultRates: ExchangeRates = {
   base: "USD",
@@ -28,7 +29,7 @@ export const renderWithProviders = (
   { locale = "en", currency = "USD", rates = defaultRates }: Options = {}
 ) => {
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <NextIntlClientProvider locale={locale} messages={messages[locale]}>
+    <NextIntlClientProvider locale={locale} messages={messages[locale]} timeZone={timeZone}>
       <CurrencyProvider initialCurrency={currency} rates={rates}>
         {children}
       </CurrencyProvider>

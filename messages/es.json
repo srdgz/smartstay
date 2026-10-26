@@ -207,7 +207,16 @@
       "CredentialsSignin": "Correo o contraseña incorrectos.",
       "AccessDenied": "Acceso denegado. No tienes permiso para iniciar sesión.",
       "Default": "No hemos podido iniciar tu sesión. Inténtalo de nuevo."
-    }
+    },
+    "signInTitle": "Inicia sesión en tu cuenta",
+    "passwordLogin": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Repite tu contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "noAccount": "¿Aún no tienes cuenta?"
   },
   "Contact": {
     "title": "Contáctanos",
